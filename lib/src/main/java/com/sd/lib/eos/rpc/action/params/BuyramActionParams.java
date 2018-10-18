@@ -1,13 +1,13 @@
-package com.sd.lib.eos.rpc.action.eosio;
+package com.sd.lib.eos.rpc.action.params;
 
 /**
  * 购买内存
  */
-public class BuyramAction extends EosioAction<BuyramAction.Args>
+public class BuyramActionParams extends BaseParams<BuyramActionParams.Args>
 {
     private final Args args;
 
-    private BuyramAction(Builder builder)
+    private BuyramActionParams(Builder builder)
     {
         this.args = new Args(builder);
     }
@@ -19,7 +19,7 @@ public class BuyramAction extends EosioAction<BuyramAction.Args>
     }
 
     @Override
-    public final BuyramAction.Args getArgs()
+    public final BuyramActionParams.Args getArgs()
     {
         return this.args;
     }
@@ -95,9 +95,9 @@ public class BuyramAction extends EosioAction<BuyramAction.Args>
             return this;
         }
 
-        public BuyramAction build()
+        public BuyramActionParams build()
         {
-            return new BuyramAction(this);
+            return new BuyramActionParams(this);
         }
     }
 }

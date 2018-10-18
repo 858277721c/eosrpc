@@ -1,6 +1,6 @@
-package com.sd.lib.eos.rpc.action;
+package com.sd.lib.eos.rpc.action.params;
 
-public interface EosAction<T>
+public interface ActionParams<T>
 {
     String getAction();
 

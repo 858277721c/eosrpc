@@ -1,6 +1,6 @@
 package com.sd.lib.eos.rpc.action.model;
 
-public class ActionModel
+public class ActionParamsModel
 {
     private String code;
     private String action;

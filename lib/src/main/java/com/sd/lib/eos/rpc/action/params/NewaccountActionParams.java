@@ -1,15 +1,15 @@
-package com.sd.lib.eos.rpc.action.eosio;
+package com.sd.lib.eos.rpc.action.params;
 
 import com.sd.lib.eos.rpc.action.model.PermissionModel;
 
 /**
  * 创建新账户
  */
-public class NewaccountAction extends EosioAction<NewaccountAction.Args>
+public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Args>
 {
     private final Args args;
 
-    private NewaccountAction(Builder builder)
+    private NewaccountActionParams(Builder builder)
     {
         this.args = new Args(builder);
     }
@@ -105,9 +105,9 @@ public class NewaccountAction extends EosioAction<NewaccountAction.Args>
             return this;
         }
 
-        public NewaccountAction build()
+        public NewaccountActionParams build()
         {
-            return new NewaccountAction(this);
+            return new NewaccountActionParams(this);
         }
     }
 }

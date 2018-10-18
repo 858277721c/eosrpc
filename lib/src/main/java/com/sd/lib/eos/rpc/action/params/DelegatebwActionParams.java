@@ -1,13 +1,13 @@
-package com.sd.lib.eos.rpc.action.eosio;
+package com.sd.lib.eos.rpc.action.params;
 
 /**
  * 购买抵押资源
  */
-public class DelegatebwAction extends EosioAction<DelegatebwAction.Args>
+public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Args>
 {
     private final Args args;
 
-    private DelegatebwAction(Builder builder)
+    private DelegatebwActionParams(Builder builder)
     {
         this.args = new Args(builder);
     }
@@ -123,9 +123,9 @@ public class DelegatebwAction extends EosioAction<DelegatebwAction.Args>
             return this;
         }
 
-        public DelegatebwAction build()
+        public DelegatebwActionParams build()
         {
-            return new DelegatebwAction(this);
+            return new DelegatebwActionParams(this);
         }
     }
 }

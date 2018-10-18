@@ -1,10 +1,16 @@
-package com.sd.lib.eos.rpc.action;
+package com.sd.lib.eos.rpc.action.params;
 
-import com.sd.lib.eos.rpc.action.model.ActionModel;
+import com.sd.lib.eos.rpc.action.model.ActionParamsModel;
 import com.sd.lib.eos.rpc.utils.Utils;
 
-public abstract class BaseAction<T> implements EosAction<T>
+public abstract class BaseParams<T> implements ActionParams<T>
 {
+    @Override
+    public final String getCode()
+    {
+        return "eosio";
+    }
+
     @Override
     public final String toJson()
     {
@@ -17,7 +23,7 @@ public abstract class BaseAction<T> implements EosAction<T>
         final T args = getArgs();
         Utils.checkNull(args);
 
-        final ActionModel model = new ActionModel();
+        final ActionParamsModel model = new ActionParamsModel();
         model.setCode(code);
         model.setAction(action);
         model.setArgs(args);

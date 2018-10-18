@@ -1,4 +1,4 @@
-package com.sd.lib.eos.rpc.api.model.chain;
+package com.sd.lib.eos.rpc.request.chain;
 
 public class ProducerModel
 {

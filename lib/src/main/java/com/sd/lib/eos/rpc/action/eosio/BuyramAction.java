@@ -3,7 +3,7 @@ package com.sd.lib.eos.rpc.action.eosio;
 /**
  * 购买内存
  */
-public class BuyramAction extends EosioAction
+public class BuyramAction extends EosioAction<BuyramAction.Args>
 {
     private final Args args;
 
@@ -19,7 +19,7 @@ public class BuyramAction extends EosioAction
     }
 
     @Override
-    public final Object getArgs()
+    public final BuyramAction.Args getArgs()
     {
         return this.args;
     }

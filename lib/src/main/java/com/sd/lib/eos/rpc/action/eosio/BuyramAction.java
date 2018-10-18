@@ -60,7 +60,7 @@ public class BuyramAction extends EosioAction<BuyramAction.Args>
         private String quant;
 
         /**
-         * 设置付款账号
+         * 设置付款账户
          *
          * @param payer
          * @return
@@ -72,7 +72,7 @@ public class BuyramAction extends EosioAction<BuyramAction.Args>
         }
 
         /**
-         * 设置接收账号
+         * 设置接收账户
          *
          * @param receiver
          * @return

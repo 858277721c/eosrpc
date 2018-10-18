@@ -3,7 +3,7 @@ package com.sd.lib.eos.rpc.action.eosio;
 import com.sd.lib.eos.rpc.action.model.PermissionModel;
 
 /**
- * 创建新账号
+ * 创建新账户
  */
 public class NewaccountAction extends EosioAction<NewaccountAction.Args>
 {
@@ -70,7 +70,7 @@ public class NewaccountAction extends EosioAction<NewaccountAction.Args>
         private PermissionModel active;
 
         /**
-         * 设置创建者账号
+         * 设置创建者账户
          *
          * @param creator
          * @return
@@ -82,7 +82,7 @@ public class NewaccountAction extends EosioAction<NewaccountAction.Args>
         }
 
         /**
-         * 设置新账号名称
+         * 设置新账户名称
          *
          * @param name
          * @return

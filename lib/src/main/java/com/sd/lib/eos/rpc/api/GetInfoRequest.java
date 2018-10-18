@@ -1,13 +1,13 @@
-package com.sd.lib.eos.rpc.request;
+package com.sd.lib.eos.rpc.api;
 
-import com.sd.lib.eos.rpc.request.chain.GetInfoResponse;
+import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 
 import java.util.Map;
 
 /**
  * 获得区块链信息
  */
-public class GetInfoRequest extends BaseRequest<GetInfoResponse>
+class GetInfoRequest extends BaseRequest<GetInfoResponse>
 {
     public GetInfoRequest(String baseUrl)
     {

@@ -1,6 +1,6 @@
-package com.sd.lib.eos.rpc.request;
+package com.sd.lib.eos.rpc.api;
 
-import com.sd.lib.eos.rpc.request.chain.GetBlockResponse;
+import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * 获得区块信息
  */
-public class GetBlockRequest extends BaseRequest<GetBlockResponse>
+class GetBlockRequest extends BaseRequest<GetBlockResponse>
 {
     private String block_num_or_id;
 

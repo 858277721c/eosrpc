@@ -1,4 +1,4 @@
-package com.sd.lib.eos.rpc.request;
+package com.sd.lib.eos.rpc.api;
 
 import com.sd.lib.eos.rpc.utils.Utils;
 import com.sd.lib.http.IResponse;
@@ -9,7 +9,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-public abstract class BaseRequest<T>
+abstract class BaseRequest<T>
 {
     private final String mBaseUrl;
 

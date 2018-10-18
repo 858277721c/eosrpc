@@ -1,11 +1,8 @@
 package com.sd.lib.eos.rpc.api;
 
-import com.sd.lib.eos.rpc.request.AbiJsonToBinRequest;
-import com.sd.lib.eos.rpc.request.GetBlockRequest;
-import com.sd.lib.eos.rpc.request.GetInfoRequest;
-import com.sd.lib.eos.rpc.request.chain.AbiJsonToBinResponse;
-import com.sd.lib.eos.rpc.request.chain.GetBlockResponse;
-import com.sd.lib.eos.rpc.request.chain.GetInfoResponse;
+import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
+import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
+import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 
 public class RpcApi
 {

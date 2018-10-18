@@ -1,4 +1,4 @@
-package com.sd.lib.eos.rpc.response.chain;
+package com.sd.lib.eos.rpc.api.model.chain;
 
 public class GetBlockResponse
 {

@@ -1,7 +1,7 @@
 package com.sd.lib.eos.rpc.api.impl;
 
 import com.sd.lib.eos.rpc.api.EosApi;
-import com.sd.lib.eos.rpc.response.chain.GetBlockResponse;
+import com.sd.lib.eos.rpc.api.model.chain.GetBlockResponse;
 import com.sd.lib.http.Request;
 
 /**

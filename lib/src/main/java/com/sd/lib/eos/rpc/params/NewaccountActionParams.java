@@ -1,7 +1,9 @@
 package com.sd.lib.eos.rpc.params;
 
 
+import com.sd.lib.eos.rpc.params.model.KeyModel;
 import com.sd.lib.eos.rpc.params.model.PermissionModel;
+import com.sd.lib.eos.rpc.utils.Utils;
 
 /**
  * 创建新账户
@@ -95,20 +97,26 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
             return this;
         }
 
-        public Builder setOwner(PermissionModel owner)
+        public Builder setOwner(int threshold, String key, int weight)
         {
-            this.owner = owner;
+            this.owner = new PermissionModel(threshold, new KeyModel(key, weight));
+            if (active == null)
+                setActive(threshold, key, weight);
             return this;
         }
 
-        public Builder setActive(PermissionModel active)
+        public Builder setActive(int threshold, String key, int weight)
         {
-            this.active = active;
+            this.active = new PermissionModel(threshold, new KeyModel(key, weight));
             return this;
         }
 
         public NewaccountActionParams build()
         {
+            Utils.checkEmpty(creator, "");
+            Utils.checkEmpty(name, "");
+            Utils.checkNotNull(owner, "");
+            Utils.checkNotNull(active, "");
             return new NewaccountActionParams(this);
         }
     }

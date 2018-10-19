@@ -1,5 +1,7 @@
 package com.sd.lib.eos.rpc.params;
 
+import com.sd.lib.eos.rpc.utils.Utils;
+
 /**
  * 购买内存
  */
@@ -98,6 +100,9 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
 
         public BuyramActionParams build()
         {
+            Utils.checkEmpty(payer, "");
+            Utils.checkEmpty(receiver, "");
+            Utils.checkEmpty(quant, "");
             return new BuyramActionParams(this);
         }
     }

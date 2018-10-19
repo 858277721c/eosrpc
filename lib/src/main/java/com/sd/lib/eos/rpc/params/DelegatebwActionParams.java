@@ -1,5 +1,7 @@
 package com.sd.lib.eos.rpc.params;
 
+import com.sd.lib.eos.rpc.utils.Utils;
+
 /**
  * 购买抵押资源
  */
@@ -132,6 +134,10 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
 
         public DelegatebwActionParams build()
         {
+            Utils.checkEmpty(from, "");
+            Utils.checkEmpty(receiver, "");
+            Utils.checkEmpty(stake_net_quantity, "");
+            Utils.checkEmpty(stake_cpu_quantity, "");
             return new DelegatebwActionParams(this);
         }
     }

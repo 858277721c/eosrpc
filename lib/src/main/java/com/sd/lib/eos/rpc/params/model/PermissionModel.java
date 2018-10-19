@@ -1,27 +1,26 @@
 package com.sd.lib.eos.rpc.params.model;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class PermissionModel
 {
-    private int threshold;
-    private KeyModel keys;
+    private final int threshold;
+    private final List<KeyModel> keys;
+
+    public PermissionModel(int threshold, KeyModel... keys)
+    {
+        this.threshold = threshold;
+        this.keys = Arrays.asList(keys);
+    }
 
     public int getThreshold()
     {
         return threshold;
     }
 
-    public void setThreshold(int threshold)
-    {
-        this.threshold = threshold;
-    }
-
-    public KeyModel getKeys()
+    public List<KeyModel> getKeys()
     {
         return keys;
-    }
-
-    public void setKeys(KeyModel keys)
-    {
-        this.keys = keys;
     }
 }

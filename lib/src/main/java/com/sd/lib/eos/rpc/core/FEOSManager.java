@@ -6,6 +6,8 @@ public class FEOSManager
 
     private String mBaseUrl;
     private RpcApiExecutor mApiExecutor;
+    private TransactionSigner mTransactionSigner;
+    private TransactionPacker mTransactionPacker;
 
     private FEOSManager()
     {
@@ -42,5 +44,25 @@ public class FEOSManager
     public void setApiExecutor(RpcApiExecutor apiExecutor)
     {
         mApiExecutor = apiExecutor;
+    }
+
+    public TransactionSigner getTransactionSigner()
+    {
+        return mTransactionSigner;
+    }
+
+    public void setTransactionSigner(TransactionSigner transactionSigner)
+    {
+        mTransactionSigner = transactionSigner;
+    }
+
+    public TransactionPacker getTransactionPacker()
+    {
+        return mTransactionPacker;
+    }
+
+    public void setTransactionPacker(TransactionPacker transactionPacker)
+    {
+        mTransactionPacker = transactionPacker;
     }
 }

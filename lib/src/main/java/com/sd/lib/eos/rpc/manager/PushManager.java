@@ -5,8 +5,10 @@ import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
 import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
 import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
+import com.sd.lib.eos.rpc.core.FEOSManager;
+import com.sd.lib.eos.rpc.core.TransactionPacker;
+import com.sd.lib.eos.rpc.core.TransactionSigner;
 import com.sd.lib.eos.rpc.output.PackedTransaction;
-import com.sd.lib.eos.rpc.output.TransactionQuery;
 import com.sd.lib.eos.rpc.output.model.ActionModel;
 import com.sd.lib.eos.rpc.output.model.TransactionModel;
 import com.sd.lib.eos.rpc.params.ActionParams;
@@ -16,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class PushManager
+public class PushManager
 {
     private final RpcApi mRpcApi = new RpcApi();
     private final List<ActionParams> mListParam = new ArrayList<>();
@@ -28,6 +30,16 @@ public abstract class PushManager
 
         Utils.checkNotNull(model, "");
         mListParam.add(model);
+    }
+
+    protected TransactionSigner getTransactionSigner()
+    {
+        return FEOSManager.getInstance().getTransactionSigner();
+    }
+
+    protected TransactionPacker getTransactionPacker()
+    {
+        return FEOSManager.getInstance().getTransactionPacker();
     }
 
     public PushTransactionResponse execute() throws Exception
@@ -65,16 +77,12 @@ public abstract class PushManager
         transaction.setRef_block_prefix(block.getRef_block_prefix());
         transaction.setActions(listAction);
 
-        final String sign = signTransaction(transaction);
-        final PackedTransaction packedTransaction = packTransaction(transaction);
+        final String sign = getTransactionSigner().signTransaction(transaction);
+        final PackedTransaction packedTransaction = getTransactionPacker().packTransaction(transaction);
 
         final List<String> signatures = new ArrayList<>(1);
         signatures.add(sign);
 
         return mRpcApi.pushTransaction(signatures, packedTransaction.getCompression(), null, packedTransaction.getPacked_trx());
     }
-
-    protected abstract String signTransaction(TransactionQuery query);
-
-    protected abstract PackedTransaction packTransaction(TransactionQuery query);
 }

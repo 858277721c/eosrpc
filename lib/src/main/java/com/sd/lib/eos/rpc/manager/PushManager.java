@@ -1,9 +1,9 @@
 package com.sd.lib.eos.rpc.manager;
 
 import com.sd.lib.eos.rpc.api.RpcApi;
-import com.sd.lib.eos.rpc.api.request.model.AbiJsonToBinResponse;
-import com.sd.lib.eos.rpc.api.request.model.GetBlockResponse;
-import com.sd.lib.eos.rpc.api.request.model.GetInfoResponse;
+import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
+import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
+import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 import com.sd.lib.eos.rpc.output.TransactionQuery;
 import com.sd.lib.eos.rpc.output.model.ActionModel;
 import com.sd.lib.eos.rpc.output.model.PushTransactionModel;
@@ -64,13 +64,17 @@ public abstract class PushManager
         transaction.setRef_block_prefix(block.getRef_block_prefix());
         transaction.setActions(listAction);
 
-        final String signature = signTransaction(transaction);
+        final String sign = signTransaction(transaction);
         final String pack = packTransaction(transaction);
 
         final PushTransactionModel model = new PushTransactionModel();
-        model.addSignature(signature);
+        model.addSignature(sign);
         model.setPacked_trx(pack);
 
+        final List<String> signatures = new ArrayList<>(1);
+        signatures.add(sign);
+
+        mRpcApi.pushTransaction();
     }
 
     protected abstract String signTransaction(TransactionQuery query);

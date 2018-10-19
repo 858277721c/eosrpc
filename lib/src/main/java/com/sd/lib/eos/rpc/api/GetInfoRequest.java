@@ -1,6 +1,6 @@
-package com.sd.lib.eos.rpc.api.request;
+package com.sd.lib.eos.rpc.api;
 
-import com.sd.lib.eos.rpc.api.request.model.GetInfoResponse;
+import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 
 import java.util.Map;
 

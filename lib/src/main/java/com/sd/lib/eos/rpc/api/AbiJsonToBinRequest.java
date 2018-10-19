@@ -1,6 +1,6 @@
-package com.sd.lib.eos.rpc.api.request;
+package com.sd.lib.eos.rpc.api;
 
-import com.sd.lib.eos.rpc.api.request.model.AbiJsonToBinResponse;
+import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
 
 import java.util.HashMap;
 import java.util.Map;

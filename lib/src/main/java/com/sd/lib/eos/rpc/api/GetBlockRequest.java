@@ -1,6 +1,6 @@
-package com.sd.lib.eos.rpc.api.request;
+package com.sd.lib.eos.rpc.api;
 
-import com.sd.lib.eos.rpc.api.request.model.GetBlockResponse;
+import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
 
 import java.util.HashMap;
 import java.util.Map;

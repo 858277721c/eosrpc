@@ -1,4 +1,4 @@
-package com.sd.lib.eos.rpc.api.request.model;
+package com.sd.lib.eos.rpc.api.model;
 
 import java.util.List;
 

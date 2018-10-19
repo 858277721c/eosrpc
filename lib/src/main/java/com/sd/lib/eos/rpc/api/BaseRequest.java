@@ -1,4 +1,4 @@
-package com.sd.lib.eos.rpc.api.request;
+package com.sd.lib.eos.rpc.api;
 
 import com.sd.lib.eos.rpc.core.FEOSManager;
 import com.sd.lib.eos.rpc.core.RpcApiExecutor;

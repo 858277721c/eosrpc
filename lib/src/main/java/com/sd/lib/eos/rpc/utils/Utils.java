@@ -21,14 +21,6 @@ public class Utils
             throw new NullPointerException(exception);
     }
 
-    public static void checkArgument(boolean expression, Object errorMessage)
-    {
-        if (!expression)
-        {
-            throw new IllegalArgumentException(String.valueOf(errorMessage));
-        }
-    }
-
     public static String objectToJson(Object object)
     {
         return new Gson().toJson(object);

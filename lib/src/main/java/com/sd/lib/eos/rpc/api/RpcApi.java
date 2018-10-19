@@ -1,11 +1,11 @@
 package com.sd.lib.eos.rpc.api;
 
-import com.sd.lib.eos.rpc.api.request.AbiJsonToBinRequest;
-import com.sd.lib.eos.rpc.api.request.GetBlockRequest;
-import com.sd.lib.eos.rpc.api.request.GetInfoRequest;
-import com.sd.lib.eos.rpc.api.request.model.AbiJsonToBinResponse;
-import com.sd.lib.eos.rpc.api.request.model.GetBlockResponse;
-import com.sd.lib.eos.rpc.api.request.model.GetInfoResponse;
+import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
+import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
+import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
+import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
+
+import java.util.List;
 
 public class RpcApi
 {
@@ -23,6 +23,12 @@ public class RpcApi
     public AbiJsonToBinResponse abiJsonToBin(String code, String action, String args) throws Exception
     {
         final AbiJsonToBinRequest request = new AbiJsonToBinRequest(code, action, args);
+        return request.execute();
+    }
+
+    public PushTransactionResponse pushTransaction(List<String> signatures, String compression, String packed_context_free_data, String packed_trx) throws Exception
+    {
+        final PushTransactionRequest request = new PushTransactionRequest(signatures, compression, packed_context_free_data, packed_trx);
         return request.execute();
     }
 }

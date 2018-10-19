@@ -1,14 +1,15 @@
-package com.sd.lib.eos.rpc.action.params;
+package com.sd.lib.eos.rpc.params;
 
 /**
  * 购买内存
  */
-public class BuyramActionParams extends BaseParams<BuyramActionParams.Args>
+public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, BuyramActionParams.Builder>
 {
     private final Args args;
 
     private BuyramActionParams(Builder builder)
     {
+        super(builder);
         this.args = new Args(builder);
     }
 
@@ -24,7 +25,7 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args>
         return this.args;
     }
 
-    public static class Args
+    public static class Args extends ActionParams.Args
     {
         private final String payer;
         private final String receiver;
@@ -53,7 +54,7 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args>
         }
     }
 
-    public static class Builder
+    public static class Builder extends BaseParams.Builder<Builder>
     {
         private String payer;
         private String receiver;

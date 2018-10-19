@@ -1,4 +1,10 @@
-package com.sd.lib.eos.rpc.api.model;
+package com.sd.lib.eos.rpc.api.request.model;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class GetInfoResponse
 {
@@ -8,6 +14,25 @@ public class GetInfoResponse
     private String head_block_id;
     private String head_block_time;
     private String head_block_producer;
+
+    public String getHeadBlockTimeAfter(int mille)
+    {
+        try
+        {
+            final DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            final Date date = format.parse(this.head_block_time);
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.MILLISECOND, mille);
+
+            return format.format(calendar.getTime());
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+            return this.head_block_time;
+        }
+    }
 
     public String getServer_version()
     {

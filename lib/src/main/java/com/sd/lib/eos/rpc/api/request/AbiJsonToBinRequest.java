@@ -1,6 +1,6 @@
-package com.sd.lib.eos.rpc.api;
+package com.sd.lib.eos.rpc.api.request;
 
-import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
+import com.sd.lib.eos.rpc.api.request.model.AbiJsonToBinResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,34 +8,16 @@ import java.util.Map;
 /**
  * json转二进制
  */
-class AbiJsonToBinRequest extends BaseRequest<AbiJsonToBinResponse>
+public class AbiJsonToBinRequest extends BaseRequest<AbiJsonToBinResponse>
 {
-    private String code;
-    private String action;
-    private String args;
+    private final String code;
+    private final String action;
+    private final String args;
 
-    public AbiJsonToBinRequest(String baseUrl)
-    {
-        super(baseUrl);
-    }
-
-    public void setCode(String code)
+    public AbiJsonToBinRequest(String code, String action, String args)
     {
         this.code = code;
-    }
-
-    public void setAction(String action)
-    {
         this.action = action;
-    }
-
-    /**
-     * 设置json数据
-     *
-     * @param args
-     */
-    public void setArgs(String args)
-    {
         this.args = args;
     }
 

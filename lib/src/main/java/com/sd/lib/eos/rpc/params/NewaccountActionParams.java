@@ -1,16 +1,18 @@
-package com.sd.lib.eos.rpc.action.params;
+package com.sd.lib.eos.rpc.params;
 
-import com.sd.lib.eos.rpc.action.model.PermissionModel;
+
+import com.sd.lib.eos.rpc.params.model.PermissionModel;
 
 /**
  * 创建新账户
  */
-public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Args>
+public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Args, NewaccountActionParams.Builder>
 {
     private final Args args;
 
     private NewaccountActionParams(Builder builder)
     {
+        super(builder);
         this.args = new Args(builder);
     }
 
@@ -26,7 +28,7 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
         return this.args;
     }
 
-    public static class Args
+    public static class Args extends ActionParams.Args
     {
         private final String creator;
         private final String name;
@@ -62,7 +64,7 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
         }
     }
 
-    public static class Builder
+    public static class Builder extends BaseParams.Builder<Builder>
     {
         private String creator;
         private String name;

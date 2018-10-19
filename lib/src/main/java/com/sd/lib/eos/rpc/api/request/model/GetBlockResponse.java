@@ -1,4 +1,4 @@
-package com.sd.lib.eos.rpc.api.model;
+package com.sd.lib.eos.rpc.api.request.model;
 
 public class GetBlockResponse
 {
@@ -12,7 +12,7 @@ public class GetBlockResponse
     private NewProducersModel new_producers;
     private String producer_signature;
     private String id;
-    private int block_num;
+    private long block_num;
     private long ref_block_prefix;
 
     public String getPrevious()
@@ -115,12 +115,12 @@ public class GetBlockResponse
         this.id = id;
     }
 
-    public int getBlock_num()
+    public long getBlock_num()
     {
         return block_num;
     }
 
-    public void setBlock_num(int block_num)
+    public void setBlock_num(long block_num)
     {
         this.block_num = block_num;
     }

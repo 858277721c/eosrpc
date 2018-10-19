@@ -1,14 +1,15 @@
-package com.sd.lib.eos.rpc.action.params;
+package com.sd.lib.eos.rpc.params;
 
 /**
  * 购买抵押资源
  */
-public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Args>
+public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Args, DelegatebwActionParams.Builder>
 {
     private final Args args;
 
     private DelegatebwActionParams(Builder builder)
     {
+        super(builder);
         this.args = new Args(builder);
     }
 
@@ -24,7 +25,7 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
         return this.args;
     }
 
-    public static class Args
+    public static class Args extends ActionParams.Args
     {
         private final String from;
         private final String receiver;
@@ -67,7 +68,7 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
         }
     }
 
-    public static class Builder
+    public static class Builder extends BaseParams.Builder<Builder>
     {
         private String from;
         private String receiver;
@@ -120,6 +121,12 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
         public Builder setStake_cpu_quantity(String stake_cpu_quantity)
         {
             this.stake_cpu_quantity = stake_cpu_quantity;
+            return this;
+        }
+
+        public Builder setTransfer(int transfer)
+        {
+            this.transfer = transfer;
             return this;
         }
 

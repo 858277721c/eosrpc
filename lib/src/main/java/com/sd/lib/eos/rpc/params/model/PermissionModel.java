@@ -1,4 +1,4 @@
-package com.sd.lib.eos.rpc.action.model;
+package com.sd.lib.eos.rpc.params.model;
 
 public class PermissionModel
 {

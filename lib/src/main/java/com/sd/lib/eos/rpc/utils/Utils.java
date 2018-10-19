@@ -9,16 +9,24 @@ public class Utils
         return content == null || content.length() == 0;
     }
 
-    public static void checkEmpty(String content)
+    public static void checkEmpty(String content, String exception)
     {
         if (isEmpty(content))
-            throw new NullPointerException("");
+            throw new NullPointerException(exception);
     }
 
-    public static void checkNull(Object object)
+    public static void checkNotNull(Object object, String exception)
     {
         if (object == null)
-            throw new NullPointerException("");
+            throw new NullPointerException(exception);
+    }
+
+    public static void checkArgument(boolean expression, Object errorMessage)
+    {
+        if (!expression)
+        {
+            throw new IllegalArgumentException(String.valueOf(errorMessage));
+        }
     }
 
     public static String objectToJson(Object object)

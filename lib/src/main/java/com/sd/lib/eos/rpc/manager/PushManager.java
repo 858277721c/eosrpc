@@ -6,9 +6,8 @@ import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
 import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.core.FEOSManager;
-import com.sd.lib.eos.rpc.core.TransactionPacker;
 import com.sd.lib.eos.rpc.core.TransactionSigner;
-import com.sd.lib.eos.rpc.output.PackedTransaction;
+import com.sd.lib.eos.rpc.output.SignedTransaction;
 import com.sd.lib.eos.rpc.output.model.ActionModel;
 import com.sd.lib.eos.rpc.output.model.TransactionModel;
 import com.sd.lib.eos.rpc.params.ActionParams;
@@ -37,13 +36,9 @@ public class PushManager
         return FEOSManager.getInstance().getTransactionSigner();
     }
 
-    protected TransactionPacker getTransactionPacker()
+    public PushTransactionResponse execute(String privateKey) throws Exception
     {
-        return FEOSManager.getInstance().getTransactionPacker();
-    }
-
-    public PushTransactionResponse execute() throws Exception
-    {
+        Utils.checkEmpty(privateKey, "");
         final List<ActionParams> listParam = Collections.unmodifiableList(mListParam);
         if (listParam.isEmpty())
             throw new RuntimeException("empty action");
@@ -77,12 +72,11 @@ public class PushManager
         transaction.setRef_block_prefix(block.getRef_block_prefix());
         transaction.setActions(listAction);
 
-        final String sign = getTransactionSigner().signTransaction(transaction);
-        final PackedTransaction packedTransaction = getTransactionPacker().packTransaction(transaction);
+        final SignedTransaction signedTransaction = getTransactionSigner().signTransaction(transaction, info, block, privateKey);
 
-        final List<String> signatures = new ArrayList<>(1);
-        signatures.add(sign);
-
-        return mRpcApi.pushTransaction(signatures, packedTransaction.getCompression(), null, packedTransaction.getPacked_trx());
+        return mRpcApi.pushTransaction(signedTransaction.getSignatures(),
+                signedTransaction.getCompression(),
+                null,
+                signedTransaction.getPacked_trx());
     }
 }

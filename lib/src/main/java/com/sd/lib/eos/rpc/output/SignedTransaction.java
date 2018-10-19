@@ -4,13 +4,13 @@ import com.sd.lib.eos.rpc.utils.Utils;
 
 import java.util.List;
 
-public class PackedTransaction
+public class SignedTransaction
 {
     private final List<String> signatures;
     private final String compression;
     private final String packed_trx;
 
-    public PackedTransaction(List<String> signatures, String compression, String packed_trx)
+    public SignedTransaction(List<String> signatures, String compression, String packed_trx)
     {
         if (signatures == null || signatures.isEmpty())
             throw new IllegalArgumentException();

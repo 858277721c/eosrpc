@@ -9,6 +9,7 @@ import java.util.Date;
 public class GetInfoResponse
 {
     private String server_version;
+    private String chain_id;
     private long head_block_num;
     private long last_irreversible_block_num;
     private String head_block_id;
@@ -42,6 +43,16 @@ public class GetInfoResponse
     public void setServer_version(String server_version)
     {
         this.server_version = server_version;
+    }
+
+    public String getChain_id()
+    {
+        return chain_id;
+    }
+
+    public void setChain_id(String chain_id)
+    {
+        this.chain_id = chain_id;
     }
 
     public long getHead_block_num()

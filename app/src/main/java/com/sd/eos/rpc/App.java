@@ -10,7 +10,9 @@ public class App extends Application
     public void onCreate()
     {
         super.onCreate();
-        FEOSManager.getInstance().setApiExecutor(new AppRpcApiExecutor());
 
+        FEOSManager.getInstance().setBaseUrl("http://jungle.cryptolions.io:18888");
+        FEOSManager.getInstance().setApiExecutor(new AppRpcApiExecutor());
+        FEOSManager.getInstance().setTransactionSigner(new AppTransactionSigner());
     }
 }

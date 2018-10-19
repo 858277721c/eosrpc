@@ -1,7 +1,6 @@
 package com.sd.lib.eos.rpc.params;
 
 
-import com.sd.lib.eos.rpc.params.model.KeyModel;
 import com.sd.lib.eos.rpc.params.model.PermissionModel;
 import com.sd.lib.eos.rpc.utils.Utils;
 
@@ -97,17 +96,17 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
             return this;
         }
 
-        public Builder setOwner(int threshold, String key, int weight)
+        public Builder setOwner(String publicKey)
         {
-            this.owner = new PermissionModel(threshold, new KeyModel(key, weight));
+            this.owner = PermissionModel.create(publicKey);
             if (active == null)
-                setActive(threshold, key, weight);
+                setActive(publicKey);
             return this;
         }
 
-        public Builder setActive(int threshold, String key, int weight)
+        public Builder setActive(String publicKey)
         {
-            this.active = new PermissionModel(threshold, new KeyModel(key, weight));
+            this.active = PermissionModel.create(publicKey);
             return this;
         }
 

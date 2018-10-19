@@ -13,6 +13,8 @@ public abstract class BaseParams<A extends ActionParams.Args, B extends BasePara
 
     protected BaseParams(B builder)
     {
+        if (builder.authorization == null || builder.authorization.isEmpty())
+            throw new IllegalArgumentException();
         this.authorization = Collections.unmodifiableList(builder.authorization);
     }
 
@@ -32,9 +34,21 @@ public abstract class BaseParams<A extends ActionParams.Args, B extends BasePara
     {
         protected List<AuthorizationModel> authorization;
 
-        public B addAuthorization(AuthorizationModel model)
+        public B addAuthorization(String actor)
         {
-            Utils.checkNotNull(model, "");
+            return addAuthorization(actor, null);
+        }
+
+        public B addAuthorization(String actor, String permission)
+        {
+            Utils.checkEmpty(actor, "");
+
+            if (Utils.isEmpty(permission))
+                permission = "active";
+
+            final AuthorizationModel model = new AuthorizationModel();
+            model.setActor(actor);
+            model.setPermission(permission);
 
             if (authorization == null)
                 authorization = new ArrayList<>();

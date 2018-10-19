@@ -39,12 +39,14 @@ public class MainActivity extends AppCompatActivity
                         .setCreator(CREATER_ACCOUNT)
                         .setName(name)
                         .setOwner(publicKey)
+                        .addAuthorization(CREATER_ACCOUNT)
                         .build();
 
                 final BuyramActionParams buyramActionParams = new BuyramActionParams.Builder()
                         .setPayer(CREATER_ACCOUNT)
                         .setReceiver(name)
                         .setQuant("1.0000 EOS")
+                        .addAuthorization(CREATER_ACCOUNT)
                         .build();
 
                 final DelegatebwActionParams delegatebwActionParams = new DelegatebwActionParams.Builder()
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity
                         .setStake_cpu_quantity("1.0000 EOS")
                         .setStake_net_quantity("1.0000 EOS")
                         .setTransfer(1)
+                        .addAuthorization(CREATER_ACCOUNT)
                         .build();
 
                 PushManager pushManager = new PushManager();

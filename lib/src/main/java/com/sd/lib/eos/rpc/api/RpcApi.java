@@ -27,7 +27,7 @@ public class RpcApi
         return request.execute();
     }
 
-    public AbiJsonToBinResponse abiJsonToBin(String code, String action, String args) throws Exception
+    public AbiJsonToBinResponse abiJsonToBin(String code, String action, Object args) throws Exception
     {
         final AbiJsonToBinRequest request = new AbiJsonToBinRequest(code, action, args);
         return request.execute();

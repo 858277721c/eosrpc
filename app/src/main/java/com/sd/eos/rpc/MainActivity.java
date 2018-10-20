@@ -27,8 +27,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        createAccount("lanfang12345", "EOS6tz2NBXZDQLxt5a7tiWVvfuqDgNuVDJRReKZBn5xCWroagzZa9");
-        getAccount("fwtest111111");
+        createAccount("lanfang12345", "EOS6tz2NBXZDQLxt5a7tiWVvfuqDgNuVDJRReKZBn5xCWroagzZa9");
     }
 
     private void createAccount(final String name, final String publicKey)

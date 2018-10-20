@@ -13,13 +13,13 @@ public class AbiJsonToBinRequest extends BaseRequest<AbiJsonToBinResponse>
 {
     private final String code;
     private final String action;
-    private final String args;
+    private final Object args;
 
-    public AbiJsonToBinRequest(String code, String action, String args)
+    public AbiJsonToBinRequest(String code, String action, Object args)
     {
         Utils.checkEmpty(code, "");
         Utils.checkEmpty(action, "");
-        Utils.checkEmpty(args, "");
+        Utils.checkNotNull(args, "");
 
         this.code = code;
         this.action = action;

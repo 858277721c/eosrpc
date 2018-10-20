@@ -48,9 +48,9 @@ public class PushManager
         {
             final String code = item.getCode();
             final String action = item.getAction();
-            final String argsJson = item.getArgs().toJson();
+            final ActionParams.Args args = item.getArgs();
 
-            final AbiJsonToBinResponse response = mRpcApi.abiJsonToBin(code, action, argsJson);
+            final AbiJsonToBinResponse response = mRpcApi.abiJsonToBin(code, action, args);
             final String binary = response.getBinargs();
 
             final ActionModel actionModel = new ActionModel();

@@ -3,6 +3,8 @@ package com.sd.eos.rpc;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 
 import com.sd.lib.eos.rpc.api.RpcApi;
 import com.sd.lib.eos.rpc.api.model.GetAccountResponse;
@@ -12,7 +14,7 @@ import com.sd.lib.eos.rpc.params.DelegatebwActionParams;
 import com.sd.lib.eos.rpc.params.NewaccountActionParams;
 import com.sd.lib.task.FTask;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
     public static final String CREATER_ACCOUNT = "fwtest111111";
     public static final String CREATER_KEY_PRIVATE = "5JQh92zjfWJW6a6suaLm7o2wMCNKZnqp4bb3Kb2dNSb7ts8vDWH";
@@ -26,8 +28,6 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        createAccount("lanfang12345", "EOS6tz2NBXZDQLxt5a7tiWVvfuqDgNuVDJRReKZBn5xCWroagzZa9");
     }
 
     private void createAccount(final String name, final String publicKey)
@@ -87,5 +87,22 @@ public class MainActivity extends AppCompatActivity
                 Log.i(TAG, "getAccount:" + response.getAccount_name());
             }
         }.submit();
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+        switch (v.getId())
+        {
+            case R.id.btn_get_account:
+                final EditText et_get_account = findViewById(R.id.et_get_account);
+                getAccount(et_get_account.getText().toString());
+                break;
+            case R.id.btn_create_account:
+                final EditText et_new_account = findViewById(R.id.et_new_account);
+                final EditText et_key_public = findViewById(R.id.et_key_public);
+                createAccount(et_new_account.getText().toString(), et_key_public.getText().toString());
+                break;
+        }
     }
 }

@@ -49,10 +49,22 @@ public class RpcApi
     }
 
     /**
+     * {@link #getCurrencyBalance(String, String)}
+     *
+     * @param account
+     * @return
+     * @throws Exception
+     */
+    public GetCurrencyBalanceResponse getCurrencyBalance(String account) throws Exception
+    {
+        return getCurrencyBalance(account, "eos");
+    }
+
+    /**
      * 查看账号余额
      *
      * @param account 要查看的账号
-     * @param symbol
+     * @param symbol  要查看的币种
      * @return
      * @throws Exception
      */

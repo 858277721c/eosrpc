@@ -30,7 +30,7 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
     }
 
     @Override
-    public Args getArgs()
+    public final Args getArgs()
     {
         return this.args;
     }

@@ -28,7 +28,7 @@ public class TransferActionParams extends BaseParams<TransferActionParams.Args, 
     }
 
     @Override
-    public Args getArgs()
+    public final Args getArgs()
     {
         return this.args;
     }

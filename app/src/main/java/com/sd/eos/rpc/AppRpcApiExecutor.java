@@ -4,39 +4,37 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.sd.lib.eos.rpc.core.RpcApiExecutor;
-import com.sd.lib.http.IResponse;
-import com.sd.lib.http.Request;
-import com.sd.lib.http.impl.httprequest.PostRequest;
+import com.yanzhenjie.kalle.JsonBody;
+import com.yanzhenjie.kalle.Kalle;
+import com.yanzhenjie.kalle.simple.SimpleBodyRequest;
+import com.yanzhenjie.kalle.simple.SimpleResponse;
 
 import java.util.Map;
 
 public class AppRpcApiExecutor implements RpcApiExecutor
 {
+    private final Gson mGson = new Gson();
+
     @Override
     public <T> T execute(String baseUrl, String path, Map<String, Object> params, Class<T> clazz) throws Exception
     {
         Log.i(AppRpcApiExecutor.class.getSimpleName(), "execute:" + baseUrl + path);
 
-        Request request = new PostRequest();
-        request.setBaseUrl(baseUrl);
-        request.setUrlSuffix(path);
-
+        final SimpleBodyRequest.Api api = Kalle.post(baseUrl + path);
         if (params != null)
         {
-            for (Map.Entry<String, Object> item : params.entrySet())
-            {
-                request.getParams().put(item.getKey(), String.valueOf(item.getValue()));
-            }
+            final String paramsJson = mGson.toJson(params);
+            api.body(new JsonBody(paramsJson));
 
-            Log.i(AppRpcApiExecutor.class.getSimpleName(), new Gson().toJson(params));
+            Log.i(AppRpcApiExecutor.class.getSimpleName(), paramsJson);
         }
 
-        final IResponse response = request.execute();
-        final String result = response.getAsString();
+        final SimpleResponse<String, Void> response = api.perform(String.class, null);
+        final String result = response.succeed();
 
-        Log.i(AppRpcApiExecutor.class.getSimpleName(), "response:" + response.getCode() + " " + result);
+        Log.i(AppRpcApiExecutor.class.getSimpleName(), "response:" + response.code() + " " + result);
 
-        final T model = new Gson().fromJson(result, clazz);
+        final T model = mGson.fromJson(result, clazz);
         return model;
     }
 }

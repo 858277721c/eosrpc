@@ -10,7 +10,7 @@ import com.sd.lib.eos.rpc.manager.PushManager;
 import com.sd.lib.eos.rpc.params.BuyramActionParams;
 import com.sd.lib.eos.rpc.params.DelegatebwActionParams;
 import com.sd.lib.eos.rpc.params.NewaccountActionParams;
-import com.sd.lib.http.task.FTask;
+import com.sd.lib.task.FTask;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
 //        createAccount("lanfang12345", "EOS6tz2NBXZDQLxt5a7tiWVvfuqDgNuVDJRReKZBn5xCWroagzZa9");
-        getAccount("lanfang12345");
+        getAccount("fwtest111111");
     }
 
     private void createAccount(final String name, final String publicKey)

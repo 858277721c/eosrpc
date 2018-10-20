@@ -19,12 +19,6 @@ public abstract class BaseParams<A extends ActionParams.Args, B extends BasePara
     }
 
     @Override
-    public String getCode()
-    {
-        return "eosio";
-    }
-
-    @Override
     public final List<AuthorizationModel> getAuthorization()
     {
         return authorization;

@@ -16,13 +16,19 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
     }
 
     @Override
+    public final String getCode()
+    {
+        return "eosio";
+    }
+
+    @Override
     public final String getAction()
     {
         return "buyram";
     }
 
     @Override
-    public final BuyramActionParams.Args getArgs()
+    public final Args getArgs()
     {
         return this.args;
     }

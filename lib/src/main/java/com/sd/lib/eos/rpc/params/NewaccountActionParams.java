@@ -18,6 +18,12 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
     }
 
     @Override
+    public final String getCode()
+    {
+        return "eosio";
+    }
+
+    @Override
     public final String getAction()
     {
         return "newaccount";

@@ -16,6 +16,12 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
     }
 
     @Override
+    public final String getCode()
+    {
+        return "eosio";
+    }
+
+    @Override
     public final String getAction()
     {
         return "delegatebw";

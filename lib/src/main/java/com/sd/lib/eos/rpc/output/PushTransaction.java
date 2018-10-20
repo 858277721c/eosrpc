@@ -46,7 +46,7 @@ public class PushTransaction
         Utils.checkEmpty(privateKey, "");
         final List<ActionParams> listParam = Collections.unmodifiableList(mListParam);
         if (listParam.isEmpty())
-            throw new RuntimeException("empty action");
+            throw new RuntimeException("action is empty");
 
         final List<ActionModel> listAction = new ArrayList<>();
         for (ActionParams item : listParam)

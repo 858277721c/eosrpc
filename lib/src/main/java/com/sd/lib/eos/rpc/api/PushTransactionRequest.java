@@ -18,7 +18,7 @@ public class PushTransactionRequest extends BaseRequest<PushTransactionResponse>
     public PushTransactionRequest(List<String> signatures, String compression, String packed_context_free_data, String packed_trx)
     {
         if (signatures == null || signatures.isEmpty())
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("signatures is empty");
 
         if (Utils.isEmpty(compression))
             compression = "none";

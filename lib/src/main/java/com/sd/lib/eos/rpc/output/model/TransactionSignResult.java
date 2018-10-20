@@ -16,9 +16,9 @@ public class TransactionSignResult
     public TransactionSignResult(List<String> signatures, String compression, String packed_trx)
     {
         if (signatures == null || signatures.isEmpty())
-            throw new IllegalArgumentException();
-        Utils.checkEmpty(compression, "");
-        Utils.checkEmpty(packed_trx, "");
+            throw new IllegalArgumentException("signatures is empty");
+        Utils.checkEmpty(compression, "compression is empty");
+        Utils.checkEmpty(packed_trx, "packed_trx is empty");
 
         this.signatures = signatures;
         this.compression = compression;

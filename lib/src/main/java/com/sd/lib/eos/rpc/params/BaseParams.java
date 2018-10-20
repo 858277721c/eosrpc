@@ -28,6 +28,17 @@ public abstract class BaseParams<A extends ActionParams.Args, B extends BasePara
     {
         protected List<AuthorizationModel> authorization;
 
+        public B setAuthorization(String actor)
+        {
+            return setAuthorization(actor, null);
+        }
+
+        public B setAuthorization(String actor, String permission)
+        {
+            authorization = null;
+            return addAuthorization(actor, permission);
+        }
+
         public B addAuthorization(String actor)
         {
             return addAuthorization(actor, null);

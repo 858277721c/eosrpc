@@ -102,6 +102,12 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
             return this;
         }
 
+        /**
+         * 设置新账号owner权限公钥
+         *
+         * @param publicKey
+         * @return
+         */
         public Builder setOwner(String publicKey)
         {
             this.owner = PermissionModel.create(publicKey);
@@ -110,6 +116,12 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
             return this;
         }
 
+        /**
+         * 设置新账号active权限公钥
+         *
+         * @param publicKey
+         * @return
+         */
         public Builder setActive(String publicKey)
         {
             this.active = PermissionModel.create(publicKey);

@@ -132,6 +132,12 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
             return this;
         }
 
+        /**
+         * 设置是否转移
+         *
+         * @param transfer 1-转移，0-不转移
+         * @return
+         */
         public Builder setTransfer(int transfer)
         {
             this.transfer = transfer;

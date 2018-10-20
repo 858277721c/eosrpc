@@ -8,6 +8,7 @@
         android:id="@+id/et_get_account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxLength="12"
         android:text="fwtest111111" />
 
     <Button
@@ -30,6 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="新账号"
+        android:maxLength="12"
         android:text="" />
 
     <EditText

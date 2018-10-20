@@ -1,7 +1,5 @@
 package com.sd.lib.eos.rpc.utils;
 
-import com.google.gson.Gson;
-
 public class Utils
 {
     public static boolean isEmpty(String content)
@@ -19,15 +17,5 @@ public class Utils
     {
         if (object == null)
             throw new NullPointerException(exception);
-    }
-
-    public static String objectToJson(Object object)
-    {
-        return new Gson().toJson(object);
-    }
-
-    public static <T> T jsonToObject(String json, Class<T> clazz)
-    {
-        return new Gson().fromJson(json, clazz);
     }
 }

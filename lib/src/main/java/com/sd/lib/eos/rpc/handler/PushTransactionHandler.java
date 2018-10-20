@@ -1,4 +1,4 @@
-package com.sd.lib.eos.rpc.manager;
+package com.sd.lib.eos.rpc.handler;
 
 import com.sd.lib.eos.rpc.api.RpcApi;
 import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
@@ -17,7 +17,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class PushManager
+/**
+ * 提交交易
+ */
+public class PushTransactionHandler
 {
     private final RpcApi mRpcApi = new RpcApi();
     private final List<ActionParams> mListParam = new ArrayList<>();
@@ -31,11 +34,13 @@ public class PushManager
         mListParam.add(model);
     }
 
-    protected TransactionSigner getTransactionSigner()
-    {
-        return FEOSManager.getInstance().getTransactionSigner();
-    }
-
+    /**
+     * 提交交易
+     *
+     * @param privateKey
+     * @return
+     * @throws Exception
+     */
     public PushTransactionResponse execute(String privateKey) throws Exception
     {
         Utils.checkEmpty(privateKey, "");
@@ -78,5 +83,10 @@ public class PushManager
                 signedTransaction.getCompression(),
                 null,
                 signedTransaction.getPacked_trx());
+    }
+
+    protected TransactionSigner getTransactionSigner()
+    {
+        return FEOSManager.getInstance().getTransactionSigner();
     }
 }

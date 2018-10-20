@@ -34,6 +34,8 @@ public class AppRpcApiExecutor implements RpcApiExecutor
         final IResponse response = request.execute();
         final String result = response.getAsString();
 
+        Log.i(AppRpcApiExecutor.class.getSimpleName(), "response:" + response.getCode() + " " + result);
+
         final T model = new Gson().fromJson(result, clazz);
         return model;
     }

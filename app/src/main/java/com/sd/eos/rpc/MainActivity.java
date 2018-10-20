@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.sd.lib.eos.rpc.api.RpcApi;
+import com.sd.lib.eos.rpc.api.model.GetAccountResponse;
 import com.sd.lib.eos.rpc.manager.PushManager;
 import com.sd.lib.eos.rpc.params.BuyramActionParams;
 import com.sd.lib.eos.rpc.params.DelegatebwActionParams;
@@ -25,7 +27,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        createAccount("lanfang12345", "EOS6tz2NBXZDQLxt5a7tiWVvfuqDgNuVDJRReKZBn5xCWroagzZa9");
+//        createAccount("lanfang12345", "EOS6tz2NBXZDQLxt5a7tiWVvfuqDgNuVDJRReKZBn5xCWroagzZa9");
+        getAccount("lanfang12345");
     }
 
     private void createAccount(final String name, final String publicKey)
@@ -70,6 +73,19 @@ public class MainActivity extends AppCompatActivity
             {
                 super.onError(e);
                 Log.e(TAG, String.valueOf(e));
+            }
+        }.submit();
+    }
+
+    private void getAccount(final String accountName)
+    {
+        new FTask()
+        {
+            @Override
+            protected void onRun() throws Exception
+            {
+                final GetAccountResponse response = new RpcApi().getAccount(accountName);
+                Log.i(TAG, "getAccount:" + response.getAccount_name());
             }
         }.submit();
     }

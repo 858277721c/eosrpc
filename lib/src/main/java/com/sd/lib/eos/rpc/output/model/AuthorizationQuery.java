@@ -1,4 +1,4 @@
-package com.sd.lib.eos.rpc.output;
+package com.sd.lib.eos.rpc.output.model;
 
 public interface AuthorizationQuery
 {

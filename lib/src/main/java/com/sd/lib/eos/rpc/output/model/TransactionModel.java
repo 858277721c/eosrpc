@@ -1,8 +1,5 @@
 package com.sd.lib.eos.rpc.output.model;
 
-import com.sd.lib.eos.rpc.output.ActionQuery;
-import com.sd.lib.eos.rpc.output.TransactionQuery;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

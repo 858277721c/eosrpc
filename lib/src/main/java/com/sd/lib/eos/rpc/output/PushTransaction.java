@@ -1,4 +1,4 @@
-package com.sd.lib.eos.rpc.handler;
+package com.sd.lib.eos.rpc.output;
 
 import com.sd.lib.eos.rpc.api.RpcApi;
 import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
@@ -7,9 +7,9 @@ import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.core.FEOSManager;
 import com.sd.lib.eos.rpc.core.TransactionSigner;
-import com.sd.lib.eos.rpc.output.SignedTransaction;
 import com.sd.lib.eos.rpc.output.model.ActionModel;
 import com.sd.lib.eos.rpc.output.model.TransactionModel;
+import com.sd.lib.eos.rpc.output.model.TransactionSignResult;
 import com.sd.lib.eos.rpc.params.ActionParams;
 import com.sd.lib.eos.rpc.utils.Utils;
 
@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * 提交交易
  */
-public class PushTransactionHandler
+public class PushTransaction
 {
     private final RpcApi mRpcApi = new RpcApi();
     private final List<ActionParams> mListParam = new ArrayList<>();
@@ -41,7 +41,7 @@ public class PushTransactionHandler
      * @return
      * @throws Exception
      */
-    public PushTransactionResponse execute(String privateKey) throws Exception
+    public PushTransactionResponse submit(String privateKey) throws Exception
     {
         Utils.checkEmpty(privateKey, "");
         final List<ActionParams> listParam = Collections.unmodifiableList(mListParam);
@@ -77,7 +77,7 @@ public class PushTransactionHandler
         transaction.setRef_block_prefix(block.getRef_block_prefix());
         transaction.setActions(listAction);
 
-        final SignedTransaction signedTransaction = getTransactionSigner().signTransaction(transaction, info, block, privateKey);
+        final TransactionSignResult signedTransaction = getTransactionSigner().signTransaction(transaction, info, block, privateKey);
 
         return mRpcApi.pushTransaction(signedTransaction.getSignatures(),
                 signedTransaction.getCompression(),

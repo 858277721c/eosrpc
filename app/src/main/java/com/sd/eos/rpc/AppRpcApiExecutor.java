@@ -18,7 +18,7 @@ public class AppRpcApiExecutor implements RpcApiExecutor
     @Override
     public <T> T execute(String baseUrl, String path, Map<String, Object> params, Class<T> clazz) throws Exception
     {
-        Log.i(AppRpcApiExecutor.class.getSimpleName(), "execute:" + baseUrl + path);
+        Log.i(AppRpcApiExecutor.class.getSimpleName(), "submit:" + baseUrl + path);
 
         final SimpleBodyRequest.Api api = Kalle.post(baseUrl + path);
         if (params != null)

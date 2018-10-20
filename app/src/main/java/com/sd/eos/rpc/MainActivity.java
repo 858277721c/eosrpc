@@ -8,7 +8,7 @@ import android.widget.EditText;
 
 import com.sd.lib.eos.rpc.api.RpcApi;
 import com.sd.lib.eos.rpc.api.model.GetAccountResponse;
-import com.sd.lib.eos.rpc.manager.PushManager;
+import com.sd.lib.eos.rpc.output.PushTransaction;
 import com.sd.lib.eos.rpc.params.BuyramActionParams;
 import com.sd.lib.eos.rpc.params.DelegatebwActionParams;
 import com.sd.lib.eos.rpc.params.NewaccountActionParams;
@@ -60,11 +60,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .addAuthorization(CREATER_ACCOUNT)
                         .build();
 
-                PushManager pushManager = new PushManager();
-                pushManager.addAction(newaccountActionParams);
-                pushManager.addAction(buyramActionParams);
-                pushManager.addAction(delegatebwActionParams);
-                pushManager.execute(CREATER_KEY_PRIVATE);
+                final PushTransaction transaction = new PushTransaction();
+                transaction.addAction(newaccountActionParams);
+                transaction.addAction(buyramActionParams);
+                transaction.addAction(delegatebwActionParams);
+                transaction.submit(CREATER_KEY_PRIVATE);
             }
 
             @Override

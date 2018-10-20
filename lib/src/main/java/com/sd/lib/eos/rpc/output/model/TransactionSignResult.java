@@ -1,16 +1,19 @@
-package com.sd.lib.eos.rpc.output;
+package com.sd.lib.eos.rpc.output.model;
 
 import com.sd.lib.eos.rpc.utils.Utils;
 
 import java.util.List;
 
-public class PackedTransaction
+/**
+ * 交易签名结果
+ */
+public class TransactionSignResult
 {
     private final List<String> signatures;
     private final String compression;
     private final String packed_trx;
 
-    public PackedTransaction(List<String> signatures, String compression, String packed_trx)
+    public TransactionSignResult(List<String> signatures, String compression, String packed_trx)
     {
         if (signatures == null || signatures.isEmpty())
             throw new IllegalArgumentException();

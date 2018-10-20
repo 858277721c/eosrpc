@@ -9,9 +9,10 @@ import com.sd.eos.rpc.help.types.TypePermissionLevel;
 import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
 import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 import com.sd.lib.eos.rpc.core.TransactionSigner;
-import com.sd.lib.eos.rpc.output.ActionQuery;
-import com.sd.lib.eos.rpc.output.AuthorizationQuery;
-import com.sd.lib.eos.rpc.output.TransactionQuery;
+import com.sd.lib.eos.rpc.output.model.ActionQuery;
+import com.sd.lib.eos.rpc.output.model.AuthorizationQuery;
+import com.sd.lib.eos.rpc.output.model.TransactionQuery;
+import com.sd.lib.eos.rpc.output.model.TransactionSignResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +20,9 @@ import java.util.List;
 public class AppTransactionSigner implements TransactionSigner
 {
     @Override
-    public com.sd.lib.eos.rpc.output.SignedTransaction signTransaction(TransactionQuery query,
-                                                                       GetInfoResponse infoResponse, GetBlockResponse blockResponse,
-                                                                       String privateKey)
+    public TransactionSignResult signTransaction(TransactionQuery query,
+                                                 GetInfoResponse infoResponse, GetBlockResponse blockResponse,
+                                                 String privateKey)
     {
         SignedTransaction transaction = new SignedTransaction();
         transaction.setExpiration(query.queryExpiration());
@@ -46,9 +47,9 @@ public class AppTransactionSigner implements TransactionSigner
         }
 
         transaction.sign(new EosPrivateKey(privateKey), new TypeChainId(infoResponse.getChain_id()));
-
         final PackedTransaction packedTransaction = new PackedTransaction(transaction);
-        final com.sd.lib.eos.rpc.output.SignedTransaction result = new com.sd.lib.eos.rpc.output.SignedTransaction(
+
+        final TransactionSignResult result = new TransactionSignResult(
                 packedTransaction.signatures,
                 packedTransaction.compression,
                 packedTransaction.packed_trx

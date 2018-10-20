@@ -1,7 +1,5 @@
 package com.sd.lib.eos.rpc.output.model;
 
-import com.sd.lib.eos.rpc.output.AuthorizationQuery;
-
 public class AuthorizationModel implements AuthorizationQuery
 {
     private String actor;

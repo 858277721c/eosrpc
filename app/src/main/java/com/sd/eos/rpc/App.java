@@ -19,7 +19,7 @@ public class App extends Application
                         .build()
         );
 
-        FEOSManager.getInstance().setBaseUrl("http://dev.cryptolions.io:38888");
+        FEOSManager.getInstance().setBaseUrl("http://jungle.eosbcn.com:8080");
         FEOSManager.getInstance().setApiExecutor(new AppRpcApiExecutor());
         FEOSManager.getInstance().setTransactionSigner(new AppTransactionSigner());
     }

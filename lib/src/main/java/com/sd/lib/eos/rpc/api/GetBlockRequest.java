@@ -1,6 +1,7 @@
 package com.sd.lib.eos.rpc.api;
 
 import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
+import com.sd.lib.eos.rpc.utils.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +15,7 @@ public class GetBlockRequest extends BaseRequest<GetBlockResponse>
 
     public GetBlockRequest(String block_num_or_id)
     {
+        Utils.checkEmpty(block_num_or_id, "");
         this.block_num_or_id = block_num_or_id;
     }
 

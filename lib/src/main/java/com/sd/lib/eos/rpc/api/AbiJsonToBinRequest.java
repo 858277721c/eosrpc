@@ -1,6 +1,7 @@
 package com.sd.lib.eos.rpc.api;
 
 import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
+import com.sd.lib.eos.rpc.utils.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +17,10 @@ public class AbiJsonToBinRequest extends BaseRequest<AbiJsonToBinResponse>
 
     public AbiJsonToBinRequest(String code, String action, String args)
     {
+        Utils.checkEmpty(code, "");
+        Utils.checkEmpty(action, "");
+        Utils.checkEmpty(args, "");
+
         this.code = code;
         this.action = action;
         this.args = args;

@@ -1,5 +1,7 @@
 package com.sd.eos.rpc;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.sd.lib.eos.rpc.core.RpcApiExecutor;
 import com.sd.lib.http.IResponse;
@@ -13,6 +15,8 @@ public class AppRpcApiExecutor implements RpcApiExecutor
     @Override
     public <T> T execute(String baseUrl, String path, Map<String, Object> params, Class<T> clazz) throws Exception
     {
+        Log.i(AppRpcApiExecutor.class.getSimpleName(), "execute:" + baseUrl + path);
+
         Request request = new PostRequest();
         request.setBaseUrl(baseUrl);
         request.setUrlSuffix(path);
@@ -23,6 +27,8 @@ public class AppRpcApiExecutor implements RpcApiExecutor
             {
                 request.getParams().put(item.getKey(), String.valueOf(item.getValue()));
             }
+
+            Log.i(AppRpcApiExecutor.class.getSimpleName(), new Gson().toJson(params));
         }
 
         final IResponse response = request.execute();

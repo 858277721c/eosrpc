@@ -1,12 +1,25 @@
 package com.sd.lib.eos.rpc.handler;
 
+import com.sd.lib.eos.rpc.output.PushTransaction;
 import com.sd.lib.eos.rpc.params.BuyramActionParams;
 import com.sd.lib.eos.rpc.params.DelegatebwActionParams;
 import com.sd.lib.eos.rpc.params.NewaccountActionParams;
 
 public class CreateAccountHandler
 {
+    private final PushTransaction mPushTransaction = new PushTransaction();
 
+    private CreateAccountHandler(Builder builder)
+    {
+        mPushTransaction.addAction(builder.mNewaccountBuilder.build());
+        mPushTransaction.addAction(builder.mBuyramBuilder.build());
+        mPushTransaction.addAction(builder.mDelegatebwBuilder.build());
+    }
+
+    public void create(String privatekey) throws Exception
+    {
+        mPushTransaction.submit(privatekey);
+    }
 
     public static class Builder
     {
@@ -116,6 +129,11 @@ public class CreateAccountHandler
         {
             mDelegatebwBuilder.setTransfer(transfer);
             return this;
+        }
+
+        public CreateAccountHandler build()
+        {
+            return new CreateAccountHandler(this);
         }
     }
 }

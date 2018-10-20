@@ -8,10 +8,7 @@ import android.widget.EditText;
 
 import com.sd.lib.eos.rpc.api.RpcApi;
 import com.sd.lib.eos.rpc.api.model.GetAccountResponse;
-import com.sd.lib.eos.rpc.output.PushTransaction;
-import com.sd.lib.eos.rpc.params.BuyramActionParams;
-import com.sd.lib.eos.rpc.params.DelegatebwActionParams;
-import com.sd.lib.eos.rpc.params.NewaccountActionParams;
+import com.sd.lib.eos.rpc.handler.CreateAccountHandler;
 import com.sd.lib.task.FTask;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
@@ -37,34 +34,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             protected void onRun() throws Exception
             {
-                final NewaccountActionParams newaccountActionParams = new NewaccountActionParams.Builder()
+                final CreateAccountHandler handler = new CreateAccountHandler.Builder()
                         .setCreator(CREATER_ACCOUNT)
                         .setName(name)
                         .setOwner(publicKey)
-                        .addAuthorization(CREATER_ACCOUNT)
-                        .build();
-
-                final BuyramActionParams buyramActionParams = new BuyramActionParams.Builder()
-                        .setPayer(CREATER_ACCOUNT)
-                        .setReceiver(name)
                         .setQuant("1.0000 EOS")
-                        .addAuthorization(CREATER_ACCOUNT)
-                        .build();
-
-                final DelegatebwActionParams delegatebwActionParams = new DelegatebwActionParams.Builder()
-                        .setFrom(CREATER_ACCOUNT)
-                        .setReceiver(name)
                         .setStake_cpu_quantity("1.0000 EOS")
                         .setStake_net_quantity("1.0000 EOS")
                         .setTransfer(1)
-                        .addAuthorization(CREATER_ACCOUNT)
                         .build();
 
-                final PushTransaction transaction = new PushTransaction();
-                transaction.addAction(newaccountActionParams);
-                transaction.addAction(buyramActionParams);
-                transaction.addAction(delegatebwActionParams);
-                transaction.submit(CREATER_KEY_PRIVATE);
+                handler.create(CREATER_KEY_PRIVATE);
             }
 
             @Override

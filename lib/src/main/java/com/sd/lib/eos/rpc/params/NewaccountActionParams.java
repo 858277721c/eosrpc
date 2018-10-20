@@ -5,7 +5,7 @@ import com.sd.lib.eos.rpc.params.model.PermissionModel;
 import com.sd.lib.eos.rpc.utils.Utils;
 
 /**
- * 创建新账户
+ * 创建新账号
  */
 public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Args, NewaccountActionParams.Builder>
 {
@@ -73,7 +73,7 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
         private PermissionModel active;
 
         /**
-         * 设置创建者账户
+         * 设置创建者账号
          *
          * @param creator
          * @return
@@ -85,7 +85,7 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
         }
 
         /**
-         * 设置新账户名称
+         * 设置新账号名称
          *
          * @param name
          * @return

@@ -63,7 +63,7 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
         private String quant;
 
         /**
-         * 设置付款账户
+         * 设置付款账号
          *
          * @param payer
          * @return
@@ -75,7 +75,7 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
         }
 
         /**
-         * 设置接收账户
+         * 设置接收账号
          *
          * @param receiver
          * @return

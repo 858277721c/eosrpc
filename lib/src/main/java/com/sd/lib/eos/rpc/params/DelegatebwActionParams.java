@@ -79,7 +79,7 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
         private int transfer;
 
         /**
-         * 购买者账户
+         * 购买者账号
          *
          * @param from
          * @return
@@ -91,7 +91,7 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
         }
 
         /**
-         * 接收者账户
+         * 接收者账号
          *
          * @param receiver
          * @return

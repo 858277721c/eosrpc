@@ -77,6 +77,7 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
         public Builder setPayer(String payer)
         {
             this.payer = payer;
+            setAuthorization(payer);
             return this;
         }
 

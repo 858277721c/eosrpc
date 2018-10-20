@@ -87,6 +87,7 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
         public Builder setCreator(String creator)
         {
             this.creator = creator;
+            setAuthorization(creator);
             return this;
         }
 

@@ -38,10 +38,6 @@ public class CreateAccountHandler
             mNewaccountBuilder.setCreator(creator);
             mBuyramBuilder.setPayer(creator);
             mDelegatebwBuilder.setFrom(creator);
-
-            mNewaccountBuilder.setAuthorization(creator);
-            mBuyramBuilder.setAuthorization(creator);
-            mDelegatebwBuilder.setAuthorization(creator);
             return this;
         }
 

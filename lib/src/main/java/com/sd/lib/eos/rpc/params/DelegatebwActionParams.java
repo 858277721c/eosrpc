@@ -93,6 +93,7 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
         public Builder setFrom(String from)
         {
             this.from = from;
+            setAuthorization(from);
             return this;
         }
 

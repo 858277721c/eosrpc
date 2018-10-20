@@ -85,6 +85,7 @@ public class TransferActionParams extends BaseParams<TransferActionParams.Args, 
         public Builder setFrom(String from)
         {
             this.from = from;
+            setAuthorization(from);
             return this;
         }
 

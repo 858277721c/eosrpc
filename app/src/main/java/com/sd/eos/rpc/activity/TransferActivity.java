@@ -88,7 +88,7 @@ public class TransferActivity extends BaseActivity implements View.OnClickListen
         final TransferActionParams actionParams = new TransferActionParams.Builder()
                 .setFrom(from)
                 .setTo(to)
-                .setQuantity(quantity + " EOS")
+                .setQuantity(Double.parseDouble(quantity), null)
                 .setMemo(memo)
                 .build();
 

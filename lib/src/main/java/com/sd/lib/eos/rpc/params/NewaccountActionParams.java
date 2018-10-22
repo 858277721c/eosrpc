@@ -39,6 +39,7 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
     {
         private final String creator;
         private final String name;
+        private final String newact;
         private final PermissionModel owner;
         private final PermissionModel active;
 
@@ -46,6 +47,7 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
         {
             this.creator = builder.creator;
             this.name = builder.name;
+            this.newact = builder.name;
             this.owner = builder.owner;
             this.active = builder.active;
         }
@@ -58,6 +60,11 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
         public String getName()
         {
             return name;
+        }
+
+        public String getNewact()
+        {
+            return newact;
         }
 
         public PermissionModel getOwner()

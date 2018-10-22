@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.sd.eos.rpc.R;
 import com.sd.lib.eos.rpc.api.RpcApi;
+import com.sd.lib.eos.rpc.api.model.ApiResponse;
 import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 import com.sd.lib.task.FTask;
 
@@ -42,14 +43,17 @@ public class GetInfoActivity extends BaseActivity
             @Override
             protected void onRun() throws Exception
             {
-                final GetInfoResponse response = new RpcApi().getInfo();
+                final ApiResponse<GetInfoResponse> response = new RpcApi().getInfo();
 
                 runOnUiThread(new Runnable()
                 {
                     @Override
                     public void run()
                     {
-                        tv_content.setText(new Gson().toJson(response));
+                        if (response.isSuccessful())
+                            tv_content.setText(new Gson().toJson(response.getSuccess()));
+                        else
+                            tv_content.setText(new Gson().toJson(response.getError()));
                     }
                 });
             }

@@ -1,5 +1,7 @@
 package com.sd.lib.eos.rpc.core;
 
+import com.sd.lib.eos.rpc.api.model.ApiResponse;
+
 import java.util.Map;
 
 /**
@@ -18,5 +20,5 @@ public interface RpcApiExecutor
      * @return
      * @throws Exception
      */
-    <T> T execute(String baseUrl, String path, Map<String, Object> params, Class<T> clazz) throws Exception;
+    <T> ApiResponse<T> execute(String baseUrl, String path, Map<String, Object> params, Class<T> clazz) throws Exception;
 }

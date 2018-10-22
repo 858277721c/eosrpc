@@ -9,10 +9,13 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.sd.eos.rpc.R;
 import com.sd.eos.rpc.eos4j.ecc.EccTool;
-import com.sd.eos.rpc.model.AccountHolder;
-import com.sd.eos.rpc.model.AccountModel;
+import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
+import com.sd.lib.eos.rpc.api.model.ApiResponse;
+import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
+import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.handler.CreateAccountHandler;
+import com.sd.lib.eos.rpc.output.PushTransaction;
 import com.sd.lib.task.FTask;
 import com.sd.lib.utils.context.FClipboardUtil;
 import com.sd.lib.utils.context.FToast;
@@ -164,29 +167,46 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
                         .setTransfer(1)
                         .build();
 
-                final PushTransactionResponse response = handler.create(createrKeyPrivate);
-                if (response != null)
+                final PushTransaction pushTransaction = handler.newPushTransaction();
+                pushTransaction.submit(createrKeyPrivate, new PushTransaction.Callback()
                 {
-                    AccountHolder.get().add(new AccountModel(newAccount, newAccountKeyPrivate, newAccountKeyPublic));
-                    runOnUiThread(new Runnable()
+                    @Override
+                    public void onSuccess(ApiResponse<PushTransactionResponse> response)
                     {
-                        @Override
-                        public void run()
-                        {
-                            tv_content.setText(new Gson().toJson(response));
-                        }
-                    });
-                } else
-                {
-                    FToast.show("创建失败");
-                }
+                        setTextContent(new Gson().toJson(response.getSuccess()));
+                    }
+
+                    @Override
+                    public void onErrorAbiJsonToBin(ApiResponse<AbiJsonToBinResponse> response, String msg)
+                    {
+                        setTextContent(msg);
+                    }
+
+                    @Override
+                    public void onErrorGetInfo(ApiResponse<GetInfoResponse> response, String msg)
+                    {
+                        setTextContent(msg);
+                    }
+
+                    @Override
+                    public void onErrorGetBlock(ApiResponse<GetBlockResponse> response, String msg)
+                    {
+                        setTextContent(msg);
+                    }
+
+                    @Override
+                    public void onErrorPushTransaction(ApiResponse<PushTransactionResponse> response, String msg)
+                    {
+                        setTextContent(msg);
+                    }
+                });
             }
 
             @Override
             protected void onError(Exception e)
             {
                 super.onError(e);
-                FToast.show(String.valueOf(e));
+                setTextContent(String.valueOf(e));
             }
 
             @Override
@@ -205,7 +225,20 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
     {
         if (mTask != null)
             mTask.cancel(true);
-        tv_content.setText("");
+
+        setTextContent("");
+    }
+
+    private void setTextContent(final CharSequence text)
+    {
+        runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                tv_content.setText(text);
+            }
+        });
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.sd.lib.eos.rpc.output;
 
 import com.sd.lib.eos.rpc.api.RpcApi;
 import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
+import com.sd.lib.eos.rpc.api.model.ApiResponse;
 import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
 import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
@@ -14,7 +15,7 @@ import com.sd.lib.eos.rpc.params.ActionParams;
 import com.sd.lib.eos.rpc.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,60 +24,73 @@ import java.util.List;
 public class PushTransaction
 {
     private final RpcApi mRpcApi = new RpcApi();
-    private final List<ActionParams> mListParam = new ArrayList<>();
+    private final ActionParams[] mActionParams;
 
-    public void addAction(ActionParams model)
+    public PushTransaction(ActionParams... params)
     {
-        if (mListParam.contains(model))
-            return;
+        if (params == null || params.length <= 0)
+            throw new IllegalArgumentException("params was not specified");
 
-        Utils.checkNotNull(model, "");
-        mListParam.add(model);
+        mActionParams = Arrays.copyOf(params, params.length);
     }
 
     /**
-     * 提交交易
+     * 提交交易(同步执行)
      *
      * @param privateKey
-     * @return
+     * @param callback
      * @throws Exception
      */
-    public PushTransactionResponse submit(String privateKey) throws Exception
+    public final void submit(String privateKey, Callback callback) throws Exception
     {
-        Utils.checkEmpty(privateKey, "");
-        final List<ActionParams> listParam = Collections.unmodifiableList(mListParam);
-        if (listParam.isEmpty())
-            throw new RuntimeException("action is empty");
+        Utils.checkEmpty(privateKey, "private key is empty");
+        Utils.checkNotNull(callback, "callback is null");
 
         final List<ActionModel> listAction = new ArrayList<>();
-        for (ActionParams item : listParam)
+        for (ActionParams item : mActionParams)
         {
             final String code = item.getCode();
             final String action = item.getAction();
             final ActionParams.Args args = item.getArgs();
 
-            final AbiJsonToBinResponse response = mRpcApi.abiJsonToBin(code, action, args);
-            if (response != null)
+            final ApiResponse<AbiJsonToBinResponse> apiResponse = mRpcApi.abiJsonToBin(code, action, args);
+            if (!apiResponse.isSuccessful())
             {
-                final String binary = response.getBinargs();
-                Utils.checkEmpty(binary, "abiJsonToBin failed:" + code + " " + action);
-
-                final ActionModel actionModel = new ActionModel();
-                actionModel.setAccount(code);
-                actionModel.setName(action);
-                actionModel.setAuthorization(item.getAuthorization());
-                actionModel.setData(binary);
-
-                listAction.add(actionModel);
-            } else
-            {
-                Utils.checkNotNull(response, "abiJsonToBin failed:" + code + " " + action);
+                callback.onErrorAbiJsonToBin(apiResponse, "abiJsonToBin failed:" + code + " " + action);
+                return;
             }
+
+            final AbiJsonToBinResponse response = apiResponse.getSuccess();
+            final String binary = response.getBinargs();
+            Utils.checkEmpty(binary, "abiJsonToBin failed with empty binary:" + code + " " + action);
+
+            final ActionModel actionModel = new ActionModel();
+            actionModel.setAccount(code);
+            actionModel.setName(action);
+            actionModel.setAuthorization(item.getAuthorization());
+            actionModel.setData(binary);
+
+            listAction.add(actionModel);
         }
 
-        final GetInfoResponse info = mRpcApi.getInfo();
-        final String blockId = info.getHead_block_id();
-        final GetBlockResponse block = mRpcApi.getBlock(blockId);
+        final ApiResponse<GetInfoResponse> infoApiResponse = mRpcApi.getInfo();
+        if (!infoApiResponse.isSuccessful())
+        {
+            callback.onErrorGetInfo(infoApiResponse, "getInfo fialed");
+            return;
+        }
+
+        final GetInfoResponse info = infoApiResponse.getSuccess();
+        final String blockId = infoApiResponse.getSuccess().getHead_block_id();
+
+        final ApiResponse<GetBlockResponse> blockApiResonse = mRpcApi.getBlock(blockId);
+        if (!blockApiResonse.isSuccessful())
+        {
+            callback.onErrorGetBlock(blockApiResonse, "getBlock failed");
+            return;
+        }
+
+        final GetBlockResponse block = blockApiResonse.getSuccess();
 
         final TransactionModel transaction = new TransactionModel();
         transaction.setExpiration(info.getHeadBlockTimeAfter(30 * 1000));
@@ -86,14 +100,37 @@ public class PushTransaction
 
         final TransactionSignResult signedTransaction = getTransactionSigner().signTransaction(transaction, info, block, privateKey);
 
-        return mRpcApi.pushTransaction(signedTransaction.getSignatures(),
+        final ApiResponse<PushTransactionResponse> pushApiResponse = mRpcApi.pushTransaction(
+                signedTransaction.getSignatures(),
                 signedTransaction.getCompression(),
                 null,
-                signedTransaction.getPacked_trx());
+                signedTransaction.getPacked_trx()
+        );
+
+        if (!pushApiResponse.isSuccessful())
+        {
+            callback.onErrorPushTransaction(pushApiResponse, "push transaction failed");
+            return;
+        }
+
+        callback.onSuccess(pushApiResponse);
     }
 
     protected TransactionSigner getTransactionSigner()
     {
         return FEOSManager.getInstance().getTransactionSigner();
+    }
+
+    public interface Callback
+    {
+        void onSuccess(ApiResponse<PushTransactionResponse> response);
+
+        void onErrorAbiJsonToBin(ApiResponse<AbiJsonToBinResponse> response, String msg);
+
+        void onErrorGetInfo(ApiResponse<GetInfoResponse> response, String msg);
+
+        void onErrorGetBlock(ApiResponse<GetBlockResponse> response, String msg);
+
+        void onErrorPushTransaction(ApiResponse<PushTransactionResponse> response, String msg);
     }
 }

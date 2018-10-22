@@ -1,5 +1,6 @@
 package com.sd.lib.eos.rpc.api;
 
+import com.sd.lib.eos.rpc.api.model.ApiResponse;
 import com.sd.lib.eos.rpc.core.FEOSManager;
 import com.sd.lib.eos.rpc.core.RpcApiExecutor;
 import com.sd.lib.eos.rpc.utils.Utils;
@@ -19,25 +20,38 @@ public abstract class BaseRequest<T>
 
     protected abstract Map<String, Object> getParams();
 
-    public final T execute() throws Exception
+    /**
+     * 执行请求(同步执行)
+     *
+     * @return
+     * @throws Exception
+     */
+    public final ApiResponse<T> execute() throws Exception
     {
         final String baseUrl = getBaseUrl();
-        Utils.checkEmpty(baseUrl, "");
+        Utils.checkEmpty(baseUrl, "base url was not specified when execute:" + this);
 
         final String path = getPath();
-        Utils.checkEmpty(path, "");
+        Utils.checkEmpty(path, "path was not specified when execute:" + this);
 
         final Map<String, Object> params = getParams();
 
-        final Class<T> responseClass = getResponseClass();
-        Utils.checkNotNull(responseClass, "");
+        final Class<T> responseClass = getSuccessClass();
+        Utils.checkNotNull(responseClass, "successful class was not specified when execute:" + this);
 
         final RpcApiExecutor executor = FEOSManager.getInstance().getApiExecutor();
-        final T response = executor.execute(baseUrl, path, params, responseClass);
+        Utils.checkNotNull(executor, "RpcApiExecutor was not specified when execute:" + this);
+
+        final ApiResponse<T> response = executor.execute(baseUrl, path, params, responseClass);
+        Utils.checkNotNull(response, "ApiResponse is null");
+
+        if (!response.isSuccessful())
+            Utils.checkNotNull(response.getError(), "ApiResponse is unsuccessful but error is null");
+
         return response;
     }
 
-    protected Class<T> getResponseClass()
+    protected Class<T> getSuccessClass()
     {
         final ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
         final Type[] types = parameterizedType.getActualTypeArguments();

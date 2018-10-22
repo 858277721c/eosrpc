@@ -3,6 +3,8 @@ package com.sd.eos.rpc;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.sd.lib.eos.rpc.api.model.ApiResponse;
+import com.sd.lib.eos.rpc.api.model.ErrorResponse;
 import com.sd.lib.eos.rpc.core.RpcApiExecutor;
 import com.yanzhenjie.kalle.JsonBody;
 import com.yanzhenjie.kalle.Kalle;
@@ -16,7 +18,7 @@ public class AppRpcApiExecutor implements RpcApiExecutor
     private final Gson mGson = new Gson();
 
     @Override
-    public <T> T execute(String baseUrl, String path, Map<String, Object> params, Class<T> clazz) throws Exception
+    public <T> ApiResponse<T> execute(String baseUrl, String path, Map<String, Object> params, Class<T> clazz) throws Exception
     {
         Log.i(AppRpcApiExecutor.class.getSimpleName(), "execute:" + baseUrl + path);
 
@@ -34,7 +36,12 @@ public class AppRpcApiExecutor implements RpcApiExecutor
 
         Log.i(AppRpcApiExecutor.class.getSimpleName(), "response:" + response.code() + " " + result);
 
-        final T model = mGson.fromJson(result, clazz);
-        return model;
+        if (response.code() == 500)
+        {
+            return new ApiResponse<>(null, mGson.fromJson(result, ErrorResponse.class));
+        } else
+        {
+            return new ApiResponse<>(mGson.fromJson(result, clazz), null);
+        }
     }
 }

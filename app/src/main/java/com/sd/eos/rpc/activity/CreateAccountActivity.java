@@ -1,9 +1,7 @@
 package com.sd.eos.rpc.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,7 +17,7 @@ import java.util.UUID;
 /**
  * 创建账号
  */
-public class CreateAccountActivity extends AppCompatActivity implements View.OnClickListener
+public class CreateAccountActivity extends BaseActivity implements View.OnClickListener
 {
     public static final String TAG = CreateAccountActivity.class.getSimpleName();
 
@@ -120,6 +118,8 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
             @Override
             protected void onRun() throws Exception
             {
+                showProgress("");
+
                 final CreateAccountHandler handler = new CreateAccountHandler.Builder()
                         .setCreator(creater)
                         .setName(newAccount)
@@ -137,7 +137,14 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
             protected void onError(Exception e)
             {
                 super.onError(e);
-                Log.e(TAG, String.valueOf(e));
+                FToast.show(String.valueOf(e));
+            }
+
+            @Override
+            protected void onFinally()
+            {
+                super.onFinally();
+                dismissProgress();
             }
         };
         mTask.submit();

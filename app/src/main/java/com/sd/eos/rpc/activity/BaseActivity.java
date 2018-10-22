@@ -2,6 +2,7 @@ package com.sd.eos.rpc.activity;
 
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
 
 public class BaseActivity extends AppCompatActivity
 {
@@ -22,6 +23,18 @@ public class BaseActivity extends AppCompatActivity
             mProgressDialog.dismiss();
             mProgressDialog = null;
         }
+    }
+
+    protected final void setTextContent(final TextView textView, final CharSequence text)
+    {
+        runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                textView.setText(text);
+            }
+        });
     }
 
     @Override

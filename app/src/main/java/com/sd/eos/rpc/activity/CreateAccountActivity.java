@@ -164,32 +164,32 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
                     @Override
                     public void onSuccess(ApiResponse<PushTransactionResponse> response)
                     {
-                        setTextContent(new Gson().toJson(response.getSuccess()));
+                        setTextContent(tv_content, new Gson().toJson(response.getSuccess()));
                         AccountHolder.get().add(new AccountModel(newAccount, newAccountKeyPrivate, newAccountKeyPublic));
                     }
 
                     @Override
                     public void onErrorAbiJsonToBin(ApiResponse<AbiJsonToBinResponse> response, String msg)
                     {
-                        setTextContent(new Gson().toJson(response.getError()) + " " + msg);
+                        setTextContent(tv_content, new Gson().toJson(response.getError()) + " " + msg);
                     }
 
                     @Override
                     public void onErrorGetInfo(ApiResponse<GetInfoResponse> response, String msg)
                     {
-                        setTextContent(new Gson().toJson(response.getError()) + " " + msg);
+                        setTextContent(tv_content, new Gson().toJson(response.getError()) + " " + msg);
                     }
 
                     @Override
                     public void onErrorGetBlock(ApiResponse<GetBlockResponse> response, String msg)
                     {
-                        setTextContent(new Gson().toJson(response.getError()) + " " + msg);
+                        setTextContent(tv_content, new Gson().toJson(response.getError()) + " " + msg);
                     }
 
                     @Override
                     public void onErrorPushTransaction(ApiResponse<PushTransactionResponse> response, String msg)
                     {
-                        setTextContent(new Gson().toJson(response.getError()) + " " + msg);
+                        setTextContent(tv_content, new Gson().toJson(response.getError()) + " " + msg);
                     }
                 });
             }
@@ -198,7 +198,7 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
             protected void onError(Exception e)
             {
                 super.onError(e);
-                setTextContent(String.valueOf(e));
+                setTextContent(tv_content, String.valueOf(e));
             }
 
             @Override
@@ -218,19 +218,7 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
         if (mTask != null)
             mTask.cancel(true);
 
-        setTextContent("");
-    }
-
-    private void setTextContent(final CharSequence text)
-    {
-        runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                tv_content.setText(text);
-            }
-        });
+        setTextContent(tv_content, "");
     }
 
     @Override

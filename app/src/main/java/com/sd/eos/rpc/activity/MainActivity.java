@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.EditText;
 
 import com.sd.eos.rpc.R;
 
@@ -33,6 +32,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_create_account:
                 startActivity(new Intent(this, CreateAccountActivity.class));
+                break;
+            case R.id.btn_transfer:
+                startActivity(new Intent(this, TransferActivity.class));
                 break;
         }
     }

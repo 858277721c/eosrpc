@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.sd.eos.rpc.R;
 import com.sd.eos.rpc.eos4j.ecc.EccTool;
+import com.sd.eos.rpc.model.AccountHolder;
+import com.sd.eos.rpc.model.AccountModel;
 import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
 import com.sd.lib.eos.rpc.api.model.ApiResponse;
 import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
@@ -17,7 +19,6 @@ import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.handler.CreateAccountHandler;
 import com.sd.lib.eos.rpc.output.PushTransaction;
 import com.sd.lib.task.FTask;
-import com.sd.lib.utils.context.FClipboardUtil;
 import com.sd.lib.utils.context.FToast;
 
 import java.util.Random;
@@ -28,11 +29,9 @@ import java.util.UUID;
  */
 public class CreateAccountActivity extends BaseActivity implements View.OnClickListener
 {
-    public static final String TAG = CreateAccountActivity.class.getSimpleName();
-
     private EditText et_creater, et_creater_key_private;
     private EditText et_new_account, et_buy_ram_quantity, et_stake_cpu_quantity, et_stake_net_quantity;
-    private TextView tv_new_account_key_private, tv_new_account_key_public;
+    private EditText et_new_account_key_private, et_new_account_key_public;
     private TextView tv_content;
 
     private FTask mTask;
@@ -48,8 +47,8 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
         et_buy_ram_quantity = findViewById(R.id.et_buy_ram_quantity);
         et_stake_cpu_quantity = findViewById(R.id.et_stake_cpu_quantity);
         et_stake_net_quantity = findViewById(R.id.et_stake_net_quantity);
-        tv_new_account_key_private = findViewById(R.id.tv_new_account_key_private);
-        tv_new_account_key_public = findViewById(R.id.tv_new_account_key_public);
+        et_new_account_key_private = findViewById(R.id.et_new_account_key_private);
+        et_new_account_key_public = findViewById(R.id.et_new_account_key_public);
         tv_content = findViewById(R.id.tv_content);
     }
 
@@ -61,22 +60,14 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
             case R.id.tv_new_account_label:
                 et_new_account.setText(randomAccount());
                 break;
-            case R.id.tv_new_account_key_private:
-                FClipboardUtil.setText(tv_new_account_key_private.getText());
-                FToast.show("已复制");
-                break;
-            case R.id.tv_new_account_key_public:
-                FClipboardUtil.setText(tv_new_account_key_public.getText());
-                FToast.show("已复制");
-                break;
 
             case R.id.tv_new_account_key_private_label:
             case R.id.tv_new_account_key_public_label:
                 final String privateKey = EccTool.seedPrivate(UUID.randomUUID().toString());
                 final String publicKey = EccTool.privateToPublic(privateKey);
 
-                tv_new_account_key_private.setText(privateKey);
-                tv_new_account_key_public.setText(publicKey);
+                et_new_account_key_private.setText(privateKey);
+                et_new_account_key_public.setText(publicKey);
                 break;
             case R.id.btn_create_account:
                 createAccount();
@@ -143,8 +134,8 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
             return;
         }
 
-        final String newAccountKeyPublic = tv_new_account_key_public.getText().toString();
-        final String newAccountKeyPrivate = tv_new_account_key_private.getText().toString();
+        final String newAccountKeyPublic = et_new_account_key_public.getText().toString();
+        final String newAccountKeyPrivate = et_new_account_key_private.getText().toString();
         if (TextUtils.isEmpty(newAccountKeyPublic) || TextUtils.isEmpty(newAccountKeyPrivate))
         {
             FToast.show("请生成密钥");
@@ -174,6 +165,7 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
                     public void onSuccess(ApiResponse<PushTransactionResponse> response)
                     {
                         setTextContent(new Gson().toJson(response.getSuccess()));
+                        AccountHolder.get().add(new AccountModel(newAccount, newAccountKeyPrivate, newAccountKeyPublic));
                     }
 
                     @Override

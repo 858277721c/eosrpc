@@ -85,7 +85,7 @@ public class CreateAccountHandler
          * @param quant
          * @return
          */
-        public Builder setQuant(String quant)
+        public Builder setBuyRamQuantity(String quant)
         {
             mBuyramBuilder.setQuant(quant);
             return this;

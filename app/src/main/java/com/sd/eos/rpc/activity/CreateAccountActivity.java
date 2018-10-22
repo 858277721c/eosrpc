@@ -124,7 +124,7 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
                         .setCreator(creater)
                         .setName(newAccount)
                         .setOwner(newAccountKeyPublic)
-                        .setQuant(buyRam + " EOS")
+                        .setBuyRamQuantity(buyRam + " EOS")
                         .setStake_cpu_quantity(stakeCpu + " EOS")
                         .setStake_net_quantity(stakeNet + " EOS")
                         .setTransfer(1)

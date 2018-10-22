@@ -179,25 +179,25 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
                     @Override
                     public void onErrorAbiJsonToBin(ApiResponse<AbiJsonToBinResponse> response, String msg)
                     {
-                        setTextContent(msg);
+                        setTextContent(new Gson().toJson(response.getError()) + " " + msg);
                     }
 
                     @Override
                     public void onErrorGetInfo(ApiResponse<GetInfoResponse> response, String msg)
                     {
-                        setTextContent(msg);
+                        setTextContent(new Gson().toJson(response.getError()) + " " + msg);
                     }
 
                     @Override
                     public void onErrorGetBlock(ApiResponse<GetBlockResponse> response, String msg)
                     {
-                        setTextContent(msg);
+                        setTextContent(new Gson().toJson(response.getError()) + " " + msg);
                     }
 
                     @Override
                     public void onErrorPushTransaction(ApiResponse<PushTransactionResponse> response, String msg)
                     {
-                        setTextContent(msg);
+                        setTextContent(new Gson().toJson(response.getError()) + " " + msg);
                     }
                 });
             }

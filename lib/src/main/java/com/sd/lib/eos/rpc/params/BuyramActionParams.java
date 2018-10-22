@@ -107,9 +107,9 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
 
         public BuyramActionParams build()
         {
-            Utils.checkEmpty(payer, "");
-            Utils.checkEmpty(receiver, "");
-            Utils.checkEmpty(quant, "");
+            Utils.checkEmpty(payer, "payer account was not specified");
+            Utils.checkEmpty(receiver, "receiver account was not specified");
+            Utils.checkEmpty(quant, "buy ram quantity was not specified");
             return new BuyramActionParams(this);
         }
     }

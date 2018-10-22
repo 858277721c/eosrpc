@@ -147,10 +147,10 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
 
         public DelegatebwActionParams build()
         {
-            Utils.checkEmpty(from, "");
-            Utils.checkEmpty(receiver, "");
-            Utils.checkEmpty(stake_net_quantity, "");
-            Utils.checkEmpty(stake_cpu_quantity, "");
+            Utils.checkEmpty(from, "from account was not specified");
+            Utils.checkEmpty(receiver, "receiver account was not specified");
+            Utils.checkEmpty(stake_net_quantity, "stake net quantity was not specified");
+            Utils.checkEmpty(stake_cpu_quantity, "stake cpu quantity was not specified");
             return new DelegatebwActionParams(this);
         }
     }

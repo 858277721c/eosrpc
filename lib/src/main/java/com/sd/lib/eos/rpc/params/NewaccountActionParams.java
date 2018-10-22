@@ -131,10 +131,10 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
 
         public NewaccountActionParams build()
         {
-            Utils.checkEmpty(creator, "");
-            Utils.checkEmpty(name, "");
-            Utils.checkNotNull(owner, "");
-            Utils.checkNotNull(active, "");
+            Utils.checkEmpty(creator, "account of the creator was not specified");
+            Utils.checkEmpty(name, "new account name was not specified");
+            Utils.checkNotNull(owner, "owner permission was not specified");
+            Utils.checkNotNull(active, "active permission was not specified");
             return new NewaccountActionParams(this);
         }
     }

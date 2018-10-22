@@ -14,7 +14,7 @@ public abstract class BaseParams<A extends ActionParams.Args, B extends BasePara
     protected BaseParams(B builder)
     {
         if (builder.authorization == null || builder.authorization.isEmpty())
-            throw new IllegalArgumentException("authorization is empty");
+            throw new IllegalArgumentException("authorization was not specified");
         this.authorization = Collections.unmodifiableList(builder.authorization);
     }
 

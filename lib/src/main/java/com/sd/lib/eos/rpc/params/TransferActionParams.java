@@ -127,9 +127,9 @@ public class TransferActionParams extends BaseParams<TransferActionParams.Args, 
 
         public TransferActionParams build()
         {
-            Utils.checkEmpty(from, "");
-            Utils.checkEmpty(to, "");
-            Utils.checkEmpty(quantity, "");
+            Utils.checkEmpty(from, "from account was not specified");
+            Utils.checkEmpty(to, "to account was not specified");
+            Utils.checkEmpty(quantity, "transfer quantity was not specified");
 
             if (memo == null)
                 memo = "";

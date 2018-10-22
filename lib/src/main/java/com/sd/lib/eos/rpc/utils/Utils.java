@@ -1,5 +1,7 @@
 package com.sd.lib.eos.rpc.utils;
 
+import java.text.DecimalFormat;
+
 public class Utils
 {
     public static boolean isEmpty(String content)
@@ -39,26 +41,7 @@ public class Utils
         if (num < 0)
             throw new IllegalArgumentException("Illegal quantity:" + quantity);
 
-        if (arr[0].split(".").length != 2)
-            throw new IllegalArgumentException("Illegal quantity:" + quantity);
-
-        final int targetDemicalLength = 4;
-
-        final int demicalLength = arr[0].substring(arr[0].indexOf(".")).length();
-        if (demicalLength == targetDemicalLength)
-        {
-            // legal
-            return quantity;
-        } else if (demicalLength < targetDemicalLength)
-        {
-            for (int i = 0; i < (targetDemicalLength - demicalLength); i++)
-            {
-                arr[0] += "0";
-            }
-            return arr[0] + " " + arr[1];
-        } else
-        {
-            throw new IllegalArgumentException("Illegal quantity:" + quantity);
-        }
+        final String result = new DecimalFormat("#0.0000").format(num) + " " + arr[1];
+        return result;
     }
 }

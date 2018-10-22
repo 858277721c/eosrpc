@@ -28,9 +28,6 @@ public class Utils
         if (arr.length != 2)
             throw new IllegalArgumentException("Illegal quantity:" + quantity);
 
-        if (arr[0].split(".").length != 1)
-            throw new IllegalArgumentException("Illegal quantity:" + quantity);
-
         double num = 0;
         try
         {
@@ -39,8 +36,10 @@ public class Utils
         {
             throw new IllegalArgumentException("Illegal quantity:" + quantity);
         }
-
         if (num < 0)
+            throw new IllegalArgumentException("Illegal quantity:" + quantity);
+
+        if (arr[0].split(".").length != 2)
             throw new IllegalArgumentException("Illegal quantity:" + quantity);
 
         final int targetDemicalLength = 4;

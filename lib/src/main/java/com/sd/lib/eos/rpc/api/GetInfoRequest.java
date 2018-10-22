@@ -9,6 +9,11 @@ import java.util.Map;
  */
 class GetInfoRequest extends BaseRequest<GetInfoResponse>
 {
+    public GetInfoRequest(String baseUrl)
+    {
+        super(baseUrl);
+    }
+
     @Override
     protected final String getPath()
     {

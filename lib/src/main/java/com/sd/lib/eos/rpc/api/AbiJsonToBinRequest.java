@@ -11,19 +11,37 @@ import java.util.Map;
  */
 class AbiJsonToBinRequest extends BaseRequest<AbiJsonToBinResponse>
 {
-    private final String code;
-    private final String action;
-    private final Object args;
+    private String code;
+    private String action;
+    private Object args;
 
-    public AbiJsonToBinRequest(String code, String action, Object args)
+    public AbiJsonToBinRequest(String baseUrl)
     {
-        Utils.checkEmpty(code, "");
-        Utils.checkEmpty(action, "");
-        Utils.checkNotNull(args, "");
+        super(baseUrl);
+    }
 
+    public void setCode(String code)
+    {
         this.code = code;
+    }
+
+    public void setAction(String action)
+    {
         this.action = action;
+    }
+
+    public void setArgs(Object args)
+    {
         this.args = args;
+    }
+
+    @Override
+    protected void beforeExecute()
+    {
+        super.beforeExecute();
+        Utils.checkEmpty(code, "code is empty");
+        Utils.checkEmpty(action, "action is empty");
+        Utils.checkNotNull(args, "args is null");
     }
 
     @Override

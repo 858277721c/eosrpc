@@ -11,12 +11,23 @@ import java.util.Map;
  */
 class GetBlockRequest extends BaseRequest<GetBlockResponse>
 {
-    private final String block_num_or_id;
+    private String block_num_or_id;
 
-    public GetBlockRequest(String block_num_or_id)
+    public GetBlockRequest(String baseUrl)
     {
-        Utils.checkEmpty(block_num_or_id, "");
+        super(baseUrl);
+    }
+
+    public void setBlock_num_or_id(String block_num_or_id)
+    {
         this.block_num_or_id = block_num_or_id;
+    }
+
+    @Override
+    protected void beforeExecute()
+    {
+        super.beforeExecute();
+        Utils.checkEmpty(block_num_or_id, "block_num_or_id is empty");
     }
 
     @Override

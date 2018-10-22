@@ -10,28 +10,50 @@ import java.util.Map;
 
 class PushTransactionRequest extends BaseRequest<PushTransactionResponse>
 {
-    private final List<String> signatures;
-    private final String compression;
-    private final String packed_context_free_data;
-    private final String packed_trx;
+    private List<String> signatures;
+    private String compression;
+    private String packed_context_free_data;
+    private String packed_trx;
 
-    public PushTransactionRequest(List<String> signatures, String compression, String packed_context_free_data, String packed_trx)
+    public PushTransactionRequest(String baseUrl)
     {
+        super(baseUrl);
+    }
+
+    public void setSignatures(List<String> signatures)
+    {
+        this.signatures = signatures;
+    }
+
+    public void setCompression(String compression)
+    {
+        this.compression = compression;
+    }
+
+    public void setPacked_context_free_data(String packed_context_free_data)
+    {
+        this.packed_context_free_data = packed_context_free_data;
+    }
+
+    public void setPacked_trx(String packed_trx)
+    {
+        this.packed_trx = packed_trx;
+    }
+
+    @Override
+    protected void beforeExecute()
+    {
+        super.beforeExecute();
         if (signatures == null || signatures.isEmpty())
             throw new IllegalArgumentException("signatures is empty");
+
+        Utils.checkEmpty(packed_trx, "");
 
         if (Utils.isEmpty(compression))
             compression = "none";
 
         if (Utils.isEmpty(packed_context_free_data))
             packed_context_free_data = "";
-
-        Utils.checkEmpty(packed_trx, "");
-
-        this.signatures = signatures;
-        this.compression = compression;
-        this.packed_context_free_data = packed_context_free_data;
-        this.packed_trx = packed_trx;
     }
 
     @Override

@@ -7,11 +7,26 @@ import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
 import com.sd.lib.eos.rpc.api.model.GetCurrencyBalanceResponse;
 import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
+import com.sd.lib.eos.rpc.core.FEOSManager;
+import com.sd.lib.eos.rpc.utils.Utils;
 
 import java.util.List;
 
 public class RpcApi
 {
+    private final String mBaseUrl;
+
+    public RpcApi()
+    {
+        this(FEOSManager.getInstance().getBaseUrl());
+    }
+
+    public RpcApi(String baseUrl)
+    {
+        Utils.checkEmpty(baseUrl, "baseUrl is empty");
+        mBaseUrl = baseUrl;
+    }
+
     /**
      * 获得区块链信息
      *
@@ -20,7 +35,7 @@ public class RpcApi
      */
     public ApiResponse<GetInfoResponse> getInfo() throws Exception
     {
-        return new GetInfoRequest().execute();
+        return new GetInfoRequest(mBaseUrl).execute();
     }
 
     /**
@@ -32,7 +47,8 @@ public class RpcApi
      */
     public ApiResponse<GetBlockResponse> getBlock(String block_num_or_id) throws Exception
     {
-        final GetBlockRequest request = new GetBlockRequest(block_num_or_id);
+        final GetBlockRequest request = new GetBlockRequest(mBaseUrl);
+        request.setBlock_num_or_id(block_num_or_id);
         return request.execute();
     }
 
@@ -45,7 +61,8 @@ public class RpcApi
      */
     public ApiResponse<GetAccountResponse> getAccount(String account_name) throws Exception
     {
-        final GetAccountRequest request = new GetAccountRequest(account_name);
+        final GetAccountRequest request = new GetAccountRequest(mBaseUrl);
+        request.setAccount_name(account_name);
         return request.execute();
     }
 
@@ -71,7 +88,9 @@ public class RpcApi
      */
     public ApiResponse<GetCurrencyBalanceResponse> getCurrencyBalance(String account, String symbol) throws Exception
     {
-        final GetCurrencyBalanceRequest request = new GetCurrencyBalanceRequest(account, symbol);
+        final GetCurrencyBalanceRequest request = new GetCurrencyBalanceRequest(mBaseUrl);
+        request.setAccount(account);
+        request.setSymbol(symbol);
         return request.execute();
     }
 
@@ -86,7 +105,10 @@ public class RpcApi
      */
     public ApiResponse<AbiJsonToBinResponse> abiJsonToBin(String code, String action, Object args) throws Exception
     {
-        final AbiJsonToBinRequest request = new AbiJsonToBinRequest(code, action, args);
+        final AbiJsonToBinRequest request = new AbiJsonToBinRequest(mBaseUrl);
+        request.setCode(code);
+        request.setAction(action);
+        request.setArgs(args);
         return request.execute();
     }
 
@@ -102,7 +124,11 @@ public class RpcApi
      */
     public ApiResponse<PushTransactionResponse> pushTransaction(List<String> signatures, String compression, String packed_context_free_data, String packed_trx) throws Exception
     {
-        final PushTransactionRequest request = new PushTransactionRequest(signatures, compression, packed_context_free_data, packed_trx);
+        final PushTransactionRequest request = new PushTransactionRequest(mBaseUrl);
+        request.setSignatures(signatures);
+        request.setCompression(compression);
+        request.setPacked_context_free_data(packed_context_free_data);
+        request.setPacked_trx(packed_trx);
         return request.execute();
     }
 }

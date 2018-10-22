@@ -13,10 +13,21 @@ class GetAccountRequest extends BaseRequest<GetAccountResponse>
 {
     private String account_name;
 
-    public GetAccountRequest(String account_name)
+    public GetAccountRequest(String baseUrl)
     {
-        Utils.checkEmpty(account_name, "");
+        super(baseUrl);
+    }
+
+    public void setAccount_name(String account_name)
+    {
         this.account_name = account_name;
+    }
+
+    @Override
+    protected void beforeExecute()
+    {
+        super.beforeExecute();
+        Utils.checkEmpty(account_name, "account_name is empty");
     }
 
     @Override

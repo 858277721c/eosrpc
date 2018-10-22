@@ -11,39 +11,42 @@ import java.util.Map;
  */
 class GetCurrencyBalanceRequest extends BaseRequest<GetCurrencyBalanceResponse>
 {
-    private final String code;
-    /**
-     * 要查询的账号
-     */
-    private final String account;
-    /**
-     * 要查询的币种
-     */
-    private final String symbol;
+    private final String code = "eosio.token";
+    private String account;
+    private String symbol;
 
-    public GetCurrencyBalanceRequest(String account)
+    public GetCurrencyBalanceRequest(String baseUrl)
     {
-        this(account, null);
+        super(baseUrl);
     }
 
-    public GetCurrencyBalanceRequest(String account, String symbol)
+    /**
+     * 设置要查询的账号
+     *
+     * @param account
+     */
+    public void setAccount(String account)
     {
-        this(null, account, symbol);
+        this.account = account;
     }
 
-    private GetCurrencyBalanceRequest(String code, String account, String symbol)
+    /**
+     * 设置要查询的币种
+     *
+     * @param symbol
+     */
+    public void setSymbol(String symbol)
     {
-        Utils.checkEmpty(account, "");
+        this.symbol = symbol;
+    }
 
-        if (Utils.isEmpty(code))
-            code = "eosio.token";
-
+    @Override
+    protected void beforeExecute()
+    {
+        super.beforeExecute();
+        Utils.checkEmpty(account, "account is empty");
         if (Utils.isEmpty(symbol))
             symbol = "eos";
-
-        this.code = code;
-        this.account = account;
-        this.symbol = symbol;
     }
 
     @Override

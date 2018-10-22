@@ -11,14 +11,21 @@ import java.util.Map;
 
 abstract class BaseRequest<T>
 {
-    protected String getBaseUrl()
+    protected final String mBaseUrl;
+
+    public BaseRequest(String baseUrl)
     {
-        return FEOSManager.getInstance().getBaseUrl();
+        Utils.checkEmpty(baseUrl, "baseUrl is empty");
+        mBaseUrl = baseUrl;
     }
 
     protected abstract String getPath();
 
     protected abstract Map<String, Object> getParams();
+
+    protected void beforeExecute()
+    {
+    }
 
     /**
      * 执行请求(同步执行)
@@ -28,13 +35,10 @@ abstract class BaseRequest<T>
      */
     public final ApiResponse<T> execute() throws Exception
     {
-        final String baseUrl = getBaseUrl();
-        Utils.checkEmpty(baseUrl, "base url was not specified when execute:" + this);
+        beforeExecute();
 
         final String path = getPath();
         Utils.checkEmpty(path, "path was not specified when execute:" + this);
-
-        final Map<String, Object> params = getParams();
 
         final Class<T> responseClass = getSuccessClass();
         Utils.checkNotNull(responseClass, "successful class was not specified when execute:" + this);
@@ -42,7 +46,7 @@ abstract class BaseRequest<T>
         final RpcApiExecutor executor = FEOSManager.getInstance().getApiExecutor();
         Utils.checkNotNull(executor, "RpcApiExecutor was not specified when execute:" + this);
 
-        final ApiResponse<T> response = executor.execute(baseUrl, path, params, responseClass);
+        final ApiResponse<T> response = executor.execute(mBaseUrl, path, getParams(), responseClass);
         Utils.checkNotNull(response, "ApiResponse is null");
 
         if (!response.isSuccessful())

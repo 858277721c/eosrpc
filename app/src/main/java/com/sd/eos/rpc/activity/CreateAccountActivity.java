@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.sd.eos.rpc.R;
 import com.sd.eos.rpc.eos4j.ecc.EccTool;
+import com.sd.eos.rpc.model.AccountHolder;
+import com.sd.eos.rpc.model.AccountModel;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.handler.CreateAccountHandler;
 import com.sd.lib.task.FTask;
@@ -165,6 +167,7 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
                 final PushTransactionResponse response = handler.create(createrKeyPrivate);
                 if (response != null)
                 {
+                    AccountHolder.get().add(new AccountModel(newAccount, newAccountKeyPrivate, newAccountKeyPublic));
                     runOnUiThread(new Runnable()
                     {
                         @Override

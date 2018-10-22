@@ -2,18 +2,20 @@ package com.sd.eos.rpc.model;
 
 public class AccountModel
 {
-    private String privateKey;
-    private String publicKey;
-    private String account;
+    private final String account;
+    private final String privateKey;
+    private final String publicKey;
+
+    public AccountModel(String account, String privateKey, String publicKey)
+    {
+        this.account = account;
+        this.privateKey = privateKey;
+        this.publicKey = publicKey;
+    }
 
     public String getPrivateKey()
     {
         return privateKey;
-    }
-
-    public void setPrivateKey(String privateKey)
-    {
-        this.privateKey = privateKey;
     }
 
     public String getPublicKey()
@@ -21,18 +23,20 @@ public class AccountModel
         return publicKey;
     }
 
-    public void setPublicKey(String publicKey)
-    {
-        this.publicKey = publicKey;
-    }
-
     public String getAccount()
     {
         return account;
     }
 
-    public void setAccount(String account)
+    @Override
+    public boolean equals(Object obj)
     {
-        this.account = account;
+        if (!(obj instanceof AccountModel))
+        {
+            return false;
+        }
+
+        final AccountModel other = (AccountModel) obj;
+        return account.equals(other.account);
     }
 }

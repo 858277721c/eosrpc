@@ -105,11 +105,26 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
             return this;
         }
 
+        /**
+         * 设置购买金额
+         *
+         * @param quant  数量
+         * @param symbol 币种，默认EOS
+         * @return
+         */
+        public Builder setQuant(double quant, String symbol)
+        {
+            if (Utils.isEmpty(symbol))
+                symbol = "EOS";
+
+            return setQuant(quant + " " + symbol);
+        }
+
         public BuyramActionParams build()
         {
             Utils.checkEmpty(payer, "payer account was not specified");
             Utils.checkEmpty(receiver, "receiver account was not specified");
-            Utils.checkEmpty(quant, "buy ram quantity was not specified");
+            quant = Utils.checkQuantity(quant, "quant was not specified");
             return new BuyramActionParams(this);
         }
     }

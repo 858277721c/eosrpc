@@ -94,6 +94,19 @@ public class CreateAccountHandler
         }
 
         /**
+         * 设置购买内存的金额
+         *
+         * @param quant  数量
+         * @param symbol 币种，默认EOS
+         * @return
+         */
+        public Builder setBuyRamQuantity(double quant, String symbol)
+        {
+            mBuyramBuilder.setQuant(quant, symbol);
+            return this;
+        }
+
+        /**
          * 设置网络抵押金额
          *
          * @param stake_net_quantity

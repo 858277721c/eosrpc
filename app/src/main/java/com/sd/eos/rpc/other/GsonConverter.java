@@ -1,4 +1,4 @@
-package com.sd.eos.rpc;
+package com.sd.eos.rpc.other;
 
 import com.google.gson.Gson;
 import com.yanzhenjie.kalle.Response;

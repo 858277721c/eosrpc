@@ -1,7 +1,6 @@
 package com.sd.eos.rpc.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -15,7 +14,7 @@ import com.sd.lib.task.FTask;
 /**
  * 查询账号信息
  */
-public class GetAccountActivity extends AppCompatActivity
+public class GetAccountActivity extends BaseActivity
 {
     private TextView tv_content;
     private EditText et_get_account;

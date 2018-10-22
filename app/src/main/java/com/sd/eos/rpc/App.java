@@ -27,7 +27,7 @@ public class App extends Application
                 .converter(new GsonConverter())
                 .build());
 
-        FEOSManager.getInstance().setBaseUrl("http://jungle.eosbcn.com:8080");
+        FEOSManager.getInstance().setBaseUrl("http://jungle.cryptolions.io:18888");
         FEOSManager.getInstance().setApiExecutor(new AppRpcApiExecutor());
         FEOSManager.getInstance().setTransactionSigner(new AppTransactionSigner());
     }

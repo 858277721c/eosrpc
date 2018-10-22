@@ -24,6 +24,7 @@
                 android:id="@+id/et_creater"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:digits="abcdefghijklmnopqrstuvwxyz12345"
                 android:maxLength="12"
                 android:text="fwtest111111" />
 
@@ -44,7 +45,6 @@
                 android:id="@+id/et_creater_key_private"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="12"
                 android:text="5JQh92zjfWJW6a6suaLm7o2wMCNKZnqp4bb3Kb2dNSb7ts8vDWH" />
 
         </LinearLayout>

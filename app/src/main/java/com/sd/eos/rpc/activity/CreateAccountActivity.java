@@ -6,8 +6,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.sd.eos.rpc.R;
 import com.sd.eos.rpc.eos4j.ecc.EccTool;
+import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.handler.CreateAccountHandler;
 import com.sd.lib.task.FTask;
 import com.sd.lib.utils.context.FToast;
@@ -24,6 +26,7 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
     private EditText et_creater, et_creater_key_private;
     private EditText et_new_account, et_buy_ram_quantity, et_stake_cpu_quantity, et_stake_net_quantity;
     private TextView tv_new_account_key_private, tv_new_account_key_public;
+    private TextView tv_content;
 
     private FTask mTask;
 
@@ -40,6 +43,7 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
         et_stake_net_quantity = findViewById(R.id.et_stake_net_quantity);
         tv_new_account_key_private = findViewById(R.id.tv_new_account_key_private);
         tv_new_account_key_public = findViewById(R.id.tv_new_account_key_public);
+        tv_content = findViewById(R.id.tv_content);
     }
 
     @Override
@@ -130,7 +134,21 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
                         .setTransfer(1)
                         .build();
 
-                handler.create(createrKeyPrivate);
+                final PushTransactionResponse response = handler.create(createrKeyPrivate);
+                if (response != null)
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            tv_content.setText(new Gson().toJson(response));
+                        }
+                    });
+                } else
+                {
+                    FToast.show("创建失败");
+                }
             }
 
             @Override
@@ -154,6 +172,7 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
     {
         if (mTask != null)
             mTask.cancel(true);
+        tv_content.setText("");
     }
 
     @Override

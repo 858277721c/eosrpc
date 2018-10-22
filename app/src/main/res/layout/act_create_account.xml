@@ -197,6 +197,11 @@
             android:text="创建账号"
             android:textAllCaps="false" />
 
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
 </ScrollView>

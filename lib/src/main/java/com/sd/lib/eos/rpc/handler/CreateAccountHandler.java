@@ -1,5 +1,6 @@
 package com.sd.lib.eos.rpc.handler;
 
+import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.output.PushTransaction;
 import com.sd.lib.eos.rpc.params.BuyramActionParams;
 import com.sd.lib.eos.rpc.params.DelegatebwActionParams;
@@ -16,9 +17,9 @@ public class CreateAccountHandler
         mPushTransaction.addAction(builder.mDelegatebwBuilder.build());
     }
 
-    public void create(String privatekey) throws Exception
+    public PushTransactionResponse create(String privatekey) throws Exception
     {
-        mPushTransaction.submit(privatekey);
+        return mPushTransaction.submit(privatekey);
     }
 
     public static class Builder

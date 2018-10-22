@@ -56,15 +56,22 @@ public class PushTransaction
             final ActionParams.Args args = item.getArgs();
 
             final AbiJsonToBinResponse response = mRpcApi.abiJsonToBin(code, action, args);
-            final String binary = response.getBinargs();
+            if (response != null)
+            {
+                final String binary = response.getBinargs();
+                Utils.checkEmpty(binary, "abiJsonToBin failed:" + code + " " + action);
 
-            final ActionModel actionModel = new ActionModel();
-            actionModel.setAccount(code);
-            actionModel.setName(action);
-            actionModel.setAuthorization(item.getAuthorization());
-            actionModel.setData(binary);
+                final ActionModel actionModel = new ActionModel();
+                actionModel.setAccount(code);
+                actionModel.setName(action);
+                actionModel.setAuthorization(item.getAuthorization());
+                actionModel.setData(binary);
 
-            listAction.add(actionModel);
+                listAction.add(actionModel);
+            } else
+            {
+                Utils.checkNotNull(response, "abiJsonToBin failed:" + code + " " + action);
+            }
         }
 
         final GetInfoResponse info = mRpcApi.getInfo();

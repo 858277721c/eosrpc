@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * 查看余额
  */
-public class GetCurrencyBalanceRequest extends BaseRequest<GetCurrencyBalanceResponse>
+class GetCurrencyBalanceRequest extends BaseRequest<GetCurrencyBalanceResponse>
 {
     private final String code;
     /**

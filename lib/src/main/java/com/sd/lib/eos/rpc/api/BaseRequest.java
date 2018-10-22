@@ -9,7 +9,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-public abstract class BaseRequest<T>
+abstract class BaseRequest<T>
 {
     protected String getBaseUrl()
     {

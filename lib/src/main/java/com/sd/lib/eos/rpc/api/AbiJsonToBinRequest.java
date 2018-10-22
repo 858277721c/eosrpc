@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * json转二进制
  */
-public class AbiJsonToBinRequest extends BaseRequest<AbiJsonToBinResponse>
+class AbiJsonToBinRequest extends BaseRequest<AbiJsonToBinResponse>
 {
     private final String code;
     private final String action;

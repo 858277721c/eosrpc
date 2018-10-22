@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * 获得区块链信息
  */
-public class GetInfoRequest extends BaseRequest<GetInfoResponse>
+class GetInfoRequest extends BaseRequest<GetInfoResponse>
 {
     @Override
     protected final String getPath()

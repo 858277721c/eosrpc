@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * 获取账号信息
  */
-public class GetAccountRequest extends BaseRequest<GetAccountResponse>
+class GetAccountRequest extends BaseRequest<GetAccountResponse>
 {
     private String account_name;
 

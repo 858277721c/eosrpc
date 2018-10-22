@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * 获得区块信息
  */
-public class GetBlockRequest extends BaseRequest<GetBlockResponse>
+class GetBlockRequest extends BaseRequest<GetBlockResponse>
 {
     private final String block_num_or_id;
 

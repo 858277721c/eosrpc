@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PushTransactionRequest extends BaseRequest<PushTransactionResponse>
+class PushTransactionRequest extends BaseRequest<PushTransactionResponse>
 {
     private final List<String> signatures;
     private final String compression;

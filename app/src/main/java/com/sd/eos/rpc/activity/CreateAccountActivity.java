@@ -12,8 +12,10 @@ import com.sd.eos.rpc.eos4j.ecc.EccTool;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.handler.CreateAccountHandler;
 import com.sd.lib.task.FTask;
+import com.sd.lib.utils.context.FClipboardUtil;
 import com.sd.lib.utils.context.FToast;
 
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -51,7 +53,20 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
     {
         switch (v.getId())
         {
-            case R.id.btn_new_keys:
+            case R.id.tv_new_account_label:
+                et_new_account.setText(randomAccount());
+                break;
+            case R.id.tv_new_account_key_private:
+                FClipboardUtil.setText(tv_new_account_key_private.getText());
+                FToast.show("已复制");
+                break;
+            case R.id.tv_new_account_key_public:
+                FClipboardUtil.setText(tv_new_account_key_public.getText());
+                FToast.show("已复制");
+                break;
+
+            case R.id.tv_new_account_key_private_label:
+            case R.id.tv_new_account_key_public_label:
                 final String privateKey = EccTool.seedPrivate(UUID.randomUUID().toString());
                 final String publicKey = EccTool.privateToPublic(privateKey);
 
@@ -62,6 +77,21 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
                 createAccount();
                 break;
         }
+    }
+
+    private String randomAccount()
+    {
+        final String[] arr = new String[]{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
+                "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "1", "2", "3", "4", "5"};
+
+        final Random random = new Random();
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 12; i++)
+        {
+            final int index = random.nextInt(arr.length);
+            sb.append(arr[index]);
+        }
+        return sb.toString();
     }
 
     private void createAccount()
@@ -122,8 +152,6 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
             @Override
             protected void onRun() throws Exception
             {
-                showProgress("");
-
                 final CreateAccountHandler handler = new CreateAccountHandler.Builder()
                         .setCreator(creater)
                         .setName(newAccount)
@@ -165,6 +193,8 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
                 dismissProgress();
             }
         };
+
+        showProgress("");
         mTask.submit();
     }
 

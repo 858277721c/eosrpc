@@ -110,7 +110,23 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
         }
 
         /**
-         * 设置网络抵押金额
+         * 设置net抵押金额
+         *
+         * @param stake_net_quantity 金额数量
+         * @param symbol             币种，默认EOS
+         * @return
+         */
+        public Builder setStake_net_quantity(double stake_net_quantity, String symbol)
+        {
+            if (Utils.isEmpty(symbol))
+                symbol = "EOS";
+
+            setStake_net_quantity(stake_net_quantity + " " + symbol);
+            return this;
+        }
+
+        /**
+         * 设置net抵押金额
          *
          * @param stake_net_quantity
          * @return
@@ -118,6 +134,22 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
         public Builder setStake_net_quantity(String stake_net_quantity)
         {
             this.stake_net_quantity = stake_net_quantity;
+            return this;
+        }
+
+        /**
+         * 设置cpu抵押金额
+         *
+         * @param stake_cpu_quantity 金额数量
+         * @param symbol             币种，默认EOS
+         * @return
+         */
+        public Builder setStake_cpu_quantity(double stake_cpu_quantity, String symbol)
+        {
+            if (Utils.isEmpty(symbol))
+                symbol = "EOS";
+
+            setStake_cpu_quantity(stake_cpu_quantity + " " + symbol);
             return this;
         }
 
@@ -151,6 +183,8 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
             Utils.checkEmpty(receiver, "receiver account was not specified");
             Utils.checkEmpty(stake_net_quantity, "stake net quantity was not specified");
             Utils.checkEmpty(stake_cpu_quantity, "stake cpu quantity was not specified");
+            Utils.checkQuantity(stake_cpu_quantity);
+            Utils.checkQuantity(stake_cpu_quantity);
             return new DelegatebwActionParams(this);
         }
     }

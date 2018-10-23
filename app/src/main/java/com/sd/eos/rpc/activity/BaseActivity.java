@@ -3,6 +3,7 @@ package com.sd.eos.rpc.activity;
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class BaseActivity extends AppCompatActivity
 {
@@ -25,12 +26,6 @@ public class BaseActivity extends AppCompatActivity
         }
     }
 
-    /**
-     * 主线程设置TextView内容
-     *
-     * @param textView
-     * @param text
-     */
     protected final void setTextContent(final TextView textView, final CharSequence text)
     {
         runOnUiThread(new Runnable()
@@ -39,6 +34,18 @@ public class BaseActivity extends AppCompatActivity
             public void run()
             {
                 textView.setText(text);
+            }
+        });
+    }
+
+    protected final void showToast(final CharSequence text)
+    {
+        runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Toast.makeText(BaseActivity.this, text, Toast.LENGTH_SHORT).show();
             }
         });
     }

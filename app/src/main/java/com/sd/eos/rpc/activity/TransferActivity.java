@@ -18,7 +18,6 @@ import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.output.PushTransaction;
 import com.sd.lib.eos.rpc.params.TransferActionParams;
 import com.sd.lib.task.FTask;
-import com.sd.lib.utils.context.FToast;
 
 /**
  * 转账
@@ -83,28 +82,28 @@ public class TransferActivity extends BaseActivity implements View.OnClickListen
         final String from = et_from.getText().toString();
         if (TextUtils.isEmpty(from))
         {
-            FToast.show("请输入转账账号");
+            showToast("请输入转账账号");
             return;
         }
 
         final String to = et_to.getText().toString();
         if (TextUtils.isEmpty(from))
         {
-            FToast.show("请输入收款账号");
+            showToast("请输入收款账号");
             return;
         }
 
         final String fromkeyPrivate = et_from_key_private.getText().toString();
         if (TextUtils.isEmpty(fromkeyPrivate))
         {
-            FToast.show("请输入转账者账号私钥");
+            showToast("请输入转账者账号私钥");
             return;
         }
 
         final String quantity = et_transfer_quantity.getText().toString();
         if (TextUtils.isEmpty(fromkeyPrivate))
         {
-            FToast.show("请输入转账金额");
+            showToast("请输入转账金额");
             return;
         }
 

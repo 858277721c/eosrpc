@@ -20,7 +20,6 @@ import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.handler.CreateAccountHandler;
 import com.sd.lib.eos.rpc.output.PushTransaction;
 import com.sd.lib.task.FTask;
-import com.sd.lib.utils.context.FToast;
 
 import java.util.Random;
 import java.util.UUID;
@@ -109,42 +108,42 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
         final String creator = et_creator.getText().toString();
         if (TextUtils.isEmpty(creator))
         {
-            FToast.show("请输入创建者账号");
+            showToast("请输入创建者账号");
             return;
         }
 
         final String creatorKeyPrivate = et_creator_key_private.getText().toString();
         if (TextUtils.isEmpty(creatorKeyPrivate))
         {
-            FToast.show("请输入创建者账号私钥");
+            showToast("请输入创建者账号私钥");
             return;
         }
 
         final String newAccount = et_new_account.getText().toString();
         if (TextUtils.isEmpty(newAccount))
         {
-            FToast.show("请输入新账号");
+            showToast("请输入新账号");
             return;
         }
 
         final String buyRam = et_buy_ram_quantity.getText().toString();
         if (TextUtils.isEmpty(buyRam))
         {
-            FToast.show("请输入要购买的内存金额");
+            showToast("请输入要购买的内存金额");
             return;
         }
 
         final String stakeCpu = et_stake_cpu_quantity.getText().toString();
         if (TextUtils.isEmpty(stakeCpu))
         {
-            FToast.show("请输入要抵押的cpu金额");
+            showToast("请输入要抵押的cpu金额");
             return;
         }
 
         final String stakeNet = et_stake_net_quantity.getText().toString();
         if (TextUtils.isEmpty(stakeNet))
         {
-            FToast.show("请输入要抵押的net金额");
+            showToast("请输入要抵押的net金额");
             return;
         }
 
@@ -152,7 +151,7 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
         final String newAccountKeyPrivate = et_new_account_key_private.getText().toString();
         if (TextUtils.isEmpty(newAccountKeyPublic) || TextUtils.isEmpty(newAccountKeyPrivate))
         {
-            FToast.show("请生成密钥");
+            showToast("请生成密钥");
             return;
         }
 

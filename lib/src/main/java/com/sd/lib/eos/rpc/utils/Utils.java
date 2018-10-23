@@ -1,7 +1,5 @@
 package com.sd.lib.eos.rpc.utils;
 
-import java.text.DecimalFormat;
-
 public class Utils
 {
     public static boolean isEmpty(String content)
@@ -21,14 +19,11 @@ public class Utils
             throw new NullPointerException(exception);
     }
 
-    public static String checkQuantity(String quantity, String emptyTip)
+    public static void checkQuantity(String quantity)
     {
-        if (isEmpty(quantity))
-            throw new IllegalArgumentException(emptyTip);
-
         final String[] arr = quantity.split(" ");
         if (arr.length != 2)
-            throw new IllegalArgumentException("Illegal quantity:" + quantity);
+            throw new IllegalArgumentException("Illegal quantity must include one blank space:" + quantity);
 
         double num = 0;
         try
@@ -36,12 +31,17 @@ public class Utils
             num = Double.parseDouble(arr[0]);
         } catch (Exception e)
         {
-            throw new IllegalArgumentException("Illegal quantity:" + quantity);
+            throw new IllegalArgumentException("Illegal quantity:" + quantity + " " + e);
         }
         if (num < 0)
-            throw new IllegalArgumentException("Illegal quantity:" + quantity);
+            throw new IllegalArgumentException("Illegal quantity less than 0:" + quantity);
 
-        final String result = new DecimalFormat("#0.0000").format(num) + " " + arr[1];
-        return result;
+        final int dotIndex = arr[0].lastIndexOf(".");
+        if (dotIndex < 0)
+            throw new IllegalArgumentException("Illegal quantity without demical part:" + quantity);
+
+        final int demicalLength = arr[0].length() - dotIndex - 1;
+        if (demicalLength != 4)
+            throw new IllegalArgumentException("Illegal quantity demical length is not 4 but " + demicalLength);
     }
 }

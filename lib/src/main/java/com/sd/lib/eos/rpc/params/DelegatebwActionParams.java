@@ -80,8 +80,9 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
     {
         private String from;
         private String receiver;
-        private String stake_net_quantity;
         private String stake_cpu_quantity;
+        private String stake_net_quantity;
+
         private int transfer;
 
         /**
@@ -181,10 +182,10 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
         {
             Utils.checkEmpty(from, "from account was not specified");
             Utils.checkEmpty(receiver, "receiver account was not specified");
-            Utils.checkEmpty(stake_net_quantity, "stake net quantity was not specified");
             Utils.checkEmpty(stake_cpu_quantity, "stake cpu quantity was not specified");
+            Utils.checkEmpty(stake_net_quantity, "stake net quantity was not specified");
             stake_cpu_quantity = Utils.checkQuantity(stake_cpu_quantity);
-            stake_cpu_quantity = Utils.checkQuantity(stake_cpu_quantity);
+            stake_net_quantity = Utils.checkQuantity(stake_net_quantity);
             return new DelegatebwActionParams(this);
         }
     }

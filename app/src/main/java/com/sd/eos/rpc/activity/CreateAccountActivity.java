@@ -153,8 +153,8 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
                         .setName(newAccount)
                         .setOwner(newAccountKeyPublic)
                         .setBuyRamQuantity(Double.valueOf(buyRam), null)
-                        .setStake_cpu_quantity(stakeCpu + " EOS")
-                        .setStake_net_quantity(stakeNet + " EOS")
+                        .setStake_cpu_quantity(Double.parseDouble(stakeCpu), null)
+                        .setStake_net_quantity(Double.parseDouble(stakeNet), null)
                         .setTransfer(1)
                         .build();
 

@@ -63,13 +63,13 @@ abstract class BaseRequest<T>
 
         if (code == 500)
         {
-            return new ApiResponse<>(null, jsonConverter.jsonToObject(string, ErrorResponse.class));
+            return new ApiResponse<>(jsonConverter.jsonToObject(string, ErrorResponse.class));
         } else
         {
             final Class<T> successClass = getSuccessClass();
             Utils.checkNotNull(successClass, "successful class was not specified when execute:" + this);
 
-            return new ApiResponse<>(jsonConverter.jsonToObject(string, successClass), null);
+            return new ApiResponse<>(jsonConverter.jsonToObject(string, successClass));
         }
     }
 

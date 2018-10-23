@@ -5,9 +5,15 @@ public class ApiResponse<S>
     private final S success;
     private final ErrorResponse error;
 
-    public ApiResponse(S success, ErrorResponse error)
+    public ApiResponse(S success)
     {
         this.success = success;
+        this.error = null;
+    }
+
+    public ApiResponse(ErrorResponse error)
+    {
+        this.success = null;
         this.error = error;
     }
 

@@ -105,7 +105,8 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
             if (Utils.isEmpty(symbol))
                 symbol = "EOS";
 
-            return setQuant(quant + " " + symbol);
+            setQuant(quant + " " + symbol);
+            return this;
         }
 
         /**
@@ -114,7 +115,7 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
          * @param quant
          * @return
          */
-        public Builder setQuant(String quant)
+        private Builder setQuant(String quant)
         {
             this.quant = quant;
             return this;

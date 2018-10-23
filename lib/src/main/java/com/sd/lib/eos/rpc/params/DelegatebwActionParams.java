@@ -113,56 +113,56 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
         /**
          * 设置net抵押金额
          *
-         * @param stake_net_quantity 金额数量
-         * @param symbol             币种，默认EOS
+         * @param quantity 金额数量
+         * @param symbol   币种，默认EOS
          * @return
          */
-        public Builder setStake_net_quantity(double stake_net_quantity, String symbol)
+        public Builder setStake_net_quantity(double quantity, String symbol)
         {
             if (Utils.isEmpty(symbol))
                 symbol = "EOS";
 
-            setStake_net_quantity(stake_net_quantity + " " + symbol);
+            setStake_net_quantity(quantity + " " + symbol);
             return this;
         }
 
         /**
          * 设置net抵押金额
          *
-         * @param stake_net_quantity
+         * @param quantity
          * @return
          */
-        public Builder setStake_net_quantity(String stake_net_quantity)
+        private Builder setStake_net_quantity(String quantity)
         {
-            this.stake_net_quantity = stake_net_quantity;
+            this.stake_net_quantity = quantity;
             return this;
         }
 
         /**
          * 设置cpu抵押金额
          *
-         * @param stake_cpu_quantity 金额数量
-         * @param symbol             币种，默认EOS
+         * @param quantity 金额数量
+         * @param symbol   币种，默认EOS
          * @return
          */
-        public Builder setStake_cpu_quantity(double stake_cpu_quantity, String symbol)
+        public Builder setStake_cpu_quantity(double quantity, String symbol)
         {
             if (Utils.isEmpty(symbol))
                 symbol = "EOS";
 
-            setStake_cpu_quantity(stake_cpu_quantity + " " + symbol);
+            setStake_cpu_quantity(quantity + " " + symbol);
             return this;
         }
 
         /**
          * 设置cpu抵押金额
          *
-         * @param stake_cpu_quantity
+         * @param quantity
          * @return
          */
-        public Builder setStake_cpu_quantity(String stake_cpu_quantity)
+        private Builder setStake_cpu_quantity(String quantity)
         {
-            this.stake_cpu_quantity = stake_cpu_quantity;
+            this.stake_cpu_quantity = quantity;
             return this;
         }
 

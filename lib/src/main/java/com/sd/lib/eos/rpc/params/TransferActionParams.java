@@ -113,7 +113,8 @@ public class TransferActionParams extends BaseParams<TransferActionParams.Args, 
             if (Utils.isEmpty(symbol))
                 symbol = "EOS";
 
-            return setQuantity(quantity + " " + symbol);
+            setQuantity(quantity + " " + symbol);
+            return this;
         }
 
         /**
@@ -122,7 +123,7 @@ public class TransferActionParams extends BaseParams<TransferActionParams.Args, 
          * @param quantity
          * @return
          */
-        public Builder setQuantity(String quantity)
+        private Builder setQuantity(String quantity)
         {
             this.quantity = quantity;
             return this;

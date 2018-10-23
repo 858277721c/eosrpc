@@ -84,75 +84,39 @@ public class CreateAccountHandler
         /**
          * 设置购买内存的金额
          *
-         * @param quant  数量
-         * @param symbol 币种，默认EOS
+         * @param quantity 数量
+         * @param symbol   币种，默认EOS
          * @return
          */
-        public Builder setBuyRamQuantity(double quant, String symbol)
+        public Builder setBuyRamQuantity(double quantity, String symbol)
         {
-            mBuyramBuilder.setQuant(quant, symbol);
-            return this;
-        }
-
-        /**
-         * 设置购买内存的金额
-         *
-         * @param quant
-         * @return
-         */
-        public Builder setBuyRamQuantity(String quant)
-        {
-            mBuyramBuilder.setQuant(quant);
-            return this;
-        }
-
-        /**
-         * 设置net抵押金额
-         *
-         * @param stake_net_quantity 金额数量
-         * @param symbol             币种，默认EOS
-         * @return
-         */
-        public Builder setStake_net_quantity(double stake_net_quantity, String symbol)
-        {
-            mDelegatebwBuilder.setStake_net_quantity(stake_net_quantity, symbol);
-            return this;
-        }
-
-        /**
-         * 设置net抵押金额
-         *
-         * @param stake_net_quantity
-         * @return
-         */
-        public Builder setStake_net_quantity(String stake_net_quantity)
-        {
-            mDelegatebwBuilder.setStake_net_quantity(stake_net_quantity);
+            mBuyramBuilder.setQuant(quantity, symbol);
             return this;
         }
 
         /**
          * 设置cpu抵押金额
          *
-         * @param stake_cpu_quantity 金额数量
-         * @param symbol             币种，默认EOS
+         * @param quantity 金额数量
+         * @param symbol   币种，默认EOS
          * @return
          */
-        public Builder setStake_cpu_quantity(double stake_cpu_quantity, String symbol)
+        public Builder setStake_cpu_quantity(double quantity, String symbol)
         {
-            mDelegatebwBuilder.setStake_cpu_quantity(stake_cpu_quantity, symbol);
+            mDelegatebwBuilder.setStake_cpu_quantity(quantity, symbol);
             return this;
         }
 
         /**
-         * 设置cpu抵押金额
+         * 设置net抵押金额
          *
-         * @param stake_cpu_quantity
+         * @param quantity 金额数量
+         * @param symbol   币种，默认EOS
          * @return
          */
-        public Builder setStake_cpu_quantity(String stake_cpu_quantity)
+        public Builder setStake_net_quantity(double quantity, String symbol)
         {
-            mDelegatebwBuilder.setStake_cpu_quantity(stake_cpu_quantity);
+            mDelegatebwBuilder.setStake_net_quantity(quantity, symbol);
             return this;
         }
 

@@ -22,7 +22,6 @@
         </activity>
 
         <activity android:name=".activity.GetAccountActivity" />
-        <activity android:name=".activity.GetCurrencyActivity" />
         <activity android:name=".activity.CreateAccountActivity" />
         <activity android:name=".activity.TransferActivity" />
 

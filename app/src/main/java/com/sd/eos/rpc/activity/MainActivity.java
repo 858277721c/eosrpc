@@ -24,9 +24,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_get_account:
                 startActivity(new Intent(this, GetAccountActivity.class));
                 break;
-            case R.id.btn_get_currency:
-                startActivity(new Intent(this, GetCurrencyActivity.class));
-                break;
             case R.id.btn_create_account:
                 startActivity(new Intent(this, CreateAccountActivity.class));
                 break;

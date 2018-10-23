@@ -61,6 +61,7 @@ public class GetAccountActivity extends BaseActivity implements View.OnClickList
     private void getAccount(final String account)
     {
         setTextContent(tv_content, "");
+        showProgress("");
         new FTask()
         {
             @Override
@@ -86,6 +87,13 @@ public class GetAccountActivity extends BaseActivity implements View.OnClickList
             {
                 super.onError(e);
                 setTextContent(tv_content, String.valueOf(e));
+            }
+
+            @Override
+            protected void onFinally()
+            {
+                super.onFinally();
+                dismissProgress();
             }
         }.submit();
     }

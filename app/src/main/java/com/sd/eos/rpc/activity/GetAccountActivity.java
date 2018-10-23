@@ -41,7 +41,7 @@ public class GetAccountActivity extends BaseActivity
 
     private void getAccount(final String account)
     {
-        tv_content.setText("");
+        setTextContent(tv_content, "");
         new FTask()
         {
             @Override
@@ -60,6 +60,13 @@ public class GetAccountActivity extends BaseActivity
                             tv_content.setText(new Gson().toJson(response.getError()));
                     }
                 });
+            }
+
+            @Override
+            protected void onError(Exception e)
+            {
+                super.onError(e);
+                setTextContent(tv_content, String.valueOf(e));
             }
         }.submit();
     }

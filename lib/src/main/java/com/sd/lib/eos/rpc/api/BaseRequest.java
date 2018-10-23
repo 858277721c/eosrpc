@@ -1,7 +1,9 @@
 package com.sd.lib.eos.rpc.api;
 
 import com.sd.lib.eos.rpc.api.model.ApiResponse;
+import com.sd.lib.eos.rpc.api.model.ErrorResponse;
 import com.sd.lib.eos.rpc.core.FEOSManager;
+import com.sd.lib.eos.rpc.core.JsonConverter;
 import com.sd.lib.eos.rpc.core.RpcApiExecutor;
 import com.sd.lib.eos.rpc.utils.Utils;
 
@@ -40,19 +42,35 @@ abstract class BaseRequest<T>
         final String path = getPath();
         Utils.checkEmpty(path, "path was not specified when execute:" + this);
 
-        final Class<T> responseClass = getSuccessClass();
-        Utils.checkNotNull(responseClass, "successful class was not specified when execute:" + this);
-
         final RpcApiExecutor executor = FEOSManager.getInstance().getApiExecutor();
         Utils.checkNotNull(executor, "RpcApiExecutor was not specified when execute:" + this);
 
-        final ApiResponse<T> response = executor.execute(mBaseUrl, path, getParams(), responseClass);
-        Utils.checkNotNull(response, "ApiResponse is null");
+        final JsonConverter jsonConverter = FEOSManager.getInstance().getJsonConverter();
+        Utils.checkNotNull(jsonConverter, "JsonConverter was not specified when execute:" + this);
 
-        if (!response.isSuccessful())
-            Utils.checkNotNull(response.getError(), "ApiResponse is unsuccessful but error is null");
+        final Map<String, Object> params = getParams();
+        final String jsonParams = params == null ? "" : jsonConverter.objectToJson(params);
 
-        return response;
+        final RpcApiExecutor.Result result = executor.execute(mBaseUrl, path, jsonParams);
+        Utils.checkNotNull(result, "RpcApiExecutor return null");
+
+        final int code = result.code;
+        if (code <= 0)
+            throw new RuntimeException("Illegal result code:" + code);
+
+        final String string = result.string;
+        Utils.checkEmpty(string, "RpcApiExecutor return empty string");
+
+        if (code == 500)
+        {
+            return new ApiResponse<>(null, jsonConverter.jsonToObject(string, ErrorResponse.class));
+        } else
+        {
+            final Class<T> successClass = getSuccessClass();
+            Utils.checkNotNull(successClass, "successful class was not specified when execute:" + this);
+
+            return new ApiResponse<>(jsonConverter.jsonToObject(string, successClass), null);
+        }
     }
 
     protected Class<T> getSuccessClass()

@@ -1,24 +1,30 @@
 package com.sd.lib.eos.rpc.core;
 
-import com.sd.lib.eos.rpc.api.model.ApiResponse;
-
-import java.util.Map;
-
 /**
  * RPC接口执行器
  */
 public interface RpcApiExecutor
 {
     /**
-     * 请求接口
+     * 请求接口(POST执行)
      *
-     * @param baseUrl 接口地址
-     * @param path    接口路径
-     * @param params  参数
-     * @param clazz   返回接口类
-     * @param <T>
+     * @param baseUrl    接口地址
+     * @param path       接口路径
+     * @param jsonParams 参数
      * @return
      * @throws Exception
      */
-    <T> ApiResponse<T> execute(String baseUrl, String path, Map<String, Object> params, Class<T> clazz) throws Exception;
+    Result execute(String baseUrl, String path, String jsonParams) throws Exception;
+
+    class Result
+    {
+        public final int code;
+        public final String string;
+
+        public Result(int code, String string)
+        {
+            this.code = code;
+            this.string = string;
+        }
+    }
 }

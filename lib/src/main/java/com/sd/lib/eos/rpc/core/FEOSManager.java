@@ -5,6 +5,7 @@ public class FEOSManager
     private static FEOSManager sInstance;
 
     private String mBaseUrl;
+    private JsonConverter mJsonConverter;
     private RpcApiExecutor mApiExecutor;
     private TransactionSigner mTransactionSigner;
 
@@ -33,6 +34,16 @@ public class FEOSManager
     public String getBaseUrl()
     {
         return mBaseUrl;
+    }
+
+    public JsonConverter getJsonConverter()
+    {
+        return mJsonConverter;
+    }
+
+    public void setJsonConverter(JsonConverter jsonConverter)
+    {
+        mJsonConverter = jsonConverter;
     }
 
     public RpcApiExecutor getApiExecutor()

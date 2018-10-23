@@ -7,9 +7,14 @@ import com.yanzhenjie.kalle.simple.SimpleResponse;
 
 import java.lang.reflect.Type;
 
-public class GsonConverter implements Converter
+public class KalleGsonConverter implements Converter
 {
-    private static final Gson GSON = new Gson();
+    private final Gson mGson;
+
+    public KalleGsonConverter(Gson gson)
+    {
+        mGson = gson;
+    }
 
     public <S, F> SimpleResponse<S, F> convert(Type succeed, Type failed, Response response, boolean fromCache) throws Exception
     {
@@ -19,7 +24,7 @@ public class GsonConverter implements Converter
         if (succeed == String.class)
             succeedData = (S) jsonStrig;
         else
-            succeedData = GSON.fromJson(jsonStrig, succeed);
+            succeedData = mGson.fromJson(jsonStrig, succeed);
 
         return SimpleResponse.<S, F>newBuilder()
                 .code(response.code())

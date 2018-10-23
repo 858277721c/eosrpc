@@ -1,16 +1,11 @@
-package com.sd.eos.rpc.other;
+package com.sd.lib.eos.rpc.core.impl;
 
 import com.google.gson.Gson;
 import com.sd.lib.eos.rpc.core.JsonConverter;
 
-public class AppJsonConverter implements JsonConverter
+public class SimpleJsonConverter implements JsonConverter
 {
-    private final Gson mGson;
-
-    public AppJsonConverter(Gson gson)
-    {
-        mGson = gson;
-    }
+    private final Gson mGson = new Gson();
 
     @Override
     public String objectToJson(Object object)

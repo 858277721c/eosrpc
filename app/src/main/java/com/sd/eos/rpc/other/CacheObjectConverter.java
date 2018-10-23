@@ -8,12 +8,7 @@ import com.sd.lib.cache.Cache;
  */
 public class CacheObjectConverter implements Cache.ObjectConverter
 {
-    private final Gson mGson;
-
-    public CacheObjectConverter(Gson gson)
-    {
-        mGson = gson;
-    }
+    private final Gson mGson = new Gson();
 
     @Override
     public byte[] objectToByte(Object object)

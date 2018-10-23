@@ -1,5 +1,8 @@
 package com.sd.lib.eos.rpc.core;
 
+import com.sd.lib.eos.rpc.core.impl.SimpleJsonConverter;
+import com.sd.lib.eos.rpc.core.impl.SimpleRpcApiExecutor;
+
 public class FEOSManager
 {
     private static FEOSManager sInstance;
@@ -38,6 +41,8 @@ public class FEOSManager
 
     public JsonConverter getJsonConverter()
     {
+        if (mJsonConverter == null)
+            mJsonConverter = new SimpleJsonConverter();
         return mJsonConverter;
     }
 
@@ -48,6 +53,8 @@ public class FEOSManager
 
     public RpcApiExecutor getApiExecutor()
     {
+        if (mApiExecutor == null)
+            mApiExecutor = new SimpleRpcApiExecutor();
         return mApiExecutor;
     }
 

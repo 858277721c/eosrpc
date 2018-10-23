@@ -16,8 +16,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
 }
 
 dependencies {
+    compileOnly 'com.google.code.gson:gson:2.8.2'
 }

@@ -1,6 +1,7 @@
 package com.sd.lib.eos.rpc.core.impl;
 
 import com.sd.lib.eos.rpc.core.RpcApiExecutor;
+import com.sd.lib.eos.rpc.utils.HttpRequest;
 
 public class SimpleRpcApiExecutor implements RpcApiExecutor
 {

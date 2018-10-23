@@ -1,6 +1,6 @@
 package com.sd.lib.eos.rpc.handler;
 
-import com.sd.lib.eos.rpc.output.PushTransaction;
+import com.sd.lib.eos.rpc.core.output.PushTransaction;
 import com.sd.lib.eos.rpc.params.BuyramActionParams;
 import com.sd.lib.eos.rpc.params.DelegatebwActionParams;
 import com.sd.lib.eos.rpc.params.NewaccountActionParams;

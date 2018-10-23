@@ -1,6 +1,6 @@
 package com.sd.lib.eos.rpc.params;
 
-import com.sd.lib.eos.rpc.output.model.AuthorizationModel;
+import com.sd.lib.eos.rpc.core.output.model.AuthorizationModel;
 
 import java.util.List;
 

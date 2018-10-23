@@ -4,7 +4,8 @@ import android.app.Application;
 
 import com.sd.eos.rpc.model.AccountHolder;
 import com.sd.eos.rpc.model.AccountModel;
-import com.sd.eos.rpc.other.CacheObjectConverter;
+import com.sd.eos.rpc.utils.AppRpcApiExecutor;
+import com.sd.eos.rpc.utils.CacheObjectConverter;
 import com.sd.lib.cache.CacheConfig;
 import com.sd.lib.cache.FCache;
 import com.sd.lib.eos.rpc.core.FEOSManager;
@@ -32,9 +33,5 @@ public class App extends Application
          * 设置接口请求对象（非必须）
          */
         FEOSManager.getInstance().setApiExecutor(new AppRpcApiExecutor());
-        /**
-         * 设置交易签名对象（必须）
-         */
-        FEOSManager.getInstance().setTransactionSigner(new AppTransactionSigner());
     }
 }

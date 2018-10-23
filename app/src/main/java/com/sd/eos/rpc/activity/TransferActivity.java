@@ -15,7 +15,7 @@ import com.sd.lib.eos.rpc.api.model.ApiResponse;
 import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
 import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
-import com.sd.lib.eos.rpc.output.PushTransaction;
+import com.sd.lib.eos.rpc.core.output.PushTransaction;
 import com.sd.lib.eos.rpc.params.TransferActionParams;
 import com.sd.lib.task.FTask;
 

@@ -1,7 +1,9 @@
 package com.sd.lib.eos.rpc.core;
 
+import com.sd.lib.eos.rpc.core.impl.SimpleEccTool;
 import com.sd.lib.eos.rpc.core.impl.SimpleJsonConverter;
 import com.sd.lib.eos.rpc.core.impl.SimpleRpcApiExecutor;
+import com.sd.lib.eos.rpc.core.impl.SimpleTransactionSigner;
 
 public class FEOSManager
 {
@@ -11,6 +13,7 @@ public class FEOSManager
     private JsonConverter mJsonConverter;
     private RpcApiExecutor mApiExecutor;
     private TransactionSigner mTransactionSigner;
+    private EccTool mEccTool;
 
     private FEOSManager()
     {
@@ -34,6 +37,26 @@ public class FEOSManager
         mBaseUrl = baseUrl;
     }
 
+    public void setJsonConverter(JsonConverter jsonConverter)
+    {
+        mJsonConverter = jsonConverter;
+    }
+
+    public void setApiExecutor(RpcApiExecutor apiExecutor)
+    {
+        mApiExecutor = apiExecutor;
+    }
+
+    public void setTransactionSigner(TransactionSigner transactionSigner)
+    {
+        mTransactionSigner = transactionSigner;
+    }
+
+    public void setEccTool(EccTool eccTool)
+    {
+        mEccTool = eccTool;
+    }
+
     public String getBaseUrl()
     {
         return mBaseUrl;
@@ -46,11 +69,6 @@ public class FEOSManager
         return mJsonConverter;
     }
 
-    public void setJsonConverter(JsonConverter jsonConverter)
-    {
-        mJsonConverter = jsonConverter;
-    }
-
     public RpcApiExecutor getApiExecutor()
     {
         if (mApiExecutor == null)
@@ -58,18 +76,17 @@ public class FEOSManager
         return mApiExecutor;
     }
 
-    public void setApiExecutor(RpcApiExecutor apiExecutor)
-    {
-        mApiExecutor = apiExecutor;
-    }
-
     public TransactionSigner getTransactionSigner()
     {
+        if (mTransactionSigner == null)
+            mTransactionSigner = new SimpleTransactionSigner();
         return mTransactionSigner;
     }
 
-    public void setTransactionSigner(TransactionSigner transactionSigner)
+    public EccTool getEccTool()
     {
-        mTransactionSigner = transactionSigner;
+        if (mEccTool == null)
+            mEccTool = new SimpleEccTool();
+        return mEccTool;
     }
 }

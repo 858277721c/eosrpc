@@ -9,7 +9,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.sd.eos.rpc.R;
 import com.sd.eos.rpc.dialog.LocalAccountDialog;
-import com.sd.eos.rpc.eos4j.ecc.EccTool;
 import com.sd.eos.rpc.model.AccountHolder;
 import com.sd.eos.rpc.model.AccountModel;
 import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
@@ -17,12 +16,12 @@ import com.sd.lib.eos.rpc.api.model.ApiResponse;
 import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
 import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
+import com.sd.lib.eos.rpc.core.FEOSManager;
+import com.sd.lib.eos.rpc.core.output.PushTransaction;
 import com.sd.lib.eos.rpc.handler.CreateAccountHandler;
-import com.sd.lib.eos.rpc.output.PushTransaction;
 import com.sd.lib.task.FTask;
 
 import java.util.Random;
-import java.util.UUID;
 
 /**
  * 创建账号
@@ -76,8 +75,11 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
 
             case R.id.tv_new_account_key_private_label:
             case R.id.tv_new_account_key_public_label:
-                final String privateKey = EccTool.seedPrivate(UUID.randomUUID().toString());
-                final String publicKey = EccTool.privateToPublic(privateKey);
+
+                final com.sd.lib.eos.rpc.core.EccTool eccTool = FEOSManager.getInstance().getEccTool();
+
+                final String privateKey = eccTool.generatePrivateKey();
+                final String publicKey = eccTool.privateToPublicKey(privateKey);
 
                 et_new_account_key_private.setText(privateKey);
                 et_new_account_key_public.setText(publicKey);

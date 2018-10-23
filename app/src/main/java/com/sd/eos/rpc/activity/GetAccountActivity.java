@@ -17,7 +17,7 @@ import com.sd.lib.task.FTask;
 /**
  * 查询账号信息
  */
-public class GetAccountActivity extends BaseActivity  implements View.OnClickListener
+public class GetAccountActivity extends BaseActivity implements View.OnClickListener
 {
     private TextView tv_content;
     private EditText et_account;
@@ -29,9 +29,6 @@ public class GetAccountActivity extends BaseActivity  implements View.OnClickLis
         setContentView(R.layout.act_get_account);
         tv_content = findViewById(R.id.tv_content);
         et_account = findViewById(R.id.et_account);
-
-        findViewById(R.id.btn_query).setOnClickListener(this);
-        findViewById(R.id.tv_account_label).setOnClickListener(this);
     }
 
     @Override

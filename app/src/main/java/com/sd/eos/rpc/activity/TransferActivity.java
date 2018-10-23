@@ -40,10 +40,6 @@ public class TransferActivity extends BaseActivity implements View.OnClickListen
         et_transfer_quantity = findViewById(R.id.et_transfer_quantity);
         et_transfer_memo = findViewById(R.id.et_transfer_memo);
         tv_content = findViewById(R.id.tv_content);
-
-        findViewById(R.id.tv_from_label).setOnClickListener(this);
-        findViewById(R.id.tv_to_label).setOnClickListener(this);
-        findViewById(R.id.btn_transfer).setOnClickListener(this);
     }
 
     @Override

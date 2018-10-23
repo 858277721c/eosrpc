@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.sd.eos.rpc.R;
+import com.sd.eos.rpc.dialog.LocalAccountDialog;
 import com.sd.eos.rpc.eos4j.ecc.EccTool;
 import com.sd.eos.rpc.model.AccountHolder;
 import com.sd.eos.rpc.model.AccountModel;
@@ -57,6 +58,19 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
     {
         switch (v.getId())
         {
+            case R.id.tv_creator_label:
+                final LocalAccountDialog dialog = new LocalAccountDialog(this);
+                dialog.setCallback(new LocalAccountDialog.Callback()
+                {
+                    @Override
+                    public void onClickItem(AccountModel model)
+                    {
+                        et_creator.setText(model.getAccount());
+                        et_creator_key_private.setText(model.getPrivateKey());
+                    }
+                });
+                dialog.show();
+                break;
             case R.id.tv_new_account_label:
                 et_new_account.setText(randomAccount());
                 break;

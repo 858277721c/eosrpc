@@ -2,7 +2,7 @@ package com.sd.lib.eos.rpc.helper.cypto.digest;
 
 
 import com.sd.lib.eos.rpc.helper.cypto.util.HexUtils;
-import com.sd.lib.eos.rpc.helper.cypto.util.OtherUtils;
+import com.sd.lib.eos.rpc.helper.util.OtherUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

@@ -1,4 +1,4 @@
-package com.sd.lib.eos.rpc.helper.cypto.util;
+package com.sd.lib.eos.rpc.helper.util;
 
 public class OtherUtils
 {

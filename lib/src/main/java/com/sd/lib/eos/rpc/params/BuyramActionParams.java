@@ -96,19 +96,7 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
         /**
          * 设置购买金额
          *
-         * @param quant
-         * @return
-         */
-        public Builder setQuant(String quant)
-        {
-            this.quant = quant;
-            return this;
-        }
-
-        /**
-         * 设置购买金额
-         *
-         * @param quant  数量
+         * @param quant  数量数量
          * @param symbol 币种，默认EOS
          * @return
          */
@@ -118,6 +106,18 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
                 symbol = "EOS";
 
             return setQuant(quant + " " + symbol);
+        }
+
+        /**
+         * 设置购买金额
+         *
+         * @param quant
+         * @return
+         */
+        public Builder setQuant(String quant)
+        {
+            this.quant = quant;
+            return this;
         }
 
         public BuyramActionParams build()

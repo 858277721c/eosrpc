@@ -104,18 +104,6 @@ public class TransferActionParams extends BaseParams<TransferActionParams.Args, 
         /**
          * 设置转账金额
          *
-         * @param quantity
-         * @return
-         */
-        public Builder setQuantity(String quantity)
-        {
-            this.quantity = quantity;
-            return this;
-        }
-
-        /**
-         * 设置转账金额
-         *
          * @param quantity 数量
          * @param symbol   币种，默认EOS
          * @return
@@ -126,6 +114,18 @@ public class TransferActionParams extends BaseParams<TransferActionParams.Args, 
                 symbol = "EOS";
 
             return setQuantity(quantity + " " + symbol);
+        }
+
+        /**
+         * 设置转账金额
+         *
+         * @param quantity
+         * @return
+         */
+        public Builder setQuantity(String quantity)
+        {
+            this.quantity = quantity;
+            return this;
         }
 
         /**

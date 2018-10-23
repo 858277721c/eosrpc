@@ -25,6 +25,12 @@ public class BaseActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * 主线程设置TextView内容
+     *
+     * @param textView
+     * @param text
+     */
     protected final void setTextContent(final TextView textView, final CharSequence text)
     {
         runOnUiThread(new Runnable()

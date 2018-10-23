@@ -65,17 +65,10 @@ public class GetAccountActivity extends BaseActivity implements View.OnClickList
             {
                 final ApiResponse<GetAccountResponse> response = new RpcApi().getAccount(account);
 
-                runOnUiThread(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        if (response.isSuccessful())
-                            setTextContent(tv_content, new Gson().toJson(response.getSuccess()));
-                        else
-                            setTextContent(tv_content, new Gson().toJson(response.getError()));
-                    }
-                });
+                if (response.isSuccessful())
+                    setTextContent(tv_content, new Gson().toJson(response.getSuccess()));
+                else
+                    setTextContent(tv_content, new Gson().toJson(response.getError()));
             }
 
             @Override

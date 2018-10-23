@@ -39,4 +39,10 @@ public class AccountModel
         final AccountModel other = (AccountModel) obj;
         return account.equals(other.account);
     }
+
+    @Override
+    public String toString()
+    {
+        return account;
+    }
 }

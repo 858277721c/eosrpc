@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.sd.eos.rpc.R;
+import com.sd.eos.rpc.dialog.LocalAccountDialog;
+import com.sd.eos.rpc.model.AccountModel;
 import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
 import com.sd.lib.eos.rpc.api.model.ApiResponse;
 import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
@@ -39,6 +41,8 @@ public class TransferActivity extends BaseActivity implements View.OnClickListen
         et_transfer_memo = findViewById(R.id.et_transfer_memo);
         tv_content = findViewById(R.id.tv_content);
 
+        findViewById(R.id.tv_from_label).setOnClickListener(this);
+        findViewById(R.id.tv_to_label).setOnClickListener(this);
         findViewById(R.id.btn_transfer).setOnClickListener(this);
     }
 
@@ -47,6 +51,31 @@ public class TransferActivity extends BaseActivity implements View.OnClickListen
     {
         switch (v.getId())
         {
+            case R.id.tv_from_label:
+                final LocalAccountDialog dialogFrom = new LocalAccountDialog(this);
+                dialogFrom.setCallback(new LocalAccountDialog.Callback()
+                {
+                    @Override
+                    public void onClickItem(AccountModel model)
+                    {
+                        et_from.setText(model.getAccount());
+                        et_from_key_private.setText(model.getPrivateKey());
+                    }
+                });
+                dialogFrom.show();
+                break;
+            case R.id.tv_to_label:
+                final LocalAccountDialog dialogTo = new LocalAccountDialog(this);
+                dialogTo.setCallback(new LocalAccountDialog.Callback()
+                {
+                    @Override
+                    public void onClickItem(AccountModel model)
+                    {
+                        et_to.setText(model.getAccount());
+                    }
+                });
+                dialogTo.show();
+                break;
             case R.id.btn_transfer:
                 transfer();
                 break;

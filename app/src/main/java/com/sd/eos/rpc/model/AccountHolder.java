@@ -27,6 +27,9 @@ public class AccountHolder
 
     public void add(AccountModel model)
     {
+        if (model == null)
+            throw new NullPointerException();
+
         if (accounts.contains(model))
             return;
 

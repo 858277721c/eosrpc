@@ -24,7 +24,7 @@
                 android:id="@+id/et_from"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:digits="abcdefghijklmnopqrstuvwxyz12345"
+                android:digits="@string/lib_eosrpc_digits_account"
                 android:maxLength="12" />
 
         </LinearLayout>
@@ -61,7 +61,7 @@
                 android:id="@+id/et_to"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:digits="abcdefghijklmnopqrstuvwxyz12345"
+                android:digits="@string/lib_eosrpc_digits_account"
                 android:maxLength="12" />
 
         </LinearLayout>

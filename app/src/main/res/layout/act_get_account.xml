@@ -19,7 +19,7 @@
             android:id="@+id/et_account"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:digits="@string/digits_account"
+            android:digits="@string/lib_eosrpc_digits_account"
             android:maxLength="12" />
 
     </LinearLayout>

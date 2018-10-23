@@ -29,7 +29,7 @@ import java.util.UUID;
  */
 public class CreateAccountActivity extends BaseActivity implements View.OnClickListener
 {
-    private EditText et_creater, et_creater_key_private;
+    private EditText et_creator, et_creator_key_private;
     private EditText et_new_account, et_buy_ram_quantity, et_stake_cpu_quantity, et_stake_net_quantity;
     private EditText et_new_account_key_private, et_new_account_key_public;
     private TextView tv_content;
@@ -41,8 +41,8 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_create_account);
-        et_creater = findViewById(R.id.et_creater);
-        et_creater_key_private = findViewById(R.id.et_creater_key_private);
+        et_creator = findViewById(R.id.et_creator);
+        et_creator_key_private = findViewById(R.id.et_creator_key_private);
         et_new_account = findViewById(R.id.et_new_account);
         et_buy_ram_quantity = findViewById(R.id.et_buy_ram_quantity);
         et_stake_cpu_quantity = findViewById(R.id.et_stake_cpu_quantity);
@@ -92,15 +92,15 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
 
     private void createAccount()
     {
-        final String creater = et_creater.getText().toString();
-        if (TextUtils.isEmpty(creater))
+        final String creator = et_creator.getText().toString();
+        if (TextUtils.isEmpty(creator))
         {
             FToast.show("请输入创建者账号");
             return;
         }
 
-        final String createrKeyPrivate = et_creater_key_private.getText().toString();
-        if (TextUtils.isEmpty(createrKeyPrivate))
+        final String creatorKeyPrivate = et_creator_key_private.getText().toString();
+        if (TextUtils.isEmpty(creatorKeyPrivate))
         {
             FToast.show("请输入创建者账号私钥");
             return;
@@ -149,7 +149,7 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
             protected void onRun() throws Exception
             {
                 final CreateAccountHandler handler = new CreateAccountHandler.Builder()
-                        .setCreator(creater)
+                        .setCreator(creator)
                         .setName(newAccount)
                         .setOwner(newAccountKeyPublic)
                         .setBuyRamQuantity(Double.valueOf(buyRam), null)
@@ -159,7 +159,7 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
                         .build();
 
                 final PushTransaction pushTransaction = handler.newPushTransaction();
-                pushTransaction.submit(createrKeyPrivate, new PushTransaction.Callback()
+                pushTransaction.submit(creatorKeyPrivate, new PushTransaction.Callback()
                 {
                     @Override
                     public void onSuccess(ApiResponse<PushTransactionResponse> response)

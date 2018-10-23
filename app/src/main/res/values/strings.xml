@@ -1,5 +1,3 @@
 <resources>
     <string name="app_name">eos-rpc</string>
-
-    <string name="digits_account">abcdefghijklmnopqrstuvwxyz12345</string>
 </resources>

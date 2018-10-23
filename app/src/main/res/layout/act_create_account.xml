@@ -15,17 +15,17 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/tv_creator_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="创建者：" />
 
             <EditText
-                android:id="@+id/et_creater"
+                android:id="@+id/et_creator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:digits="abcdefghijklmnopqrstuvwxyz12345"
-                android:maxLength="12"
-                android:text="fwtest111111" />
+                android:digits="@string/lib_eosrpc_digits_account"
+                android:maxLength="12" />
 
         </LinearLayout>
 
@@ -40,10 +40,9 @@
                 android:text="创建者私钥：" />
 
             <EditText
-                android:id="@+id/et_creater_key_private"
+                android:id="@+id/et_creator_key_private"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="5JQh92zjfWJW6a6suaLm7o2wMCNKZnqp4bb3Kb2dNSb7ts8vDWH" />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -63,7 +62,7 @@
                 android:id="@+id/et_new_account"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:digits="abcdefghijklmnopqrstuvwxyz12345"
+                android:digits="@string/lib_eosrpc_digits_account"
                 android:maxLength="12"
                 android:text="" />
 

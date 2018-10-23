@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.sd.eos.rpc.R;
+import com.sd.eos.rpc.dialog.LocalAccountDialog;
+import com.sd.eos.rpc.model.AccountModel;
 import com.sd.lib.eos.rpc.api.RpcApi;
 import com.sd.lib.eos.rpc.api.model.ApiResponse;
 import com.sd.lib.eos.rpc.api.model.GetAccountResponse;
@@ -15,10 +17,10 @@ import com.sd.lib.task.FTask;
 /**
  * 查询账号信息
  */
-public class GetAccountActivity extends BaseActivity
+public class GetAccountActivity extends BaseActivity implements View.OnClickListener
 {
     private TextView tv_content;
-    private EditText et_get_account;
+    private EditText et_account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -26,17 +28,34 @@ public class GetAccountActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_get_account);
         tv_content = findViewById(R.id.tv_content);
-        et_get_account = findViewById(R.id.et_get_account);
+        et_account = findViewById(R.id.et_account);
 
-        findViewById(R.id.btn_get_account).setOnClickListener(new View.OnClickListener()
+        findViewById(R.id.btn_get).setOnClickListener(this);
+        findViewById(R.id.tv_account_label).setOnClickListener(this);
+    }
+
+
+    @Override
+    public void onClick(View v)
+    {
+        switch (v.getId())
         {
-            @Override
-            public void onClick(View v)
-            {
-                final String account = et_get_account.getText().toString();
-                getAccount(account);
-            }
-        });
+            case R.id.tv_account_label:
+                final LocalAccountDialog dialog = new LocalAccountDialog(this);
+                dialog.setCallback(new LocalAccountDialog.Callback()
+                {
+                    @Override
+                    public void onClickItem(AccountModel model)
+                    {
+                        et_account.setText(model.getAccount());
+                    }
+                });
+                dialog.show();
+                break;
+            case R.id.btn_get:
+                getAccount(et_account.getText().toString());
+                break;
+        }
     }
 
     private void getAccount(final String account)
@@ -55,9 +74,9 @@ public class GetAccountActivity extends BaseActivity
                     public void run()
                     {
                         if (response.isSuccessful())
-                            tv_content.setText(new Gson().toJson(response.getSuccess()));
+                            setTextContent(tv_content, new Gson().toJson(response.getSuccess()));
                         else
-                            tv_content.setText(new Gson().toJson(response.getError()));
+                            setTextContent(tv_content, new Gson().toJson(response.getError()));
                     }
                 });
             }

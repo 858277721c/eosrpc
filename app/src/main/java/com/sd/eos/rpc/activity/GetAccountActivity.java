@@ -17,7 +17,7 @@ import com.sd.lib.task.FTask;
 /**
  * 查询账号信息
  */
-public class GetAccountActivity extends BaseActivity implements View.OnClickListener
+public class GetAccountActivity extends BaseActivity  implements View.OnClickListener
 {
     private TextView tv_content;
     private EditText et_account;
@@ -30,10 +30,9 @@ public class GetAccountActivity extends BaseActivity implements View.OnClickList
         tv_content = findViewById(R.id.tv_content);
         et_account = findViewById(R.id.et_account);
 
-        findViewById(R.id.btn_get).setOnClickListener(this);
+        findViewById(R.id.btn_query).setOnClickListener(this);
         findViewById(R.id.tv_account_label).setOnClickListener(this);
     }
-
 
     @Override
     public void onClick(View v)
@@ -52,7 +51,7 @@ public class GetAccountActivity extends BaseActivity implements View.OnClickList
                 });
                 dialog.show();
                 break;
-            case R.id.btn_get:
+            case R.id.btn_query:
                 getAccount(et_account.getText().toString());
                 break;
         }

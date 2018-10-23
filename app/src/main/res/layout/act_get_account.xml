@@ -19,16 +19,17 @@
             android:id="@+id/et_account"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:digits="@string/digits_account"
             android:maxLength="12" />
 
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_get"
+        android:id="@+id/btn_query"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onClick"
-        android:text="get"
+        android:text="查询"
         android:textAllCaps="false" />
 
     <TextView

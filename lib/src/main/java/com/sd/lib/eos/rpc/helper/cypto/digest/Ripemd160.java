@@ -17,10 +17,10 @@ public class Ripemd160 {
     }
 
     public static Ripemd160 from(byte[] data, int startOffset, int length ) {
-        Ripemd160.Digest digest = new Ripemd160.Digest();
+        Digest digest = new Digest();
         digest.update( data, startOffset, length );
 
-        byte[] result = new byte[ Ripemd160.Digest.DIGEST_LENGTH ];
+        byte[] result = new byte[ Digest.DIGEST_LENGTH ];
         digest.doFinal( result, 0);
 
         return new Ripemd160( result );

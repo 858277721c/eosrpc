@@ -26,8 +26,8 @@ package com.sd.lib.eos.rpc.helper.cypto.ec;
 
 import com.sd.lib.eos.rpc.helper.cypto.Hmac;
 import com.sd.lib.eos.rpc.helper.cypto.digest.Sha256;
-import com.sd.lib.eos.rpc.helper.util.OtherUtils;
 import com.sd.lib.eos.rpc.helper.types.EosByteWriter;
+import com.sd.lib.eos.rpc.helper.util.OtherUtils;
 
 import java.math.BigInteger;
 import java.util.Arrays;

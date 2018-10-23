@@ -21,9 +21,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         switch (v.getId())
         {
-            case R.id.btn_get_info:
-                startActivity(new Intent(this, GetInfoActivity.class));
-                break;
             case R.id.btn_get_account:
                 startActivity(new Intent(this, GetAccountActivity.class));
                 break;

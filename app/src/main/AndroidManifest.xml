@@ -21,7 +21,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.GetInfoActivity" />
         <activity android:name=".activity.GetAccountActivity" />
         <activity android:name=".activity.GetCurrencyActivity" />
         <activity android:name=".activity.CreateAccountActivity" />

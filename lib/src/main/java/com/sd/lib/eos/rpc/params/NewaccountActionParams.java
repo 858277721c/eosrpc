@@ -52,6 +52,12 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
             this.owner = Utils.checkNotNull(builder.owner, "newaccount owner permission was not specified");
             this.active = Utils.checkNotNull(builder.active, "newaccount active permission was not specified");
 
+            if (!this.owner.hasKey())
+                throw new RuntimeException("newaccount owner permission is empty");
+
+            if (!this.active.hasKey())
+                throw new RuntimeException("newaccount active permission is empty");
+
             this.newact = this.name;
         }
 

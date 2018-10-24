@@ -1,5 +1,7 @@
 package com.sd.lib.eos.rpc.params.model;
 
+import com.sd.lib.eos.rpc.utils.Utils;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,6 +25,19 @@ public class PermissionModel
     public static PermissionModel create(String publicKey)
     {
         return new PermissionModel(1, new KeyModel(publicKey, 1));
+    }
+
+    public boolean hasKey()
+    {
+        if (keys == null || keys.isEmpty())
+            return false;
+
+        for (KeyModel item : keys)
+        {
+            if (Utils.isEmpty(item.getKey()))
+                return false;
+        }
+        return true;
     }
 
     public int getThreshold()

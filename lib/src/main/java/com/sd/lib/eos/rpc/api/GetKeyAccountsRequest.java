@@ -46,6 +46,6 @@ class GetKeyAccountsRequest extends BaseRequest<GetKeyAccountsResponse>
     {
         final Map<String, Object> params = new HashMap<>();
         params.put("public_key", public_key);
-        return null;
+        return params;
     }
 }

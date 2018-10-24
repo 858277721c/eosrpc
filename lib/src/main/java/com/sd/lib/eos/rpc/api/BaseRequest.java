@@ -49,7 +49,7 @@ abstract class BaseRequest<T>
         Utils.checkNotNull(jsonConverter, "JsonConverter was not specified when execute:" + this);
 
         final Map<String, Object> params = getParams();
-        final String jsonParams = params == null ? "" : jsonConverter.objectToJson(params);
+        final String jsonParams = params == null ? null : jsonConverter.objectToJson(params);
 
         final RpcApiExecutor.Result result = executor.execute(mBaseUrl, path, jsonParams);
         Utils.checkNotNull(result, "RpcApiExecutor return null");

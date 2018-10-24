@@ -10,16 +10,16 @@ public class SimpleRpcApiExecutor implements RpcApiExecutor
     {
         final StringBuilder stringBuilder = new StringBuilder();
 
-        final int code = HttpRequest.post(baseUrl + path)
+        final HttpRequest request = HttpRequest.post(baseUrl + path)
                 .trustAllCerts()
                 .trustAllHosts()
                 .readTimeout(10 * 1000)
-                .connectTimeout(10 * 1000)
-                .contentType(HttpRequest.CONTENT_TYPE_JSON)
-                .send(jsonParams)
-                .receive(stringBuilder)
-                .code();
+                .connectTimeout(10 * 1000);
 
+        if (jsonParams != null)
+            request.contentType(HttpRequest.CONTENT_TYPE_JSON).send(jsonParams);
+
+        final int code = request.receive(stringBuilder).code();
         return new Result(code, stringBuilder.toString());
     }
 }

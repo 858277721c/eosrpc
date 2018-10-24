@@ -39,12 +39,7 @@ public abstract class BaseParams<A extends ActionParams.Args, B extends BasePara
             return addAuthorization(actor, permission);
         }
 
-        public B addAuthorization(String actor)
-        {
-            return addAuthorization(actor, null);
-        }
-
-        public B addAuthorization(String actor, String permission)
+        private B addAuthorization(String actor, String permission)
         {
             Utils.checkEmpty(actor, "");
 

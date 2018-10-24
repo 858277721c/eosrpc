@@ -6,6 +6,8 @@ public class GetAccountResponse
     private String account_name;
     // 余额
     private String core_liquid_balance;
+    // 内存
+    private long ram_quota;
     // cpu资源
     private ResourceModel cpu_limit;
     // net资源
@@ -29,6 +31,16 @@ public class GetAccountResponse
     public void setCore_liquid_balance(String core_liquid_balance)
     {
         this.core_liquid_balance = core_liquid_balance;
+    }
+
+    public long getRam_quota()
+    {
+        return ram_quota;
+    }
+
+    public void setRam_quota(long ram_quota)
+    {
+        this.ram_quota = ram_quota;
     }
 
     public ResourceModel getCpu_limit()

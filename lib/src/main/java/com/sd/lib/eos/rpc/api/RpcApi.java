@@ -4,6 +4,7 @@ import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
 import com.sd.lib.eos.rpc.api.model.ApiResponse;
 import com.sd.lib.eos.rpc.api.model.GetAccountResponse;
 import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
+import com.sd.lib.eos.rpc.api.model.GetCodeResponse;
 import com.sd.lib.eos.rpc.api.model.GetCurrencyBalanceResponse;
 import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 import com.sd.lib.eos.rpc.api.model.GetKeyAccountsResponse;
@@ -121,6 +122,20 @@ public class RpcApi
     {
         final GetKeyAccountsRequest request = new GetKeyAccountsRequest(mBaseUrl);
         request.setPublic_key(public_key);
+        return request.execute();
+    }
+
+    /**
+     * 查询合约
+     *
+     * @param account_name
+     * @return
+     * @throws Exception
+     */
+    public ApiResponse<GetCodeResponse> getCode(String account_name) throws Exception
+    {
+        final GetCodeRequest request = new GetCodeRequest(mBaseUrl);
+        request.setAccount_name(account_name);
         return request.execute();
     }
 

@@ -35,17 +35,17 @@ class GetKeyAccountsRequest extends BaseRequest<GetKeyAccountsResponse>
     }
 
     @Override
-    protected void beforeExecute()
-    {
-        super.beforeExecute();
-        Utils.checkEmpty(public_key, "public_key is empty");
-    }
-
-    @Override
     protected final Map<String, Object> getParams()
     {
         final Map<String, Object> params = new HashMap<>();
         params.put("public_key", public_key);
         return params;
+    }
+
+    @Override
+    protected void beforeExecute()
+    {
+        super.beforeExecute();
+        Utils.checkEmpty(public_key, "public_key is empty");
     }
 }

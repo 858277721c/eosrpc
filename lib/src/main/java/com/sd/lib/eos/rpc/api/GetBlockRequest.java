@@ -24,13 +24,6 @@ class GetBlockRequest extends BaseRequest<GetBlockResponse>
     }
 
     @Override
-    protected void beforeExecute()
-    {
-        super.beforeExecute();
-        Utils.checkEmpty(block_num_or_id, "block_num_or_id is empty");
-    }
-
-    @Override
     protected final String getPath()
     {
         return "/v1/chain/get_block";
@@ -42,5 +35,12 @@ class GetBlockRequest extends BaseRequest<GetBlockResponse>
         final Map<String, Object> params = new HashMap<>();
         params.put("block_num_or_id", block_num_or_id);
         return params;
+    }
+
+    @Override
+    protected void beforeExecute()
+    {
+        super.beforeExecute();
+        Utils.checkEmpty(block_num_or_id, "block_num_or_id is empty");
     }
 }

@@ -36,15 +36,6 @@ class AbiJsonToBinRequest extends BaseRequest<AbiJsonToBinResponse>
     }
 
     @Override
-    protected void beforeExecute()
-    {
-        super.beforeExecute();
-        Utils.checkEmpty(code, "code is empty");
-        Utils.checkEmpty(action, "action is empty");
-        Utils.checkNotNull(args, "args is null");
-    }
-
-    @Override
     protected final String getPath()
     {
         return "/v1/chain/abi_json_to_bin";
@@ -58,5 +49,14 @@ class AbiJsonToBinRequest extends BaseRequest<AbiJsonToBinResponse>
         params.put("action", action);
         params.put("args", args);
         return params;
+    }
+
+    @Override
+    protected void beforeExecute()
+    {
+        super.beforeExecute();
+        Utils.checkEmpty(code, "code is empty");
+        Utils.checkEmpty(action, "action is empty");
+        Utils.checkNotNull(args, "args is null");
     }
 }

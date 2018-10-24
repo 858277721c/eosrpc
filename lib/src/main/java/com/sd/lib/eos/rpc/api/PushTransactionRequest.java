@@ -44,22 +44,6 @@ class PushTransactionRequest extends BaseRequest<PushTransactionResponse>
     }
 
     @Override
-    protected void beforeExecute()
-    {
-        super.beforeExecute();
-        if (signatures == null || signatures.isEmpty())
-            throw new IllegalArgumentException("signatures is empty");
-
-        Utils.checkEmpty(packed_trx, "");
-
-        if (Utils.isEmpty(compression))
-            compression = "none";
-
-        if (Utils.isEmpty(packed_context_free_data))
-            packed_context_free_data = "";
-    }
-
-    @Override
     protected final String getPath()
     {
         return "/v1/chain/push_transaction";
@@ -74,5 +58,21 @@ class PushTransactionRequest extends BaseRequest<PushTransactionResponse>
         params.put("packed_context_free_data", packed_context_free_data);
         params.put("packed_trx", packed_trx);
         return params;
+    }
+
+    @Override
+    protected void beforeExecute()
+    {
+        super.beforeExecute();
+        if (signatures == null || signatures.isEmpty())
+            throw new IllegalArgumentException("signatures is empty");
+
+        Utils.checkEmpty(packed_trx, "");
+
+        if (Utils.isEmpty(compression))
+            compression = "none";
+
+        if (Utils.isEmpty(packed_context_free_data))
+            packed_context_free_data = "";
     }
 }

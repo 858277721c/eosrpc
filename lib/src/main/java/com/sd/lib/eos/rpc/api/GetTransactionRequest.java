@@ -35,17 +35,17 @@ class GetTransactionRequest extends BaseRequest<GetTransactionResponse>
     }
 
     @Override
-    protected void beforeExecute()
-    {
-        super.beforeExecute();
-        Utils.checkEmpty(id, "id is empty");
-    }
-
-    @Override
     protected final Map<String, Object> getParams()
     {
         final Map<String, Object> params = new HashMap<>();
         params.put("id", id);
         return params;
+    }
+
+    @Override
+    protected void beforeExecute()
+    {
+        super.beforeExecute();
+        Utils.checkEmpty(id, "id is empty");
     }
 }

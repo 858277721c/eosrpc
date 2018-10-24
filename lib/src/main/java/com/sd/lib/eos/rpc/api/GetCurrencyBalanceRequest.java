@@ -45,15 +45,6 @@ class GetCurrencyBalanceRequest extends BaseRequest<GetCurrencyBalanceResponse>
     }
 
     @Override
-    protected void beforeExecute()
-    {
-        super.beforeExecute();
-        Utils.checkEmpty(account, "account is empty");
-        if (Utils.isEmpty(symbol))
-            symbol = "eos";
-    }
-
-    @Override
     protected final String getPath()
     {
         return "/v1/chain/get_currency_balance";
@@ -67,6 +58,15 @@ class GetCurrencyBalanceRequest extends BaseRequest<GetCurrencyBalanceResponse>
         params.put("account", account);
         params.put("symbol", symbol);
         return params;
+    }
+
+    @Override
+    protected void beforeExecute()
+    {
+        super.beforeExecute();
+        Utils.checkEmpty(account, "account is empty");
+        if (Utils.isEmpty(symbol))
+            symbol = "eos";
     }
 
     @Override

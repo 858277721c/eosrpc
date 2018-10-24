@@ -29,13 +29,6 @@ class GetAccountRequest extends BaseRequest<GetAccountResponse>
     }
 
     @Override
-    protected void beforeExecute()
-    {
-        super.beforeExecute();
-        Utils.checkEmpty(account_name, "account_name is empty");
-    }
-
-    @Override
     protected final String getPath()
     {
         return "/v1/chain/get_account";
@@ -47,5 +40,12 @@ class GetAccountRequest extends BaseRequest<GetAccountResponse>
         final Map<String, Object> params = new HashMap<>();
         params.put("account_name", account_name);
         return params;
+    }
+
+    @Override
+    protected void beforeExecute()
+    {
+        super.beforeExecute();
+        Utils.checkEmpty(account_name, "account_name is empty");
     }
 }

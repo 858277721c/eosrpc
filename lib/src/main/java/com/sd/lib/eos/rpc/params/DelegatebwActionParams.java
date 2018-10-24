@@ -1,5 +1,6 @@
 package com.sd.lib.eos.rpc.params;
 
+import com.sd.lib.eos.rpc.utils.RpcUtils;
 import com.sd.lib.eos.rpc.utils.Utils;
 
 /**
@@ -184,8 +185,8 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
             Utils.checkEmpty(receiver, "receiver account was not specified");
             Utils.checkEmpty(stake_cpu_quantity, "stake cpu quantity was not specified");
             Utils.checkEmpty(stake_net_quantity, "stake net quantity was not specified");
-            stake_cpu_quantity = Utils.checkQuantity(stake_cpu_quantity);
-            stake_net_quantity = Utils.checkQuantity(stake_net_quantity);
+            stake_cpu_quantity = RpcUtils.checkMoney(stake_cpu_quantity);
+            stake_net_quantity = RpcUtils.checkMoney(stake_net_quantity);
             return new DelegatebwActionParams(this);
         }
     }

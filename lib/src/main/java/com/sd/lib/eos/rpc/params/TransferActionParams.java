@@ -1,5 +1,6 @@
 package com.sd.lib.eos.rpc.params;
 
+import com.sd.lib.eos.rpc.utils.RpcUtils;
 import com.sd.lib.eos.rpc.utils.Utils;
 
 /**
@@ -146,7 +147,7 @@ public class TransferActionParams extends BaseParams<TransferActionParams.Args, 
             Utils.checkEmpty(from, "from account was not specified");
             Utils.checkEmpty(to, "to account was not specified");
             Utils.checkEmpty(quantity, "transfer quantity was not specified");
-            quantity = Utils.checkQuantity(quantity);
+            quantity = RpcUtils.checkMoney(quantity);
 
             if (memo == null)
                 memo = "";

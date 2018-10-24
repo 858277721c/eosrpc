@@ -1,5 +1,6 @@
 package com.sd.lib.eos.rpc.params;
 
+import com.sd.lib.eos.rpc.utils.RpcUtils;
 import com.sd.lib.eos.rpc.utils.Utils;
 
 /**
@@ -126,7 +127,7 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
             Utils.checkEmpty(payer, "payer account was not specified");
             Utils.checkEmpty(receiver, "receiver account was not specified");
             Utils.checkEmpty(quant, "quant was not specified");
-            quant = Utils.checkQuantity(quant);
+            quant = RpcUtils.checkMoney(quant);
             return new BuyramActionParams(this);
         }
     }

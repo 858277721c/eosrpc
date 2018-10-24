@@ -13,9 +13,19 @@ public abstract class BaseParams<A extends ActionParams.Args, B extends BasePara
 
     protected BaseParams(B builder)
     {
-        if (builder.authorization == null || builder.authorization.isEmpty())
-            throw new IllegalArgumentException("authorization was not specified");
-        this.authorization = Collections.unmodifiableList(builder.authorization);
+        final List<AuthorizationModel> authorization = builder.authorization;
+        if (authorization == null || authorization.isEmpty())
+            throw new RuntimeException("authorization was not specified");
+
+        for (AuthorizationModel item : authorization)
+        {
+            Utils.checkNotNull(item, "authorization item is null");
+            Utils.checkEmpty(item.getActor(), "authorization actor is empty");
+            if (Utils.isEmpty(item.getPermission()))
+                item.setPermission("active");
+        }
+
+        this.authorization = Collections.unmodifiableList(authorization);
     }
 
     @Override
@@ -41,11 +51,6 @@ public abstract class BaseParams<A extends ActionParams.Args, B extends BasePara
 
         private B addAuthorization(String actor, String permission)
         {
-            Utils.checkEmpty(actor, "");
-
-            if (Utils.isEmpty(permission))
-                permission = "active";
-
             final AuthorizationModel model = new AuthorizationModel();
             model.setActor(actor);
             model.setPermission(permission);

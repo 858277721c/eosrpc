@@ -42,9 +42,9 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
 
         private Args(Builder builder)
         {
-            this.payer = builder.payer;
-            this.receiver = builder.receiver;
-            this.quant = builder.quant;
+            this.payer = RpcUtils.checkAccountName(builder.payer, "payer account was not specified");
+            this.receiver = RpcUtils.checkAccountName(builder.receiver, "receiver account was not specified");
+            this.quant = RpcUtils.checkMoney(builder.quant, "quant was not specified");
         }
 
         public String getPayer()
@@ -124,10 +124,6 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
 
         public BuyramActionParams build()
         {
-            Utils.checkEmpty(payer, "payer account was not specified");
-            Utils.checkEmpty(receiver, "receiver account was not specified");
-            Utils.checkEmpty(quant, "quant was not specified");
-            quant = RpcUtils.checkMoney(quant);
             return new BuyramActionParams(this);
         }
     }

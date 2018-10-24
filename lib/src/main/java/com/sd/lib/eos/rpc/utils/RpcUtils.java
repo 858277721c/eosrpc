@@ -10,24 +10,35 @@ public class RpcUtils
      * 检查账号名称是否合法
      *
      * @param account
+     * @param emptyExcetion
+     * @return
      */
-    public static void checkAccountName(String account)
+    public static String checkAccountName(String account, String emptyExcetion)
     {
+        if (Utils.isEmpty(account))
+            throw new RuntimeException(emptyExcetion);
+
         if (account.length() != 12)
             throw new RuntimeException("account name lengh must be 12");
+
+        return account;
     }
 
     /**
      * 检查金额串是否合法
      *
      * @param moneyString
+     * @param emptyExcetion
      * @return
      */
-    public static String checkMoney(String moneyString)
+    public static String checkMoney(String moneyString, String emptyExcetion)
     {
+        if (Utils.isEmpty(moneyString))
+            throw new RuntimeException(emptyExcetion);
+
         final String[] arr = moneyString.split(" ");
         if (arr.length != 2)
-            throw new IllegalArgumentException("moneyString must include one blank space:" + moneyString);
+            throw new RuntimeException("moneyString must include one blank space:" + moneyString);
 
         double num = 0;
         try
@@ -35,14 +46,14 @@ public class RpcUtils
             num = Double.parseDouble(arr[0]);
         } catch (Exception e)
         {
-            throw new IllegalArgumentException("moneyString:" + moneyString + " " + e);
+            throw new RuntimeException("moneyString:" + moneyString + " " + e);
         }
         if (num < 0)
-            throw new IllegalArgumentException("moneyString is less than 0:" + moneyString);
+            throw new RuntimeException("moneyString is less than 0:" + moneyString);
 
         final int dotIndex = arr[0].lastIndexOf(".");
         if (dotIndex < 0)
-            throw new IllegalArgumentException("moneyString demical part was not found:" + moneyString);
+            throw new RuntimeException("moneyString demical part was not found:" + moneyString);
 
         final int targetDemicalLength = 4;
         final int demicalLength = arr[0].length() - dotIndex - 1;
@@ -61,7 +72,7 @@ public class RpcUtils
             return sb.toString();
         } else
         {
-            throw new IllegalArgumentException("moneyString demical part length is not 4 but " + demicalLength);
+            throw new RuntimeException("moneyString demical part length is not 4 but " + demicalLength);
         }
     }
 
@@ -75,7 +86,7 @@ public class RpcUtils
     {
         if (Utils.isEmpty(moneyString))
             return 0;
-        checkMoney(moneyString);
+        checkMoney(moneyString, null);
 
         return Double.parseDouble(moneyString.split(" ")[0]);
     }

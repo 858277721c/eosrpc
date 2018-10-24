@@ -2,6 +2,7 @@ package com.sd.lib.eos.rpc.params;
 
 
 import com.sd.lib.eos.rpc.params.model.PermissionModel;
+import com.sd.lib.eos.rpc.utils.RpcUtils;
 import com.sd.lib.eos.rpc.utils.Utils;
 
 /**
@@ -39,17 +40,19 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
     {
         private final String creator;
         private final String name;
-        private final String newact;
         private final PermissionModel owner;
         private final PermissionModel active;
 
+        private final String newact;
+
         private Args(Builder builder)
         {
-            this.creator = builder.creator;
-            this.name = builder.name;
-            this.newact = builder.name;
-            this.owner = builder.owner;
-            this.active = builder.active;
+            this.creator = RpcUtils.checkAccountName(builder.creator, "creator was not specified");
+            this.name = RpcUtils.checkAccountName(builder.name, "new account name was not specified");
+            this.owner = Utils.checkNotNull(builder.owner, "owner permission was not specified");
+            this.active = Utils.checkNotNull(builder.active, "active permission was not specified");
+
+            this.newact = this.name;
         }
 
         public String getCreator()
@@ -138,10 +141,6 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
 
         public NewaccountActionParams build()
         {
-            Utils.checkEmpty(creator, "account of the creator was not specified");
-            Utils.checkEmpty(name, "new account name was not specified");
-            Utils.checkNotNull(owner, "owner permission was not specified");
-            Utils.checkNotNull(active, "active permission was not specified");
             return new NewaccountActionParams(this);
         }
     }

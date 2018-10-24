@@ -43,9 +43,9 @@ public class TransferActionParams extends BaseParams<TransferActionParams.Args, 
 
         private Args(Builder builder)
         {
-            this.from = builder.from;
-            this.to = builder.to;
-            this.quantity = builder.quantity;
+            this.from = RpcUtils.checkAccountName(builder.from, "from account was not specified");
+            this.to = RpcUtils.checkAccountName(builder.to, "to account was not specified");
+            this.quantity = RpcUtils.checkMoney(builder.quantity, "transfer quantity was not specified");
             this.memo = builder.memo;
         }
 
@@ -144,14 +144,6 @@ public class TransferActionParams extends BaseParams<TransferActionParams.Args, 
 
         public TransferActionParams build()
         {
-            Utils.checkEmpty(from, "from account was not specified");
-            Utils.checkEmpty(to, "to account was not specified");
-            Utils.checkEmpty(quantity, "transfer quantity was not specified");
-            quantity = RpcUtils.checkMoney(quantity);
-
-            if (memo == null)
-                memo = "";
-
             return new TransferActionParams(this);
         }
     }

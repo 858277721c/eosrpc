@@ -38,17 +38,23 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
     {
         private final String from;
         private final String receiver;
-        private final String stake_net_quantity;
         private final String stake_cpu_quantity;
+        private final String stake_net_quantity;
+
         private final int transfer;
 
         private Args(Builder builder)
         {
-            this.from = builder.from;
-            this.receiver = builder.receiver;
-            this.stake_net_quantity = builder.stake_net_quantity;
-            this.stake_cpu_quantity = builder.stake_cpu_quantity;
-            this.transfer = builder.transfer;
+            this.from = RpcUtils.checkAccountName(builder.from, "from account was not specified");
+            this.receiver = RpcUtils.checkAccountName(builder.receiver, "receiver account was not specified");
+            this.stake_cpu_quantity = RpcUtils.checkMoney(builder.stake_cpu_quantity, "stake cpu quantity was not specified");
+            this.stake_net_quantity = RpcUtils.checkMoney(builder.stake_net_quantity, "stake net quantity was not specified");
+
+            final int transfer = builder.transfer;
+            if (transfer == 0 || transfer == 1)
+                this.transfer = transfer;
+            else
+                throw new RuntimeException("transfer must be 0 or 1");
         }
 
         public String getFrom()
@@ -181,12 +187,6 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
 
         public DelegatebwActionParams build()
         {
-            Utils.checkEmpty(from, "from account was not specified");
-            Utils.checkEmpty(receiver, "receiver account was not specified");
-            Utils.checkEmpty(stake_cpu_quantity, "stake cpu quantity was not specified");
-            Utils.checkEmpty(stake_net_quantity, "stake net quantity was not specified");
-            stake_cpu_quantity = RpcUtils.checkMoney(stake_cpu_quantity);
-            stake_net_quantity = RpcUtils.checkMoney(stake_net_quantity);
             return new DelegatebwActionParams(this);
         }
     }

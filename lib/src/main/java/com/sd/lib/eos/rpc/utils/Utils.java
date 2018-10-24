@@ -13,9 +13,10 @@ public class Utils
             throw new NullPointerException(exception);
     }
 
-    public static void checkNotNull(Object object, String exception)
+    public static <T> T checkNotNull(T object, String exception)
     {
         if (object == null)
             throw new NullPointerException(exception);
+        return object;
     }
 }

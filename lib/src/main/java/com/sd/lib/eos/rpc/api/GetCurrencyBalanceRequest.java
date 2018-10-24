@@ -70,9 +70,12 @@ class GetCurrencyBalanceRequest extends BaseRequest<GetCurrencyBalanceResponse>
     }
 
     @Override
-    protected final ApiResponse<GetCurrencyBalanceResponse> convertSuccessResponse(String string, Class<GetCurrencyBalanceResponse> clazz, JsonConverter converter) throws Exception
+    protected final ApiResponse<GetCurrencyBalanceResponse> convertSuccessResponse(String json, Class<GetCurrencyBalanceResponse> clazz, JsonConverter converter) throws Exception
     {
-        final JSONArray jsonArray = new JSONArray(string);
+        final JSONArray jsonArray = new JSONArray(json);
+        if (jsonArray.length() <= 0)
+            throw new RuntimeException("get currency balance error from json:" + json);
+
         final String balance = jsonArray.getString(0);
 
         final GetCurrencyBalanceResponse response = new GetCurrencyBalanceResponse();

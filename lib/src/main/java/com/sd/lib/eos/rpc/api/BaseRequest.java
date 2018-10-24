@@ -58,24 +58,24 @@ abstract class BaseRequest<T>
         if (code <= 0)
             throw new RuntimeException("Illegal result code:" + code);
 
-        final String string = result.string;
-        Utils.checkEmpty(string, "RpcApiExecutor return empty string");
+        final String json = result.string;
+        Utils.checkEmpty(json, "RpcApiExecutor return empty string");
 
         if (code == 500)
         {
-            return new ApiResponse<>(jsonConverter.jsonToObject(string, ErrorResponse.class));
+            return new ApiResponse<>(jsonConverter.jsonToObject(json, ErrorResponse.class));
         } else
         {
             final Class<T> successClass = getSuccessClass();
             Utils.checkNotNull(successClass, "successful class was not specified when execute:" + this);
 
-            return convertSuccessResponse(string, successClass, jsonConverter);
+            return convertSuccessResponse(json, successClass, jsonConverter);
         }
     }
 
-    protected ApiResponse<T> convertSuccessResponse(String string, Class<T> clazz, JsonConverter converter) throws Exception
+    protected ApiResponse<T> convertSuccessResponse(String json, Class<T> clazz, JsonConverter converter) throws Exception
     {
-        return new ApiResponse<>(converter.jsonToObject(string, clazz));
+        return new ApiResponse<>(converter.jsonToObject(json, clazz));
     }
 
     private Class<T> getSuccessClass()

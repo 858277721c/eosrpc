@@ -6,6 +6,7 @@ import com.sd.lib.eos.rpc.api.model.GetAccountResponse;
 import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
 import com.sd.lib.eos.rpc.api.model.GetCurrencyBalanceResponse;
 import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
+import com.sd.lib.eos.rpc.api.model.GetTransactionResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.core.FEOSManager;
 import com.sd.lib.eos.rpc.utils.Utils;
@@ -91,6 +92,20 @@ public class RpcApi
         final GetCurrencyBalanceRequest request = new GetCurrencyBalanceRequest(mBaseUrl);
         request.setAccount(account);
         request.setSymbol(symbol);
+        return request.execute();
+    }
+
+    /**
+     * 查询交易
+     *
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public ApiResponse<GetTransactionResponse> getTransaction(String id) throws Exception
+    {
+        final GetTransactionRequest request = new GetTransactionRequest(mBaseUrl);
+        request.setId(id);
         return request.execute();
     }
 

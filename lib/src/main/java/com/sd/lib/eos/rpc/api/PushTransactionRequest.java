@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 提交交易
+ */
 class PushTransactionRequest extends BaseRequest<PushTransactionResponse>
 {
     private List<String> signatures;

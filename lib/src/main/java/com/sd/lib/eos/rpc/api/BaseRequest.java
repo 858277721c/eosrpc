@@ -69,11 +69,16 @@ abstract class BaseRequest<T>
             final Class<T> successClass = getSuccessClass();
             Utils.checkNotNull(successClass, "successful class was not specified when execute:" + this);
 
-            return new ApiResponse<>(jsonConverter.jsonToObject(string, successClass));
+            return convertSuccessResponse(string, successClass, jsonConverter);
         }
     }
 
-    protected Class<T> getSuccessClass()
+    protected ApiResponse<T> convertSuccessResponse(String string, Class<T> clazz, JsonConverter converter) throws Exception
+    {
+        return new ApiResponse<>(converter.jsonToObject(string, clazz));
+    }
+
+    private Class<T> getSuccessClass()
     {
         final ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
         final Type[] types = parameterizedType.getActualTypeArguments();

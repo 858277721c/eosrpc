@@ -1,7 +1,11 @@
 package com.sd.lib.eos.rpc.api;
 
+import com.sd.lib.eos.rpc.api.model.ApiResponse;
 import com.sd.lib.eos.rpc.api.model.GetCurrencyBalanceResponse;
+import com.sd.lib.eos.rpc.core.JsonConverter;
 import com.sd.lib.eos.rpc.utils.Utils;
+
+import org.json.JSONArray;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,5 +67,17 @@ class GetCurrencyBalanceRequest extends BaseRequest<GetCurrencyBalanceResponse>
         params.put("account", account);
         params.put("symbol", symbol);
         return params;
+    }
+
+    @Override
+    protected final ApiResponse<GetCurrencyBalanceResponse> convertSuccessResponse(String string, Class<GetCurrencyBalanceResponse> clazz, JsonConverter converter) throws Exception
+    {
+        final JSONArray jsonArray = new JSONArray(string);
+        final String balance = jsonArray.getString(0);
+
+        final GetCurrencyBalanceResponse response = new GetCurrencyBalanceResponse();
+        response.setBalance(balance);
+
+        return new ApiResponse<>(response);
     }
 }

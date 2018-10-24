@@ -6,6 +6,7 @@ import com.sd.lib.eos.rpc.api.model.GetAccountResponse;
 import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
 import com.sd.lib.eos.rpc.api.model.GetCurrencyBalanceResponse;
 import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
+import com.sd.lib.eos.rpc.api.model.GetKeyAccountsResponse;
 import com.sd.lib.eos.rpc.api.model.GetTransactionResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.core.FEOSManager;
@@ -54,9 +55,9 @@ public class RpcApi
     }
 
     /**
-     * 获得账号信息
+     * 查询账号信息
      *
-     * @param account_name
+     * @param account_name 要查询的账号
      * @return
      * @throws Exception
      */
@@ -96,9 +97,9 @@ public class RpcApi
     }
 
     /**
-     * 查询交易
+     * 查询交易详细
      *
-     * @param id
+     * @param id 交易id
      * @return
      * @throws Exception
      */
@@ -106,6 +107,20 @@ public class RpcApi
     {
         final GetTransactionRequest request = new GetTransactionRequest(mBaseUrl);
         request.setId(id);
+        return request.execute();
+    }
+
+    /**
+     * 根据公钥查询账号
+     *
+     * @param public_key 公钥
+     * @return
+     * @throws Exception
+     */
+    public ApiResponse<GetKeyAccountsResponse> getKeyAccounts(String public_key) throws Exception
+    {
+        final GetKeyAccountsRequest request = new GetKeyAccountsRequest(mBaseUrl);
+        request.setPublic_key(public_key);
         return request.execute();
     }
 

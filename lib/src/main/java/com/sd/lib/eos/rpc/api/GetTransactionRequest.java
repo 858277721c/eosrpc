@@ -1,12 +1,13 @@
 package com.sd.lib.eos.rpc.api;
 
 import com.sd.lib.eos.rpc.api.model.GetTransactionResponse;
+import com.sd.lib.eos.rpc.utils.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 交易记录
+ * 查询交易详细
  */
 class GetTransactionRequest extends BaseRequest<GetTransactionResponse>
 {
@@ -17,6 +18,11 @@ class GetTransactionRequest extends BaseRequest<GetTransactionResponse>
         super(baseUrl);
     }
 
+    /**
+     * 设置交易id
+     *
+     * @param id
+     */
     public void setId(String id)
     {
         this.id = id;
@@ -26,6 +32,13 @@ class GetTransactionRequest extends BaseRequest<GetTransactionResponse>
     protected final String getPath()
     {
         return "/v1/history/get_transaction";
+    }
+
+    @Override
+    protected void beforeExecute()
+    {
+        super.beforeExecute();
+        Utils.checkEmpty(id, "id is empty");
     }
 
     @Override

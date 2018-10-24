@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 获取账号信息
+ * 查询账号信息
  */
 class GetAccountRequest extends BaseRequest<GetAccountResponse>
 {
@@ -18,6 +18,11 @@ class GetAccountRequest extends BaseRequest<GetAccountResponse>
         super(baseUrl);
     }
 
+    /**
+     * 设置要查询的账号
+     *
+     * @param account_name
+     */
     public void setAccount_name(String account_name)
     {
         this.account_name = account_name;

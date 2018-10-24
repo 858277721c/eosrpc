@@ -33,6 +33,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_buy_ram:
                 startActivity(new Intent(this, BuyRamActivity.class));
                 break;
+            case R.id.btn_delegatebw:
+                startActivity(new Intent(this, DelegatebwActivity.class));
+                break;
         }
     }
 }

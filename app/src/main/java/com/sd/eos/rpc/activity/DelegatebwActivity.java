@@ -16,15 +16,15 @@ import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
 import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.core.output.PushTransaction;
-import com.sd.lib.eos.rpc.params.TransferActionParams;
+import com.sd.lib.eos.rpc.params.DelegatebwActionParams;
 import com.sd.lib.task.FTask;
 
 /**
- * 转账
+ * 购买抵押
  */
-public class TransferActivity extends BaseActivity implements View.OnClickListener
+public class DelegatebwActivity extends BaseActivity implements View.OnClickListener
 {
-    private EditText et_from, et_from_key_private, et_to, et_transfer_quantity, et_transfer_memo;
+    private EditText et_from, et_from_key_private, et_to, et_stake_cpu_quantity, et_stake_net_quantity;
     private TextView tv_content;
     private FTask mTask;
 
@@ -32,12 +32,12 @@ public class TransferActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_transfer);
+        setContentView(R.layout.act_delegatebw);
         et_from = findViewById(R.id.et_from);
         et_from_key_private = findViewById(R.id.et_from_key_private);
+        et_stake_cpu_quantity = findViewById(R.id.et_stake_cpu_quantity);
+        et_stake_net_quantity = findViewById(R.id.et_stake_net_quantity);
         et_to = findViewById(R.id.et_to);
-        et_transfer_quantity = findViewById(R.id.et_transfer_quantity);
-        et_transfer_memo = findViewById(R.id.et_transfer_memo);
         tv_content = findViewById(R.id.tv_content);
     }
 
@@ -71,49 +71,54 @@ public class TransferActivity extends BaseActivity implements View.OnClickListen
                 });
                 dialogTo.show();
                 break;
-            case R.id.btn_transfer:
-                transfer();
+            case R.id.btn_buy:
+                buyRam();
                 break;
         }
     }
 
-    private void transfer()
+    private void buyRam()
     {
         final String from = et_from.getText().toString();
         if (TextUtils.isEmpty(from))
         {
-            showToast("请输入转账账号");
+            showToast("请输入购买账号");
             return;
         }
 
         final String to = et_to.getText().toString();
-        if (TextUtils.isEmpty(to))
+        if (TextUtils.isEmpty(from))
         {
-            showToast("请输入收款账号");
+            showToast("请输入接收账号");
             return;
         }
 
         final String fromkeyPrivate = et_from_key_private.getText().toString();
         if (TextUtils.isEmpty(fromkeyPrivate))
         {
-            showToast("请输入转账者账号私钥");
+            showToast("请输入购买账号私钥");
             return;
         }
 
-        final String quantity = et_transfer_quantity.getText().toString();
-        if (TextUtils.isEmpty(quantity))
+        final String cpuQuantity = et_stake_cpu_quantity.getText().toString();
+        if (TextUtils.isEmpty(cpuQuantity))
         {
-            showToast("请输入转账金额");
+            showToast("请输入cpu抵押金额");
             return;
         }
 
-        final String memo = et_transfer_memo.getText().toString();
+        final String netQuantity = et_stake_net_quantity.getText().toString();
+        if (TextUtils.isEmpty(netQuantity))
+        {
+            showToast("请输入net抵押金额");
+            return;
+        }
 
-        final TransferActionParams actionParams = new TransferActionParams.Builder()
+        final DelegatebwActionParams params = new DelegatebwActionParams.Builder()
                 .setFrom(from)
-                .setTo(to)
-                .setQuantity(Double.parseDouble(quantity), null)
-                .setMemo(memo)
+                .setReceiver(to)
+                .setStake_cpu_quantity(Double.parseDouble(cpuQuantity), null)
+                .setStake_net_quantity(Double.parseDouble(netQuantity), null)
                 .build();
 
         cancelTask();
@@ -122,7 +127,7 @@ public class TransferActivity extends BaseActivity implements View.OnClickListen
             @Override
             protected void onRun() throws Exception
             {
-                final PushTransaction pushTransaction = new PushTransaction(actionParams);
+                final PushTransaction pushTransaction = new PushTransaction(params);
                 pushTransaction.submit(fromkeyPrivate, new PushTransaction.Callback()
                 {
                     @Override

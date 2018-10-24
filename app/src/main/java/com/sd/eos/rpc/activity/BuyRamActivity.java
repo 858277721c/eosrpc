@@ -86,7 +86,7 @@ public class BuyRamActivity extends BaseActivity implements View.OnClickListener
         }
 
         final String to = et_to.getText().toString();
-        if (TextUtils.isEmpty(from))
+        if (TextUtils.isEmpty(to))
         {
             showToast("请输入接收账号");
             return;
@@ -100,7 +100,7 @@ public class BuyRamActivity extends BaseActivity implements View.OnClickListener
         }
 
         final String quantity = et_buy_quantity.getText().toString();
-        if (TextUtils.isEmpty(fromkeyPrivate))
+        if (TextUtils.isEmpty(quantity))
         {
             showToast("请输入购买金额");
             return;

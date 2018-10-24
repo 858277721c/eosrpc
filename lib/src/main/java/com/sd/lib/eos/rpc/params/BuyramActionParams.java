@@ -44,7 +44,7 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
         {
             this.payer = RpcUtils.checkAccountName(builder.payer, "payer account was not specified");
             this.receiver = RpcUtils.checkAccountName(builder.receiver, "receiver account was not specified");
-            this.quant = RpcUtils.checkMoney(builder.quant, "quant was not specified");
+            this.quant = RpcUtils.checkMoney(builder.quant, "buy ram quantity was not specified");
         }
 
         public String getPayer()

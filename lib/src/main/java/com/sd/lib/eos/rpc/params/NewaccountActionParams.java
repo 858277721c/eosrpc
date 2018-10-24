@@ -47,10 +47,10 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
 
         private Args(Builder builder)
         {
-            this.creator = RpcUtils.checkAccountName(builder.creator, "creator was not specified");
-            this.name = RpcUtils.checkAccountName(builder.name, "new account name was not specified");
-            this.owner = Utils.checkNotNull(builder.owner, "owner permission was not specified");
-            this.active = Utils.checkNotNull(builder.active, "active permission was not specified");
+            this.creator = RpcUtils.checkAccountName(builder.creator, "newaccount creator was not specified");
+            this.name = RpcUtils.checkAccountName(builder.name, "newaccount name was not specified");
+            this.owner = Utils.checkNotNull(builder.owner, "newaccount owner permission was not specified");
+            this.active = Utils.checkNotNull(builder.active, "newaccount active permission was not specified");
 
             this.newact = this.name;
         }

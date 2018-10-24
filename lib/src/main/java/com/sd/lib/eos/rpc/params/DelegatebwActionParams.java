@@ -45,16 +45,16 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
 
         private Args(Builder builder)
         {
-            this.from = RpcUtils.checkAccountName(builder.from, "from account was not specified");
-            this.receiver = RpcUtils.checkAccountName(builder.receiver, "receiver account was not specified");
-            this.stake_cpu_quantity = RpcUtils.checkMoney(builder.stake_cpu_quantity, "stake cpu quantity was not specified");
-            this.stake_net_quantity = RpcUtils.checkMoney(builder.stake_net_quantity, "stake net quantity was not specified");
+            this.from = RpcUtils.checkAccountName(builder.from, "delegatebw from was not specified");
+            this.receiver = RpcUtils.checkAccountName(builder.receiver, "delegatebw receiver was not specified");
+            this.stake_cpu_quantity = RpcUtils.checkMoney(builder.stake_cpu_quantity, "delegatebw stake cpu quantity was not specified");
+            this.stake_net_quantity = RpcUtils.checkMoney(builder.stake_net_quantity, "delegatebw stake net quantity was not specified");
 
             final int transfer = builder.transfer;
             if (transfer == 0 || transfer == 1)
                 this.transfer = transfer;
             else
-                throw new RuntimeException("transfer must be 0 or 1");
+                throw new RuntimeException("delegatebw transfer must be 0 or 1");
         }
 
         public String getFrom()

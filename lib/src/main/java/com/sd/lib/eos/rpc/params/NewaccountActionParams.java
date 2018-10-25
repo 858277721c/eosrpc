@@ -49,13 +49,17 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
         {
             this.creator = RpcUtils.checkAccountName(builder.creator, "newaccount creator was not specified");
             this.name = RpcUtils.checkAccountName(builder.newAccount, "newaccount name was not specified");
-            this.owner = Utils.checkNotNull(builder.owner, "newaccount owner permission was not specified");
-            this.active = Utils.checkNotNull(builder.active, "newaccount active permission was not specified");
 
-            if (!this.owner.hasKey())
+            final PermissionModel owner = Utils.checkNotNull(builder.owner, "newaccount owner permission was not specified");
+            if (owner.hasKey())
+                this.owner = PermissionModel.create(owner.getKeys().get(0).getKey());
+            else
                 throw new RuntimeException("newaccount owner permission is empty");
 
-            if (!this.active.hasKey())
+            final PermissionModel active = Utils.checkNotNull(builder.active, "newaccount active permission was not specified");
+            if (active.hasKey())
+                this.active = PermissionModel.create(active.getKeys().get(0).getKey());
+            else
                 throw new RuntimeException("newaccount active permission is empty");
 
             this.newact = this.name;

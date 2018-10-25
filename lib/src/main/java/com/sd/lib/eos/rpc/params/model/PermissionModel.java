@@ -13,10 +13,10 @@ public class PermissionModel
     private final String[] accounts;
     private final String[] waits;
 
-    public PermissionModel(int threshold, KeyModel... keys)
+    public PermissionModel(int threshold, KeyModel keyModel)
     {
         this.threshold = threshold;
-        this.keys = Arrays.asList(keys);
+        this.keys = Arrays.asList(new KeyModel[]{keyModel});
 
         this.accounts = new String[]{};
         this.waits = new String[]{};

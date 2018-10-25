@@ -44,7 +44,7 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
         {
             this.payer = RpcUtils.checkAccountName(builder.payer, "buyram payer was not specified");
             this.receiver = RpcUtils.checkAccountName(builder.receiver, "buyram receiver was not specified");
-            this.quant = RpcUtils.checkMoney(builder.quant, "buyram quantity was not specified");
+            this.quant = RpcUtils.checkMoney(builder.quantity, "buyram quantity was not specified");
         }
 
         public String getPayer()
@@ -67,7 +67,7 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
     {
         private String payer;
         private String receiver;
-        private String quant;
+        private String quantity;
 
         /**
          * 设置付款账号
@@ -97,28 +97,28 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
         /**
          * 设置购买金额
          *
-         * @param quant  数量数量
-         * @param symbol 币种，默认EOS
+         * @param quantity 数量数量
+         * @param symbol   币种，默认EOS
          * @return
          */
-        public Builder setQuant(double quant, String symbol)
+        public Builder setQuantity(double quantity, String symbol)
         {
             if (Utils.isEmpty(symbol))
                 symbol = "EOS";
 
-            setQuant(quant + " " + symbol);
+            setQuantity(quantity + " " + symbol);
             return this;
         }
 
         /**
          * 设置购买金额
          *
-         * @param quant
+         * @param quantity
          * @return
          */
-        private Builder setQuant(String quant)
+        private Builder setQuantity(String quantity)
         {
-            this.quant = quant;
+            this.quantity = quantity;
             return this;
         }
 

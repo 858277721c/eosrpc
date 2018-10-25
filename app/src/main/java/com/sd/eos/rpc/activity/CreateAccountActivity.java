@@ -167,14 +167,14 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
             {
                 final NewaccountActionParams newaccountActionParams = new NewaccountActionParams.Builder()
                         .setCreator(creator)
-                        .setName(newAccount)
+                        .setNewAccount(newAccount)
                         .setOwner(newAccountKeyPublic)
                         .build();
 
                 final BuyramActionParams buyramActionParams = new BuyramActionParams.Builder()
                         .setPayer(creator)
                         .setReceiver(newAccount)
-                        .setQuant(Double.valueOf(buyRam), null)
+                        .setQuantity(Double.valueOf(buyRam), null)
                         .build();
 
                 final DelegatebwActionParams delegatebwActionParams = new DelegatebwActionParams.Builder()

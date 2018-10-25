@@ -48,7 +48,7 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
         private Args(Builder builder)
         {
             this.creator = RpcUtils.checkAccountName(builder.creator, "newaccount creator was not specified");
-            this.name = RpcUtils.checkAccountName(builder.name, "newaccount name was not specified");
+            this.name = RpcUtils.checkAccountName(builder.newAccount, "newaccount name was not specified");
             this.owner = Utils.checkNotNull(builder.owner, "newaccount owner permission was not specified");
             this.active = Utils.checkNotNull(builder.active, "newaccount active permission was not specified");
 
@@ -90,7 +90,7 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
     public static class Builder extends BaseParams.Builder<Builder>
     {
         private String creator;
-        private String name;
+        private String newAccount;
         private PermissionModel owner;
         private PermissionModel active;
 
@@ -110,12 +110,12 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
         /**
          * 设置新账号名称
          *
-         * @param name
+         * @param account
          * @return
          */
-        public Builder setName(String name)
+        public Builder setNewAccount(String account)
         {
-            this.name = name;
+            this.newAccount = account;
             return this;
         }
 

@@ -109,7 +109,7 @@ public class BuyRamActivity extends BaseActivity implements View.OnClickListener
         final BuyramActionParams params = new BuyramActionParams.Builder()
                 .setPayer(from)
                 .setReceiver(to)
-                .setQuant(Double.parseDouble(quantity), null)
+                .setQuantity(Double.parseDouble(quantity), null)
                 .build();
 
         cancelTask();

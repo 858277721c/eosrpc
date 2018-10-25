@@ -1,7 +1,7 @@
 package com.sd.lib.eos.rpc.api;
 
 import com.sd.lib.eos.rpc.api.model.GetAccountResponse;
-import com.sd.lib.eos.rpc.utils.Utils;
+import com.sd.lib.eos.rpc.utils.RpcUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +46,6 @@ class GetAccountRequest extends BaseRequest<GetAccountResponse>
     protected void beforeExecute()
     {
         super.beforeExecute();
-        Utils.checkEmpty(account_name, "account_name is empty");
+        RpcUtils.checkAccountName(account_name, "account_name is empty");
     }
 }

@@ -3,6 +3,7 @@ package com.sd.lib.eos.rpc.api;
 import com.sd.lib.eos.rpc.api.model.ApiResponse;
 import com.sd.lib.eos.rpc.api.model.GetCurrencyBalanceResponse;
 import com.sd.lib.eos.rpc.core.JsonConverter;
+import com.sd.lib.eos.rpc.utils.RpcUtils;
 import com.sd.lib.eos.rpc.utils.Utils;
 
 import org.json.JSONArray;
@@ -64,7 +65,7 @@ class GetCurrencyBalanceRequest extends BaseRequest<GetCurrencyBalanceResponse>
     protected void beforeExecute()
     {
         super.beforeExecute();
-        Utils.checkEmpty(account, "account is empty");
+        RpcUtils.checkAccountName(account, "account is empty");
         if (Utils.isEmpty(symbol))
             symbol = "eos";
     }

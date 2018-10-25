@@ -18,7 +18,9 @@ import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.core.FEOSManager;
 import com.sd.lib.eos.rpc.core.output.PushTransaction;
-import com.sd.lib.eos.rpc.handler.CreateAccountHandler;
+import com.sd.lib.eos.rpc.params.BuyramActionParams;
+import com.sd.lib.eos.rpc.params.DelegatebwActionParams;
+import com.sd.lib.eos.rpc.params.NewaccountActionParams;
 import com.sd.lib.task.FTask;
 
 import java.util.Random;
@@ -163,17 +165,27 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
             @Override
             protected void onRun() throws Exception
             {
-                final CreateAccountHandler handler = new CreateAccountHandler.Builder()
+                final NewaccountActionParams newaccountActionParams = new NewaccountActionParams.Builder()
                         .setCreator(creator)
                         .setName(newAccount)
                         .setOwner(newAccountKeyPublic)
-                        .setBuyRamQuantity(Double.valueOf(buyRam), null)
+                        .build();
+
+                final BuyramActionParams buyramActionParams = new BuyramActionParams.Builder()
+                        .setPayer(creator)
+                        .setReceiver(newAccount)
+                        .setQuant(Double.valueOf(buyRam), null)
+                        .build();
+
+                final DelegatebwActionParams delegatebwActionParams = new DelegatebwActionParams.Builder()
+                        .setFrom(creator)
+                        .setReceiver(newAccount)
                         .setStake_cpu_quantity(Double.parseDouble(stakeCpu), null)
                         .setStake_net_quantity(Double.parseDouble(stakeNet), null)
                         .setTransfer(1)
                         .build();
 
-                final PushTransaction pushTransaction = handler.newPushTransaction();
+                final PushTransaction pushTransaction = new PushTransaction(newaccountActionParams, buyramActionParams, delegatebwActionParams);
                 pushTransaction.submit(creatorKeyPrivate, new PushTransaction.Callback()
                 {
                     @Override

@@ -8,6 +8,7 @@ import android.webkit.WebView;
 
 import com.sd.eos.rpc.R;
 import com.sd.eos.rpc.dapp.DappWebSocketServer;
+import com.sd.eos.rpc.dapp.model.EosAccountModel;
 import com.sd.lib.webview.FWebView;
 import com.sd.lib.webview.client.FWebViewClient;
 
@@ -59,9 +60,9 @@ public class DappActivity extends BaseActivity
                 }
 
                 @Override
-                protected String getEosAccount()
+                protected EosAccountModel getEosAccount()
                 {
-                    return "zjunzjun1234";
+                    return new EosAccountModel("zjunzjun1234", "active", "EOS76weabiGCBEMemk4nnJRMTPyshEzNBqoYKCWfnMzpVqMauTYCY");
                 }
 
                 @Override

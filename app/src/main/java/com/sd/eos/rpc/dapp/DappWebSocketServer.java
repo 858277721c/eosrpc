@@ -3,9 +3,12 @@ package com.sd.eos.rpc.dapp;
 import android.support.annotation.CallSuper;
 import android.util.Log;
 
+import com.sd.eos.rpc.dapp.model.EosAccountModel;
+
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -158,20 +161,37 @@ public abstract class DappWebSocketServer extends WebSocketServer
 
     private void onApiTypeGetOrRequestIdentity(JSONObject jsonData, String id, WebSocket socket)
     {
-        final String account = getEosAccount();
-        if (account == null || account.isEmpty())
-            throw new NullPointerException("account is empty");
+        final EosAccountModel account = getEosAccount();
+        if (account == null)
+            throw new NullPointerException("account is null");
+
+        final String blockchain = account.getBlockchain();
+        final String name = account.getName();
+        final String authority = account.getAuthority();
+        final String publicKey = account.getPublicKey();
 
         try
         {
-            new ApiResponser(id, socket).send(account);
+            final JSONObject jsonAccount = new JSONObject();
+            jsonAccount.put("blockchain", blockchain);
+            jsonAccount.put("name", name);
+            jsonAccount.put("authority", authority);
+            jsonAccount.put("publicKey", publicKey);
+
+            final JSONArray jsonArray = new JSONArray();
+            jsonArray.put(jsonAccount);
+
+            final JSONObject jsonObject = new JSONObject();
+            jsonObject.put("accounts", jsonArray);
+
+            new ApiResponser(id, socket).send(jsonObject);
         } catch (JSONException e)
         {
             onDataError(new RuntimeException("getOrRequestIdentity response error:" + e));
         }
     }
 
-    protected abstract String getEosAccount();
+    protected abstract EosAccountModel getEosAccount();
 
     protected abstract void onDataError(Exception e);
 

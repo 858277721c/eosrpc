@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_delegatebw:
                 startActivity(new Intent(this, DelegatebwActivity.class));
                 break;
+            case R.id.btn_dapp:
+                startActivity(new Intent(this, DappActivity.class));
+                break;
         }
     }
 }

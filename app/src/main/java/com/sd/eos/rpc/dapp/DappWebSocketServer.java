@@ -119,16 +119,23 @@ public abstract class DappWebSocketServer extends WebSocketServer
             final ApiType apiType = ApiType.from(type);
             if (apiType != null)
             {
-                switch (apiType)
+                final String id = jsonData.optString("id");
+                if (id != null || !id.isEmpty())
                 {
-                    case IdentityFromPermissions:
-                        onApiTypeIdentityFromPermissions(jsonData, socket);
-                        break;
-                    case GetOrRequestIdentity:
-                        onApiTypeGetOrRequestIdentity(jsonData, socket);
-                        break;
-                    default:
-                        break;
+                    switch (apiType)
+                    {
+                        case IdentityFromPermissions:
+                            onApiTypeIdentityFromPermissions(jsonData, id, socket);
+                            break;
+                        case GetOrRequestIdentity:
+                            onApiTypeGetOrRequestIdentity(jsonData, id, socket);
+                            break;
+                        default:
+                            break;
+                    }
+                } else
+                {
+                    onDataError(new RuntimeException("api id was not found"));
                 }
             } else
             {
@@ -140,21 +147,21 @@ public abstract class DappWebSocketServer extends WebSocketServer
         }
     }
 
-    private void onApiTypeIdentityFromPermissions(JSONObject jsonObject, WebSocket socket)
+    private void onApiTypeIdentityFromPermissions(JSONObject jsonObject, String id, WebSocket socket)
     {
         try
         {
-            final String id = jsonObject.getString("id");
-            final JSONObject jsonResponse = new JSONObject();
-            jsonResponse.put("id", id);
-            responseApi(jsonResponse.toString(), socket);
-        } catch (Exception e)
+            final JSONObject jsonResult = new JSONObject();
+            jsonResult.put("id", id);
+
+            new ApiResponser(id, socket).response(jsonResult);
+        } catch (JSONException e)
         {
             onDataError(e);
         }
     }
 
-    private void onApiTypeGetOrRequestIdentity(JSONObject jsonObject, WebSocket socket)
+    private void onApiTypeGetOrRequestIdentity(JSONObject jsonObject, String id, WebSocket socket)
     {
         final String account = getEosAccount();
         if (account == null || account.isEmpty())
@@ -162,9 +169,10 @@ public abstract class DappWebSocketServer extends WebSocketServer
 
         try
         {
-            final JSONObject jsonResponse = new JSONObject();
-            jsonResponse.put("id", account);
-            responseApi(jsonResponse.toString(), socket);
+            final JSONObject jsonResult = new JSONObject();
+            jsonResult.put("id", account);
+
+            new ApiResponser(id, socket).response(jsonResult);
         } catch (JSONException e)
         {
             onDataError(e);
@@ -174,11 +182,6 @@ public abstract class DappWebSocketServer extends WebSocketServer
     protected abstract String getEosAccount();
 
     protected abstract void onDataError(Exception e);
-
-    public final void responseApi(String json, WebSocket socket)
-    {
-        responseSocket(json, DataType.Api, socket);
-    }
 
     private void responseSocket(String json, DataType dataType, WebSocket socket)
     {
@@ -195,8 +198,30 @@ public abstract class DappWebSocketServer extends WebSocketServer
         sb.append("]");
 
         final String response = sb.toString();
+        Log.i(TAG, "response json:" + json);
         Log.i(TAG, "response:" + response);
         socket.send(response);
+    }
+
+    private final class ApiResponser
+    {
+        private final String mId;
+        private final WebSocket mSocket;
+
+        public ApiResponser(String id, WebSocket socket)
+        {
+            mId = id;
+            mSocket = socket;
+        }
+
+        public void response(JSONObject jsonObject) throws JSONException
+        {
+            final JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("id", mId);
+            jsonResponse.put("result", jsonObject);
+
+            responseSocket(jsonResponse.toString(), DataType.Api, mSocket);
+        }
     }
 
     public enum DataType

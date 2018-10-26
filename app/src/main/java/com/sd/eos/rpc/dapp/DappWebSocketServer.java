@@ -59,12 +59,10 @@ public abstract class DappWebSocketServer extends WebSocketServer
             if (data.startsWith(TAG_DATA_PAIR))
             {
                 final String json = getDataFromMessage(TAG_DATA_PAIR, data);
-                Log.i(TAG, "onDataPair:" + json);
                 onDataPair(json, conn);
             } else if (data.startsWith(TAG_DATA_API))
             {
                 final String json = getDataFromMessage(TAG_DATA_API, data);
-                Log.i(TAG, "onDataApi:" + json);
                 onDataApi(json, conn);
             }
         }
@@ -198,7 +196,6 @@ public abstract class DappWebSocketServer extends WebSocketServer
         sb.append("]");
 
         final String response = sb.toString();
-        Log.i(TAG, "response json:" + json);
         Log.i(TAG, "response:" + response);
         socket.send(response);
     }

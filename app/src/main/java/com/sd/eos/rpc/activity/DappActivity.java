@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.sd.eos.rpc.R;
-import com.sd.eos.rpc.utils.DappWebSocketServer;
+import com.sd.eos.rpc.dapp.DappWebSocketServer;
 import com.sd.lib.webview.FWebView;
 
 public class DappActivity extends BaseActivity
@@ -32,12 +32,6 @@ public class DappActivity extends BaseActivity
             mWebSocketServer = new DappWebSocketServer()
             {
                 @Override
-                protected void onDataPair(String json)
-                {
-                    Log.i(TAG, "onDataPair:" + json);
-                }
-
-                @Override
                 public void onStart()
                 {
                     super.onStart();
@@ -50,8 +44,26 @@ public class DappActivity extends BaseActivity
                         }
                     });
                 }
+
+                @Override
+                protected String getEosAccount()
+                {
+                    return "zjunzjun1234";
+                }
+
+                @Override
+                protected void onDataError(Exception e)
+                {
+                    Log.e(TAG, "onDataError:" + e);
+                }
             };
         }
         return mWebSocketServer;
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
     }
 }

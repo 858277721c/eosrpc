@@ -52,7 +52,7 @@ public abstract class DappWebSocketServer extends WebSocketServer
     @Override
     public final void onMessage(WebSocket conn, String message)
     {
-        Log.i(TAG, "onMessage:" + message);
+        Log.i(TAG, "----->:" + message);
         if (message.startsWith(TAG_MSG))
         {
             final String data = message.substring(TAG_MSG.length());
@@ -133,7 +133,7 @@ public abstract class DappWebSocketServer extends WebSocketServer
                     }
                 } else
                 {
-                    onDataError(new RuntimeException("api id was not found"));
+                    onDataError(new RuntimeException("api id was not found in json:" + json));
                 }
             } else
             {
@@ -145,21 +145,18 @@ public abstract class DappWebSocketServer extends WebSocketServer
         }
     }
 
-    private void onApiTypeIdentityFromPermissions(JSONObject jsonObject, String id, WebSocket socket)
+    private void onApiTypeIdentityFromPermissions(JSONObject jsonData, String id, WebSocket socket)
     {
         try
         {
-            final JSONObject jsonResult = new JSONObject();
-            jsonResult.put("id", id);
-
-            new ApiResponser(id, socket).response(jsonResult);
+            new ApiResponser(id, socket).send(id);
         } catch (JSONException e)
         {
-            onDataError(e);
+            onDataError(new RuntimeException("identityFromPermissions response error:" + e));
         }
     }
 
-    private void onApiTypeGetOrRequestIdentity(JSONObject jsonObject, String id, WebSocket socket)
+    private void onApiTypeGetOrRequestIdentity(JSONObject jsonData, String id, WebSocket socket)
     {
         final String account = getEosAccount();
         if (account == null || account.isEmpty())
@@ -167,13 +164,10 @@ public abstract class DappWebSocketServer extends WebSocketServer
 
         try
         {
-            final JSONObject jsonResult = new JSONObject();
-            jsonResult.put("id", account);
-
-            new ApiResponser(id, socket).response(jsonResult);
+            new ApiResponser(id, socket).send(account);
         } catch (JSONException e)
         {
-            onDataError(e);
+            onDataError(new RuntimeException("getOrRequestIdentity response error:" + e));
         }
     }
 
@@ -196,7 +190,7 @@ public abstract class DappWebSocketServer extends WebSocketServer
         sb.append("]");
 
         final String response = sb.toString();
-        Log.i(TAG, "response:" + response);
+        Log.i(TAG, "<-----:" + response);
         socket.send(response);
     }
 
@@ -211,13 +205,19 @@ public abstract class DappWebSocketServer extends WebSocketServer
             mSocket = socket;
         }
 
-        public void response(JSONObject jsonObject) throws JSONException
+        private JSONObject newData() throws JSONException
         {
             final JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("id", mId);
-            jsonResponse.put("result", jsonObject);
+            return jsonResponse;
+        }
 
-            responseSocket(jsonResponse.toString(), DataType.Api, mSocket);
+        public void send(Object object) throws JSONException
+        {
+            final JSONObject jsonData = newData();
+            jsonData.put("result", object);
+
+            responseSocket(jsonData.toString(), DataType.Api, mSocket);
         }
     }
 

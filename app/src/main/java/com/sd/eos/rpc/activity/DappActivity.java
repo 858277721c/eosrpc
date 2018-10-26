@@ -1,11 +1,15 @@
 package com.sd.eos.rpc.activity;
 
+import android.net.http.SslError;
 import android.os.Bundle;
 import android.util.Log;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebView;
 
 import com.sd.eos.rpc.R;
 import com.sd.eos.rpc.dapp.DappWebSocketServer;
 import com.sd.lib.webview.FWebView;
+import com.sd.lib.webview.client.FWebViewClient;
 
 public class DappActivity extends BaseActivity
 {
@@ -21,6 +25,15 @@ public class DappActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_dapp);
         mWebView = findViewById(R.id.webview);
+
+        mWebView.setWebViewClient(new FWebViewClient(this)
+        {
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error)
+            {
+                handler.proceed();
+            }
+        });
 
         getWebSocketServer().start();
     }
@@ -40,7 +53,7 @@ public class DappActivity extends BaseActivity
                         @Override
                         public void run()
                         {
-                            mWebView.get("https://bancor3d.com?ref=welovecasino");
+                            mWebView.get("https://betdice.one/?ref=welovecasino");
                         }
                     });
                 }

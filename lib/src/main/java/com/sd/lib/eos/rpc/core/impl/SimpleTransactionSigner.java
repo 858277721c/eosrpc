@@ -1,7 +1,5 @@
 package com.sd.lib.eos.rpc.core.impl;
 
-import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
-import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 import com.sd.lib.eos.rpc.core.TransactionSigner;
 import com.sd.lib.eos.rpc.core.output.model.ActionQuery;
 import com.sd.lib.eos.rpc.core.output.model.AuthorizationQuery;
@@ -20,13 +18,12 @@ import java.util.List;
 public class SimpleTransactionSigner implements TransactionSigner
 {
     @Override
-    public TransactionSignResult signTransaction(TransactionQuery query,
-                                                 GetInfoResponse infoResponse, GetBlockResponse blockResponse,
-                                                 String privateKey)
+    public TransactionSignResult signTransaction(TransactionQuery query, String chainId, String privateKey)
     {
-        SignedTransaction transaction = new SignedTransaction();
+        final SignedTransaction transaction = new SignedTransaction();
         transaction.setExpiration(query.queryExpiration());
-        transaction.setReferenceBlock(infoResponse.getHead_block_id());
+        transaction.setRef_block_num((int) query.queryRef_block_num());
+        transaction.setRef_block_prefix(query.queryRef_block_prefix());
 
         for (ActionQuery itemAction : query.queryActions())
         {
@@ -46,7 +43,7 @@ public class SimpleTransactionSigner implements TransactionSigner
             transaction.addAction(action);
         }
 
-        transaction.sign(new EosPrivateKey(privateKey), new TypeChainId(infoResponse.getChain_id()));
+        transaction.sign(new EosPrivateKey(privateKey), new TypeChainId(chainId));
         final PackedTransaction packedTransaction = new PackedTransaction(transaction);
 
         final TransactionSignResult result = new TransactionSignResult(

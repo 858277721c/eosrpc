@@ -67,6 +67,16 @@ public class TransactionHeader implements EosType.Packer {
         // so, no need to reverse bytes.
     }
 
+    public void setRef_block_num(int ref_block_num)
+    {
+        this.ref_block_num = ref_block_num;
+    }
+
+    public void setRef_block_prefix(long ref_block_prefix)
+    {
+        this.ref_block_prefix = ref_block_prefix;
+    }
+
     public int getRefBlockNum() {
         return ref_block_num;
     }

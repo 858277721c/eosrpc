@@ -98,7 +98,7 @@ public class PushTransaction
         transaction.setRef_block_prefix(block.getRef_block_prefix());
         transaction.setActions(listAction);
 
-        final TransactionSignResult signedTransaction = getTransactionSigner().signTransaction(transaction, info, block, privateKey);
+        final TransactionSignResult signedTransaction = getTransactionSigner().signTransaction(transaction, info.getChain_id(), privateKey);
 
         final ApiResponse<PushTransactionResponse> pushApiResponse = mRpcApi.pushTransaction(
                 signedTransaction.getSignatures(),

@@ -12,6 +12,7 @@ import com.sd.lib.eos.rpc.core.output.model.ActionModel;
 import com.sd.lib.eos.rpc.core.output.model.TransactionModel;
 import com.sd.lib.eos.rpc.core.output.model.TransactionSignResult;
 import com.sd.lib.eos.rpc.params.ActionParams;
+import com.sd.lib.eos.rpc.utils.RpcUtils;
 import com.sd.lib.eos.rpc.utils.Utils;
 
 import java.util.ArrayList;
@@ -93,7 +94,7 @@ public class PushTransaction
         final GetBlockResponse block = blockApiResonse.getSuccess();
 
         final TransactionModel transaction = new TransactionModel();
-        transaction.setExpiration(info.getHeadBlockTimeAfter(30 * 1000));
+        transaction.setExpiration(RpcUtils.addTime(info.getHead_block_time(), 30 * 1000));
         transaction.setRef_block_num(block.getBlock_num());
         transaction.setRef_block_prefix(block.getRef_block_prefix());
         transaction.setActions(listAction);

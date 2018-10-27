@@ -1,5 +1,11 @@
 package com.sd.lib.eos.rpc.utils;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class RpcUtils
 {
     private RpcUtils()
@@ -89,5 +95,31 @@ public class RpcUtils
         checkMoney(moneyString, null);
 
         return Double.parseDouble(moneyString.split(" ")[0]);
+    }
+
+    /**
+     * 返回指定时间加上指定毫秒后的时间
+     *
+     * @param time        格式：yyyy-MM-dd'T'HH:mm:ss
+     * @param millisecond 指定毫秒
+     * @return
+     */
+    public static String addTime(String time, int millisecond)
+    {
+        try
+        {
+            final DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            final Date date = format.parse(time);
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.MILLISECOND, millisecond);
+
+            return format.format(calendar.getTime());
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+            return time;
+        }
     }
 }

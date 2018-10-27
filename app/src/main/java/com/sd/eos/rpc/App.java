@@ -21,9 +21,9 @@ public class App extends Application
                 .setObjectConverter(new CacheObjectConverter())
                 .build(this));
 
-        AccountHolder.get().add(new AccountModel("fwtest111111",
-                "5JQh92zjfWJW6a6suaLm7o2wMCNKZnqp4bb3Kb2dNSb7ts8vDWH",
-                "EOS67Q8sXouXtxi72FFgih5hWx7Ks1Bkm8soNuzt9U9sRNuMtjHwT"));
+        AccountHolder.get().add(new AccountModel("liuliqin1234",
+                "5KbTuZTe6aBmtQ7aV6XxXtjs7Tu84ZZcqr4NAhSCxmvJ7797Kge",
+                "EOS6EQbp8Skxc7YQL25NNGWimnCxPCMFYqUSRTWFJm2KeXxM2Hxft"));
 
         /**
          * 设置节点地址（必须）

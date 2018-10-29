@@ -33,6 +33,8 @@ public class ActionModel implements ActionQuery
 
     public List<AuthorizationModel> getAuthorization()
     {
+        if (authorization == null)
+            authorization = new ArrayList<>(1);
         return authorization;
     }
 

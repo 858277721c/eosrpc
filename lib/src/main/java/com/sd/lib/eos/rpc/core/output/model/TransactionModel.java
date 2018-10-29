@@ -43,6 +43,8 @@ public class TransactionModel implements TransactionQuery
 
     public List<ActionModel> getActions()
     {
+        if (actions == null)
+            actions = new ArrayList<>(1);
         return actions;
     }
 

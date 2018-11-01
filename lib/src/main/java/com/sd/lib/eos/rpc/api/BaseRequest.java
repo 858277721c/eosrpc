@@ -78,7 +78,7 @@ abstract class BaseRequest<T>
                 return new ApiResponse<>(errorResponse);
             } catch (Exception e)
             {
-                throw new RpcJsonToObjectException("json to " + ErrorResponse.class.getSimpleName() + " failed:" + e.toString());
+                throw new RpcJsonToObjectException("json to " + ErrorResponse.class.getSimpleName() + " error:" + e.toString());
             }
         }
 
@@ -90,7 +90,7 @@ abstract class BaseRequest<T>
             return convertSuccessResponse(json, successClass, jsonConverter);
         } catch (Exception e)
         {
-            throw new RpcJsonToObjectException("json to " + successClass.getSimpleName() + " failed:" + e.toString());
+            throw new RpcJsonToObjectException("json to " + successClass.getSimpleName() + " error:" + e.toString());
         }
     }
 

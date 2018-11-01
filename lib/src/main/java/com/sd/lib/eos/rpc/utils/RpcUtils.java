@@ -83,18 +83,33 @@ public class RpcUtils
     }
 
     /**
-     * 金额串转double
+     * 从金额串中获得金额数量
      *
      * @param moneyString
      * @return
      */
-    public double getMoney(String moneyString)
+    public double getMoneyAmount(String moneyString)
     {
         if (Utils.isEmpty(moneyString))
             return 0;
         checkMoney(moneyString, null);
 
         return Double.parseDouble(moneyString.split(" ")[0]);
+    }
+
+    /**
+     * 从金额串中获得金额类型
+     *
+     * @param moneyString
+     * @return
+     */
+    public String getMoneySymbol(String moneyString)
+    {
+        if (Utils.isEmpty(moneyString))
+            return "";
+        checkMoney(moneyString, null);
+
+        return moneyString.split(" ")[1];
     }
 
     /**

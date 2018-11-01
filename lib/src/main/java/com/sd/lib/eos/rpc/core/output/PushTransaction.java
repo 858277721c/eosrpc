@@ -11,6 +11,9 @@ import com.sd.lib.eos.rpc.core.TransactionSigner;
 import com.sd.lib.eos.rpc.core.output.model.ActionModel;
 import com.sd.lib.eos.rpc.core.output.model.TransactionModel;
 import com.sd.lib.eos.rpc.core.output.model.TransactionSignResult;
+import com.sd.lib.eos.rpc.exception.RpcApiExecutorException;
+import com.sd.lib.eos.rpc.exception.RpcJsonToObjectException;
+import com.sd.lib.eos.rpc.exception.RpcTransactionSignException;
 import com.sd.lib.eos.rpc.params.ActionParams;
 import com.sd.lib.eos.rpc.utils.RpcUtils;
 import com.sd.lib.eos.rpc.utils.Utils;
@@ -40,10 +43,13 @@ public class PushTransaction
      *
      * @param privateKey
      * @param callback
-     * @throws Exception
+     * @throws RpcJsonToObjectException
+     * @throws RpcApiExecutorException
+     * @throws RpcTransactionSignException
      */
-    public final void submit(String privateKey, Callback callback) throws Exception
+    public final void submit(String privateKey, Callback callback) throws RpcJsonToObjectException, RpcApiExecutorException, RpcTransactionSignException
     {
+
         Utils.checkEmpty(privateKey, "private key is empty");
         Utils.checkNotNull(callback, "callback is null");
 
@@ -99,13 +105,20 @@ public class PushTransaction
         transaction.setRef_block_prefix(block.getRef_block_prefix());
         transaction.setActions(listAction);
 
-        final TransactionSignResult signedTransaction = getTransactionSigner().signTransaction(transaction, info.getChain_id(), privateKey);
+        TransactionSignResult signResult = null;
+        try
+        {
+            signResult = getTransactionSigner().signTransaction(transaction, info.getChain_id(), privateKey);
+        } catch (Exception e)
+        {
+            throw new RpcTransactionSignException(e.toString());
+        }
 
         final ApiResponse<PushTransactionResponse> pushApiResponse = mRpcApi.pushTransaction(
-                signedTransaction.getSignatures(),
-                signedTransaction.getCompression(),
+                signResult.getSignatures(),
+                signResult.getCompression(),
                 null,
-                signedTransaction.getPacked_trx()
+                signResult.getPacked_trx()
         );
 
         if (!pushApiResponse.isSuccessful())

@@ -4,5 +4,5 @@ public interface JsonConverter
 {
     String objectToJson(Object object);
 
-    <T> T jsonToObject(String json, Class<T> clazz);
+    <T> T jsonToObject(String json, Class<T> clazz) throws Exception;
 }

@@ -12,6 +12,8 @@ import com.sd.lib.eos.rpc.api.model.GetKeyAccountsResponse;
 import com.sd.lib.eos.rpc.api.model.GetTransactionResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.core.FEOSManager;
+import com.sd.lib.eos.rpc.exception.RpcJsonToObjectException;
+import com.sd.lib.eos.rpc.exception.RpcApiExecutorException;
 import com.sd.lib.eos.rpc.utils.Utils;
 
 import java.util.List;
@@ -37,7 +39,7 @@ public class RpcApi
      * @return
      * @throws Exception
      */
-    public ApiResponse<GetInfoResponse> getInfo() throws Exception
+    public ApiResponse<GetInfoResponse> getInfo() throws RpcApiExecutorException, RpcJsonToObjectException
     {
         return new GetInfoRequest(mBaseUrl).execute();
     }
@@ -49,7 +51,7 @@ public class RpcApi
      * @return
      * @throws Exception
      */
-    public ApiResponse<GetBlockResponse> getBlock(String block_num_or_id) throws Exception
+    public ApiResponse<GetBlockResponse> getBlock(String block_num_or_id) throws RpcApiExecutorException, RpcJsonToObjectException
     {
         final GetBlockRequest request = new GetBlockRequest(mBaseUrl);
         request.setBlock_num_or_id(block_num_or_id);
@@ -63,7 +65,7 @@ public class RpcApi
      * @return
      * @throws Exception
      */
-    public ApiResponse<GetAccountResponse> getAccount(String account_name) throws Exception
+    public ApiResponse<GetAccountResponse> getAccount(String account_name) throws RpcApiExecutorException, RpcJsonToObjectException
     {
         final GetAccountRequest request = new GetAccountRequest(mBaseUrl);
         request.setAccount_name(account_name);
@@ -77,7 +79,7 @@ public class RpcApi
      * @return
      * @throws Exception
      */
-    public ApiResponse<GetCurrencyBalanceResponse> getCurrencyBalance(String account) throws Exception
+    public ApiResponse<GetCurrencyBalanceResponse> getCurrencyBalance(String account) throws RpcApiExecutorException, RpcJsonToObjectException
     {
         return getCurrencyBalance(account, "eos");
     }
@@ -90,7 +92,7 @@ public class RpcApi
      * @return
      * @throws Exception
      */
-    public ApiResponse<GetCurrencyBalanceResponse> getCurrencyBalance(String account, String symbol) throws Exception
+    public ApiResponse<GetCurrencyBalanceResponse> getCurrencyBalance(String account, String symbol) throws RpcApiExecutorException, RpcJsonToObjectException
     {
         final GetCurrencyBalanceRequest request = new GetCurrencyBalanceRequest(mBaseUrl);
         request.setAccount(account);
@@ -107,7 +109,7 @@ public class RpcApi
      * @return
      * @throws Exception
      */
-    public ApiResponse<GetActionsResponse> getActions(String account_name, int pos, int offset) throws Exception
+    public ApiResponse<GetActionsResponse> getActions(String account_name, int pos, int offset) throws RpcApiExecutorException, RpcJsonToObjectException
     {
         final GetActionsRequest request = new GetActionsRequest(mBaseUrl);
         request.setAccount_name(account_name);
@@ -123,7 +125,7 @@ public class RpcApi
      * @return
      * @throws Exception
      */
-    public ApiResponse<GetTransactionResponse> getTransaction(String id) throws Exception
+    public ApiResponse<GetTransactionResponse> getTransaction(String id) throws RpcApiExecutorException, RpcJsonToObjectException
     {
         final GetTransactionRequest request = new GetTransactionRequest(mBaseUrl);
         request.setId(id);
@@ -137,7 +139,7 @@ public class RpcApi
      * @return
      * @throws Exception
      */
-    public ApiResponse<GetKeyAccountsResponse> getKeyAccounts(String public_key) throws Exception
+    public ApiResponse<GetKeyAccountsResponse> getKeyAccounts(String public_key) throws RpcApiExecutorException, RpcJsonToObjectException
     {
         final GetKeyAccountsRequest request = new GetKeyAccountsRequest(mBaseUrl);
         request.setPublic_key(public_key);
@@ -151,7 +153,7 @@ public class RpcApi
      * @return
      * @throws Exception
      */
-    public ApiResponse<GetCodeResponse> getCode(String account_name) throws Exception
+    public ApiResponse<GetCodeResponse> getCode(String account_name) throws RpcApiExecutorException, RpcJsonToObjectException
     {
         final GetCodeRequest request = new GetCodeRequest(mBaseUrl);
         request.setAccount_name(account_name);
@@ -167,7 +169,7 @@ public class RpcApi
      * @return
      * @throws Exception
      */
-    public ApiResponse<AbiJsonToBinResponse> abiJsonToBin(String code, String action, Object args) throws Exception
+    public ApiResponse<AbiJsonToBinResponse> abiJsonToBin(String code, String action, Object args) throws RpcApiExecutorException, RpcJsonToObjectException
     {
         final AbiJsonToBinRequest request = new AbiJsonToBinRequest(mBaseUrl);
         request.setCode(code);
@@ -186,7 +188,7 @@ public class RpcApi
      * @return
      * @throws Exception
      */
-    public ApiResponse<PushTransactionResponse> pushTransaction(List<String> signatures, String compression, String packed_context_free_data, String packed_trx) throws Exception
+    public ApiResponse<PushTransactionResponse> pushTransaction(List<String> signatures, String compression, String packed_context_free_data, String packed_trx) throws RpcApiExecutorException, RpcJsonToObjectException
     {
         final PushTransactionRequest request = new PushTransactionRequest(mBaseUrl);
         request.setSignatures(signatures);

@@ -14,7 +14,7 @@ public class SimpleJsonConverter implements JsonConverter
     }
 
     @Override
-    public <T> T jsonToObject(String json, Class<T> clazz)
+    public <T> T jsonToObject(String json, Class<T> clazz) throws Exception
     {
         return mGson.fromJson(json, clazz);
     }

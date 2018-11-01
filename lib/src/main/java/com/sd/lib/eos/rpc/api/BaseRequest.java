@@ -5,6 +5,8 @@ import com.sd.lib.eos.rpc.api.model.ErrorResponse;
 import com.sd.lib.eos.rpc.core.FEOSManager;
 import com.sd.lib.eos.rpc.core.JsonConverter;
 import com.sd.lib.eos.rpc.core.RpcApiExecutor;
+import com.sd.lib.eos.rpc.exception.RpcJsonToObjectException;
+import com.sd.lib.eos.rpc.exception.RpcApiExecutorException;
 import com.sd.lib.eos.rpc.utils.Utils;
 
 import java.lang.reflect.ParameterizedType;
@@ -35,7 +37,7 @@ abstract class BaseRequest<T>
      * @return
      * @throws Exception
      */
-    public final ApiResponse<T> execute() throws Exception
+    public final ApiResponse<T> execute() throws RpcApiExecutorException, RpcJsonToObjectException
     {
         beforeExecute();
 
@@ -51,7 +53,14 @@ abstract class BaseRequest<T>
         final Map<String, Object> params = getParams();
         final String jsonParams = params == null ? null : jsonConverter.objectToJson(params);
 
-        final RpcApiExecutor.Result result = executor.execute(mBaseUrl, path, jsonParams);
+        RpcApiExecutor.Result result = null;
+        try
+        {
+            result = executor.execute(mBaseUrl, path, jsonParams);
+        } catch (Exception e)
+        {
+            throw new RpcApiExecutorException(e.toString());
+        }
         Utils.checkNotNull(result, "RpcApiExecutor return null");
 
         final int code = result.code;
@@ -63,13 +72,25 @@ abstract class BaseRequest<T>
 
         if (code == 500)
         {
-            return new ApiResponse<>(jsonConverter.jsonToObject(json, ErrorResponse.class));
-        } else
-        {
-            final Class<T> successClass = getSuccessClass();
-            Utils.checkNotNull(successClass, "successful class was not specified when execute:" + this);
+            try
+            {
+                final ErrorResponse errorResponse = jsonConverter.jsonToObject(json, ErrorResponse.class);
+                return new ApiResponse<>(errorResponse);
+            } catch (Exception e)
+            {
+                throw new RpcJsonToObjectException("json to " + ErrorResponse.class.getSimpleName() + " failed:" + e.toString());
+            }
+        }
 
+        final Class<T> successClass = getSuccessClass();
+        Utils.checkNotNull(successClass, "successful class was not specified when execute:" + this);
+
+        try
+        {
             return convertSuccessResponse(json, successClass, jsonConverter);
+        } catch (Exception e)
+        {
+            throw new RpcJsonToObjectException("json to " + successClass.getSimpleName() + " failed:" + e.toString());
         }
     }
 

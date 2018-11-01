@@ -74,29 +74,33 @@ abstract class BaseRequest<T>
         {
             try
             {
-                final ErrorResponse errorResponse = jsonConverter.jsonToObject(json, ErrorResponse.class);
-                return new ApiResponse<>(errorResponse);
+                final ErrorResponse error = jsonConverter.jsonToObject(json, ErrorResponse.class);
+                final ApiResponse apiResponse = new ApiResponse(error);
+                return apiResponse;
             } catch (Exception e)
             {
                 throw new RpcJsonToObjectException("json to " + ErrorResponse.class.getSimpleName() + " error", e);
             }
-        }
-
-        final Class<T> successClass = getSuccessClass();
-        Utils.checkNotNull(successClass, "successful class was not specified when execute:" + this);
-
-        try
+        } else
         {
-            return convertSuccessResponse(json, successClass, jsonConverter);
-        } catch (Exception e)
-        {
-            throw new RpcJsonToObjectException("json to " + successClass.getSimpleName() + " error:", e);
+            final Class<T> successClass = getSuccessClass();
+            Utils.checkNotNull(successClass, "successful class was not specified when execute:" + this);
+
+            try
+            {
+                final T success = convertSuccess(json, successClass, jsonConverter);
+                final ApiResponse apiResponse = new ApiResponse(success);
+                return apiResponse;
+            } catch (Exception e)
+            {
+                throw new RpcJsonToObjectException("json to " + successClass.getSimpleName() + " error:", e);
+            }
         }
     }
 
-    protected ApiResponse<T> convertSuccessResponse(String json, Class<T> clazz, JsonConverter converter) throws Exception
+    protected T convertSuccess(String json, Class<T> clazz, JsonConverter converter) throws Exception
     {
-        return new ApiResponse<>(converter.jsonToObject(json, clazz));
+        return converter.jsonToObject(json, clazz);
     }
 
     private Class<T> getSuccessClass()

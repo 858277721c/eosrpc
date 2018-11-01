@@ -1,7 +1,9 @@
 package com.sd.lib.eos.rpc.utils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -113,6 +115,37 @@ public class RpcUtils
 
         final String item = moneyString.split(" ")[1];
         return item;
+    }
+
+    /**
+     * {@link #formatMoney(double, RoundingMode, String)}
+     *
+     * @param amount
+     * @return
+     */
+    public static String formatMoney(double amount)
+    {
+        return formatMoney(amount, null, null);
+    }
+
+    /**
+     * 格式化金额
+     *
+     * @param amount 金额数量
+     * @param mode
+     * @param symbol 币种
+     * @return
+     */
+    public static String formatMoney(double amount, RoundingMode mode, String symbol)
+    {
+        if (Utils.isEmpty(symbol))
+            symbol = "EOS";
+
+        if (mode == null)
+            mode = RoundingMode.DOWN;
+
+        final double amountFormat = new BigDecimal(amount).setScale(4, mode).doubleValue();
+        return new DecimalFormat("#.0000").format(amountFormat);
     }
 
     /**

@@ -6,7 +6,7 @@ public class ErrorResponse
 {
     private int code;
     private String message;
-    private ErrorModel error;
+    private Error error;
 
     public int getCode()
     {
@@ -28,22 +28,22 @@ public class ErrorResponse
         this.message = message;
     }
 
-    public ErrorModel getError()
+    public Error getError()
     {
         return error;
     }
 
-    public void setError(ErrorModel error)
+    public void setError(Error error)
     {
         this.error = error;
     }
 
-    public static class ErrorModel
+    public static class Error
     {
         private int code;
         private String name;
         private String what;
-        private List<DetailsModel> details;
+        private List<Details> details;
 
         public int getCode()
         {
@@ -75,62 +75,62 @@ public class ErrorResponse
             this.what = what;
         }
 
-        public List<DetailsModel> getDetails()
+        public List<Details> getDetails()
         {
             return details;
         }
 
-        public void setDetails(List<DetailsModel> details)
+        public void setDetails(List<Details> details)
         {
             this.details = details;
         }
-    }
 
-    public static class DetailsModel
-    {
-        private String message;
-        private String file;
-        private String line_number;
-        private String method;
-
-        public String getMessage()
+        public static class Details
         {
-            return message;
-        }
+            private String message;
+            private String file;
+            private String line_number;
+            private String method;
 
-        public void setMessage(String message)
-        {
-            this.message = message;
-        }
+            public String getMessage()
+            {
+                return message;
+            }
 
-        public String getFile()
-        {
-            return file;
-        }
+            public void setMessage(String message)
+            {
+                this.message = message;
+            }
 
-        public void setFile(String file)
-        {
-            this.file = file;
-        }
+            public String getFile()
+            {
+                return file;
+            }
 
-        public String getLine_number()
-        {
-            return line_number;
-        }
+            public void setFile(String file)
+            {
+                this.file = file;
+            }
 
-        public void setLine_number(String line_number)
-        {
-            this.line_number = line_number;
-        }
+            public String getLine_number()
+            {
+                return line_number;
+            }
 
-        public String getMethod()
-        {
-            return method;
-        }
+            public void setLine_number(String line_number)
+            {
+                this.line_number = line_number;
+            }
 
-        public void setMethod(String method)
-        {
-            this.method = method;
+            public String getMethod()
+            {
+                return method;
+            }
+
+            public void setMethod(String method)
+            {
+                this.method = method;
+            }
         }
     }
 }

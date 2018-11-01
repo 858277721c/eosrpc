@@ -5,8 +5,8 @@ import com.sd.lib.eos.rpc.api.model.ErrorResponse;
 import com.sd.lib.eos.rpc.core.FEOSManager;
 import com.sd.lib.eos.rpc.core.JsonConverter;
 import com.sd.lib.eos.rpc.core.RpcApiExecutor;
-import com.sd.lib.eos.rpc.exception.RpcJsonToObjectException;
 import com.sd.lib.eos.rpc.exception.RpcApiExecutorException;
+import com.sd.lib.eos.rpc.exception.RpcJsonToObjectException;
 import com.sd.lib.eos.rpc.utils.Utils;
 
 import java.lang.reflect.ParameterizedType;
@@ -59,7 +59,7 @@ abstract class BaseRequest<T>
             result = executor.execute(mBaseUrl, path, jsonParams);
         } catch (Exception e)
         {
-            throw new RpcApiExecutorException(e.toString());
+            throw new RpcApiExecutorException("execute " + mBaseUrl + path + " error", e);
         }
         Utils.checkNotNull(result, "RpcApiExecutor return null");
 
@@ -78,7 +78,7 @@ abstract class BaseRequest<T>
                 return new ApiResponse<>(errorResponse);
             } catch (Exception e)
             {
-                throw new RpcJsonToObjectException("json to " + ErrorResponse.class.getSimpleName() + " error:" + e.toString());
+                throw new RpcJsonToObjectException("json to " + ErrorResponse.class.getSimpleName() + " error", e);
             }
         }
 
@@ -90,7 +90,7 @@ abstract class BaseRequest<T>
             return convertSuccessResponse(json, successClass, jsonConverter);
         } catch (Exception e)
         {
-            throw new RpcJsonToObjectException("json to " + successClass.getSimpleName() + " error:" + e.toString());
+            throw new RpcJsonToObjectException("json to " + successClass.getSimpleName() + " error:", e);
         }
     }
 

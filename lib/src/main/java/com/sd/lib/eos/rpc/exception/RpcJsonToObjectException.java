@@ -1,9 +1,9 @@
 package com.sd.lib.eos.rpc.exception;
 
-public class RpcJsonToObjectException extends Exception
+public class RpcJsonToObjectException extends RpcException
 {
-    public RpcJsonToObjectException(String message)
+    public RpcJsonToObjectException(String message, Throwable cause)
     {
-        super(message);
+        super(message, cause);
     }
 }

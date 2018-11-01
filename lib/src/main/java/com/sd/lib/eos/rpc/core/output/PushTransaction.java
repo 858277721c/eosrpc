@@ -110,7 +110,7 @@ public class PushTransaction
             signResult = getTransactionSigner().signTransaction(transaction, info.getChain_id(), privateKey);
         } catch (Exception e)
         {
-            throw new RpcTransactionSignException(e.toString());
+            throw new RpcTransactionSignException("sign transaction error", e);
         }
 
         final ApiResponse<PushTransactionResponse> pushApiResponse = mRpcApi.pushTransaction(

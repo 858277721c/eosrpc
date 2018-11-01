@@ -1,9 +1,9 @@
 package com.sd.lib.eos.rpc.exception;
 
-public class RpcApiExecutorException extends Exception
+public class RpcApiExecutorException extends RpcException
 {
-    public RpcApiExecutorException(String message)
+    public RpcApiExecutorException(String message, Throwable cause)
     {
-        super(message);
+        super(message, cause);
     }
 }

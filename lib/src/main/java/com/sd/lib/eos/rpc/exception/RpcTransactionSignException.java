@@ -1,9 +1,9 @@
 package com.sd.lib.eos.rpc.exception;
 
-public class RpcTransactionSignException extends Exception
+public class RpcTransactionSignException extends RpcException
 {
-    public RpcTransactionSignException(String message)
+    public RpcTransactionSignException(String message, Throwable cause)
     {
-        super(message);
+        super(message, cause);
     }
 }

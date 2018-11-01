@@ -49,7 +49,6 @@ public class PushTransaction
      */
     public final void submit(String privateKey, Callback callback) throws RpcJsonToObjectException, RpcApiExecutorException, RpcTransactionSignException
     {
-
         Utils.checkEmpty(privateKey, "private key is empty");
         Utils.checkNotNull(callback, "callback is null");
 

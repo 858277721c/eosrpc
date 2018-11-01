@@ -3,6 +3,7 @@ package com.sd.lib.eos.rpc.api;
 import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
 import com.sd.lib.eos.rpc.api.model.ApiResponse;
 import com.sd.lib.eos.rpc.api.model.GetAccountResponse;
+import com.sd.lib.eos.rpc.api.model.GetActionsResponse;
 import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
 import com.sd.lib.eos.rpc.api.model.GetCodeResponse;
 import com.sd.lib.eos.rpc.api.model.GetCurrencyBalanceResponse;
@@ -94,6 +95,24 @@ public class RpcApi
         final GetCurrencyBalanceRequest request = new GetCurrencyBalanceRequest(mBaseUrl);
         request.setAccount(account);
         request.setSymbol(symbol);
+        return request.execute();
+    }
+
+    /**
+     * 查询交易记录
+     *
+     * @param account_name
+     * @param pos
+     * @param offset
+     * @return
+     * @throws Exception
+     */
+    public ApiResponse<GetActionsResponse> getActions(String account_name, int pos, int offset) throws Exception
+    {
+        final GetActionsRequest request = new GetActionsRequest(mBaseUrl);
+        request.setAccount_name(account_name);
+        request.setPos(pos);
+        request.setOffset(offset);
         return request.execute();
     }
 

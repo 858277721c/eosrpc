@@ -1,5 +1,6 @@
 package com.sd.lib.eos.rpc.utils;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -88,13 +89,14 @@ public class RpcUtils
      * @param moneyString
      * @return
      */
-    public double getMoneyAmount(String moneyString)
+    public static double getMoneyAmount(String moneyString)
     {
         if (Utils.isEmpty(moneyString))
             return 0;
         checkMoney(moneyString, null);
 
-        return Double.parseDouble(moneyString.split(" ")[0]);
+        final String item = moneyString.split(" ")[0];
+        return new BigDecimal(item).doubleValue();
     }
 
     /**
@@ -103,13 +105,14 @@ public class RpcUtils
      * @param moneyString
      * @return
      */
-    public String getMoneySymbol(String moneyString)
+    public static String getMoneySymbol(String moneyString)
     {
         if (Utils.isEmpty(moneyString))
             return "";
         checkMoney(moneyString, null);
 
-        return moneyString.split(" ")[1];
+        final String item = moneyString.split(" ")[1];
+        return item;
     }
 
     /**

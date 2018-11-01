@@ -16,5 +16,5 @@ public interface TransactionSigner
      * @param privateKey
      * @return
      */
-    TransactionSignResult signTransaction(TransactionQuery query, String chainId, String privateKey);
+    TransactionSignResult signTransaction(TransactionQuery query, String chainId, String privateKey) throws Exception;
 }

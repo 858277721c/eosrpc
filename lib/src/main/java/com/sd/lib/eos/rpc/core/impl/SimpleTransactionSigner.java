@@ -18,7 +18,7 @@ import java.util.List;
 public class SimpleTransactionSigner implements TransactionSigner
 {
     @Override
-    public TransactionSignResult signTransaction(TransactionQuery query, String chainId, String privateKey)
+    public TransactionSignResult signTransaction(TransactionQuery query, String chainId, String privateKey) throws Exception
     {
         final SignedTransaction transaction = new SignedTransaction();
         transaction.setExpiration(query.queryExpiration());

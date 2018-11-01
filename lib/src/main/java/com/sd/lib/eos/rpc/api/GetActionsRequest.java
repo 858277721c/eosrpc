@@ -6,7 +6,10 @@ import com.sd.lib.eos.rpc.utils.Utils;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GetActionsRequest extends BaseRequest<GetActionsResponse>
+/**
+ * 查询交易记录
+ */
+class GetActionsRequest extends BaseRequest<GetActionsResponse>
 {
     private String account_name;
     private int pos;

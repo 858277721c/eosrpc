@@ -125,11 +125,27 @@ public class RpcUtils
      */
     public static String formatMoney(double amount)
     {
-        return formatMoney(amount, null, null);
+        return formatMoney(amount, "EOS");
+    }
+
+    /**
+     * {@link #formatMoney(double, RoundingMode, String)}
+     *
+     * @param amount
+     * @param symbol
+     * @return
+     */
+    public static String formatMoney(double amount, String symbol)
+    {
+        return formatMoney(amount, null, symbol);
     }
 
     /**
      * 格式化金额
+     * <p>
+     * symbol为空：1.0 -> 1.0000
+     * <br>
+     * symbol不为空：1.0 -> 1.0000 symbol
      *
      * @param amount 金额数量
      * @param mode
@@ -138,14 +154,16 @@ public class RpcUtils
      */
     public static String formatMoney(double amount, RoundingMode mode, String symbol)
     {
-        if (Utils.isEmpty(symbol))
-            symbol = "EOS";
-
         if (mode == null)
             mode = RoundingMode.DOWN;
 
-        final double amountFormat = new BigDecimal(amount).setScale(4, mode).doubleValue();
-        return new DecimalFormat("#.0000").format(amountFormat);
+        final double amountScale = new BigDecimal(amount).setScale(4, mode).doubleValue();
+        final String amountFormat = new DecimalFormat("#.0000").format(amountScale);
+
+        if (symbol == null || symbol.isEmpty())
+            return amountFormat;
+
+        return amountFormat + " " + symbol;
     }
 
     /**

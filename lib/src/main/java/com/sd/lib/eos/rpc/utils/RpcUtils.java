@@ -64,25 +64,11 @@ public class RpcUtils
         if (dotIndex < 0)
             throw new RuntimeException("moneyString demical part was not found:" + moneyString);
 
-        final int targetDemicalLength = 4;
         final int demicalLength = arr[0].length() - dotIndex - 1;
-        if (demicalLength == targetDemicalLength)
-        {
-            return moneyString;
-        } else if (demicalLength < targetDemicalLength)
-        {
-            final StringBuilder sb = new StringBuilder(arr[0]);
-            final int missLength = targetDemicalLength - demicalLength;
-            for (int i = 0; i < missLength; i++)
-            {
-                sb.append("0");
-            }
-            sb.append(" ").append(arr[1]);
-            return sb.toString();
-        } else
-        {
+        if (demicalLength != 4)
             throw new RuntimeException("moneyString demical part length is not 4 but " + demicalLength);
-        }
+
+        return moneyString;
     }
 
     /**
@@ -98,9 +84,7 @@ public class RpcUtils
         if (Utils.isEmpty(moneyString))
             return 0;
         checkMoney(moneyString, null);
-
-        final String item = moneyString.split(" ")[0];
-        return new BigDecimal(item).doubleValue();
+        return new BigDecimal(moneyString.split(" ")[0]).doubleValue();
     }
 
     /**
@@ -116,9 +100,7 @@ public class RpcUtils
         if (Utils.isEmpty(moneyString))
             return "";
         checkMoney(moneyString, null);
-
-        final String item = moneyString.split(" ")[1];
-        return item;
+        return moneyString.split(" ")[1];
     }
 
     /**

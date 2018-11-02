@@ -87,6 +87,8 @@ public class RpcUtils
 
     /**
      * 从金额串中获得金额数量
+     * <p>
+     * 1.1234 EOS -> 1.1234
      *
      * @param moneyString
      * @return
@@ -103,6 +105,8 @@ public class RpcUtils
 
     /**
      * 从金额串中获得金额类型
+     * <p>
+     * 1.1234 EOS -> EOS
      *
      * @param moneyString
      * @return
@@ -125,7 +129,7 @@ public class RpcUtils
      */
     public static String formatMoney(double amount)
     {
-        return formatMoney(amount, "EOS");
+        return formatMoney(amount, null, null);
     }
 
     /**
@@ -143,13 +147,11 @@ public class RpcUtils
     /**
      * 格式化金额
      * <p>
-     * symbol为空：1.0 -> 1.0000
-     * <br>
-     * symbol不为空：1.0 -> 1.0000 symbol
+     * 1.0 -> 1.0000 symbol
      *
      * @param amount 金额数量
      * @param mode
-     * @param symbol 币种
+     * @param symbol 币种，如果为空，默认为EOS
      * @return
      */
     public static String formatMoney(double amount, RoundingMode mode, String symbol)
@@ -157,11 +159,11 @@ public class RpcUtils
         if (mode == null)
             mode = RoundingMode.DOWN;
 
+        if (Utils.isEmpty(symbol))
+            symbol = "EOS";
+
         final double amountScale = new BigDecimal(amount).setScale(4, mode).doubleValue();
         final String amountFormat = new DecimalFormat("#.0000").format(amountScale);
-
-        if (symbol == null || symbol.isEmpty())
-            return amountFormat;
 
         return amountFormat + " " + symbol;
     }

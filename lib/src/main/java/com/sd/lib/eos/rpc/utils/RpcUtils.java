@@ -11,6 +11,8 @@ import java.util.Date;
 
 public class RpcUtils
 {
+    public static final DateFormat DATE_FORMAT_EOS = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
     private RpcUtils()
     {
     }
@@ -154,7 +156,7 @@ public class RpcUtils
     }
 
     /**
-     * 返回指定时间加上指定毫秒后的时间
+     * 返回指定EOS时间加上指定毫秒后的时间
      *
      * @param time        格式：yyyy-MM-dd'T'HH:mm:ss
      * @param millisecond 指定毫秒
@@ -164,18 +166,36 @@ public class RpcUtils
     {
         try
         {
-            final DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-            final Date date = format.parse(time);
+            final Date date = DATE_FORMAT_EOS.parse(time);
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             calendar.add(Calendar.MILLISECOND, millisecond);
 
-            return format.format(calendar.getTime());
+            return DATE_FORMAT_EOS.format(calendar.getTime());
         } catch (ParseException e)
         {
             e.printStackTrace();
             return time;
+        }
+    }
+
+    /**
+     * EOS时间转为毫秒
+     *
+     * @param time
+     * @return
+     */
+    public static long toMilliSecond(String time)
+    {
+        try
+        {
+            final Date date = DATE_FORMAT_EOS.parse(time);
+            return date.getTime();
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+            return 0;
         }
     }
 }

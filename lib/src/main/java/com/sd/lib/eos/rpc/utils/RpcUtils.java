@@ -49,6 +49,9 @@ public class RpcUtils
         if (arr.length != 2)
             throw new RuntimeException("moneyString must include one blank space:" + moneyString);
 
+        if (Utils.isEmpty(arr[1]))
+            throw new RuntimeException("moneyString symbol part is empty");
+
         double num = 0;
         try
         {

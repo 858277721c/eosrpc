@@ -1,7 +1,6 @@
 package com.sd.lib.eos.rpc.params;
 
 import com.sd.lib.eos.rpc.utils.RpcUtils;
-import com.sd.lib.eos.rpc.utils.Utils;
 
 /**
  * 购买抵押资源
@@ -126,22 +125,7 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
          */
         public Builder setStake_net_quantity(double quantity, String symbol)
         {
-            if (Utils.isEmpty(symbol))
-                symbol = "EOS";
-
-            setStake_net_quantity(quantity + " " + symbol);
-            return this;
-        }
-
-        /**
-         * 设置net抵押金额
-         *
-         * @param quantity
-         * @return
-         */
-        private Builder setStake_net_quantity(String quantity)
-        {
-            this.stake_net_quantity = quantity;
+            this.stake_net_quantity = RpcUtils.formatMoney(quantity, symbol);
             return this;
         }
 
@@ -154,22 +138,7 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
          */
         public Builder setStake_cpu_quantity(double quantity, String symbol)
         {
-            if (Utils.isEmpty(symbol))
-                symbol = "EOS";
-
-            setStake_cpu_quantity(quantity + " " + symbol);
-            return this;
-        }
-
-        /**
-         * 设置cpu抵押金额
-         *
-         * @param quantity
-         * @return
-         */
-        private Builder setStake_cpu_quantity(String quantity)
-        {
-            this.stake_cpu_quantity = quantity;
+            this.stake_cpu_quantity = RpcUtils.formatMoney(quantity, symbol);
             return this;
         }
 

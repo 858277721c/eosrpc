@@ -38,8 +38,8 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
     {
         private final String from;
         private final String receiver;
-        private final String stake_cpu_quantity;
         private final String stake_net_quantity;
+        private final String stake_cpu_quantity;
 
         private final int transfer;
 
@@ -47,8 +47,8 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
         {
             this.from = RpcUtils.checkAccountName(builder.from, "delegatebw from was not specified");
             this.receiver = RpcUtils.checkAccountName(builder.receiver, "delegatebw receiver was not specified");
-            this.stake_cpu_quantity = RpcUtils.checkMoney(builder.stake_cpu_quantity, "delegatebw stake cpu quantity was not specified");
             this.stake_net_quantity = RpcUtils.checkMoney(builder.stake_net_quantity, "delegatebw stake net quantity was not specified");
+            this.stake_cpu_quantity = RpcUtils.checkMoney(builder.stake_cpu_quantity, "delegatebw stake cpu quantity was not specified");
 
             final int transfer = builder.transfer;
             if (transfer == 0 || transfer == 1)
@@ -87,8 +87,8 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
     {
         private String from;
         private String receiver;
-        private String stake_cpu_quantity;
         private String stake_net_quantity;
+        private String stake_cpu_quantity;
 
         private int transfer;
 

@@ -71,7 +71,7 @@ public class GetActionsActivity extends BaseActivity
     public void setPosition(int position)
     {
         mPosition = position;
-        mOffset = position - 49;
+        mOffset = position - 9;
 
         Log.i(TAG, "position:" + position + " offset:" + mOffset);
     }
@@ -94,6 +94,8 @@ public class GetActionsActivity extends BaseActivity
                             final List<GetActionsResponse.Action> list = apiResponse.getSuccess().getActions();
                             if (list != null && !list.isEmpty())
                             {
+                                Log.i(TAG, "list size:" + list.size());
+
                                 mLastAction = list.get(0);
                                 setPosition(mLastAction.getAccount_action_seq());
 
@@ -146,7 +148,7 @@ public class GetActionsActivity extends BaseActivity
             TextView tv_account = holder.get(R.id.tv_account);
             TextView tv_name = holder.get(R.id.tv_name);
 
-            tv_seq.setText(model.getAccount_action_seq());
+            tv_seq.setText(String.valueOf(model.getAccount_action_seq()));
             tv_account.setText(model.getAction_trace().getAct().getAccount());
             tv_name.setText(model.getAction_trace().getAct().getName());
         }

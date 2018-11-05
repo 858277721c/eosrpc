@@ -162,37 +162,51 @@ public class RpcUtils
     }
 
     /**
-     * 返回指定EOS时间加上指定毫秒后的时间
+     * 返回某个EOS时间加上指定毫秒后的时间
      *
-     * @param time        格式：yyyy-MM-dd'T'HH:mm:ss
-     * @param millisecond 指定毫秒
+     * @param time           某个EOS时间（yyyy-MM-dd'T'HH:mm:ss）
+     * @param addMilliSecond 要增加的毫秒
      * @return yyyy-MM-dd'T'HH:mm:ss
      */
-    public static String addTimeToFormat(String time, int millisecond)
+    public static String addMilliSecond(String time, int addMilliSecond)
     {
-        final long addTime = addTimeToMilliSecond(time, millisecond);
-        return EOS_DATE_FORMAT.format(new Date(addTime));
+        final Date date = toDate(time);
+        if (date == null)
+            return time;
+
+        return EOS_DATE_FORMAT.format(addMilliSecond(date.getTime(), addMilliSecond));
     }
 
     /**
-     * 返回指定EOS时间加上指定毫秒后的时间毫秒
+     * 返回某个时间加上指定毫秒后的时间毫秒
      *
-     * @param time        格式：yyyy-MM-dd'T'HH:mm:ss
-     * @param millisecond 指定毫秒
+     * @param time           某个时间（毫秒）
+     * @param addMilliSecond 要增加的毫秒
      * @return 毫秒
      */
-    public static long addTimeToMilliSecond(String time, int millisecond)
+    public static Date addMilliSecond(long time, int addMilliSecond)
+    {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        calendar.add(Calendar.MILLISECOND, addMilliSecond);
+        return calendar.getTime();
+    }
+
+    /**
+     * EOS时间转为日期
+     *
+     * @param time 格式：yyyy-MM-dd'T'HH:mm:ss
+     * @return
+     */
+    public static Date toDate(String time)
     {
         try
         {
-            final Calendar calendar = Calendar.getInstance();
-            calendar.setTime(EOS_DATE_FORMAT.parse(time));
-            calendar.add(Calendar.MILLISECOND, millisecond);
-            return calendar.getTime().getTime();
+            return EOS_DATE_FORMAT.parse(time);
         } catch (ParseException e)
         {
             e.printStackTrace();
-            return millisecond;
+            return null;
         }
     }
 }

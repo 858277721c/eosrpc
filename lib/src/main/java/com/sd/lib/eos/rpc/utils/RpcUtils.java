@@ -86,10 +86,13 @@ public class RpcUtils
      */
     public static double getMoneyAmount(String moneyString)
     {
-        if (Utils.isEmpty(moneyString))
+        try
+        {
+            return new BigDecimal(moneyString.split(" ")[0]).doubleValue();
+        } catch (Exception e)
+        {
             return 0;
-        checkMoney(moneyString, null);
-        return new BigDecimal(moneyString.split(" ")[0]).doubleValue();
+        }
     }
 
     /**
@@ -102,10 +105,13 @@ public class RpcUtils
      */
     public static String getMoneySymbol(String moneyString)
     {
-        if (Utils.isEmpty(moneyString))
+        try
+        {
+            return moneyString.split(" ")[1];
+        } catch (Exception e)
+        {
             return "";
-        checkMoney(moneyString, null);
-        return moneyString.split(" ")[1];
+        }
     }
 
     /**

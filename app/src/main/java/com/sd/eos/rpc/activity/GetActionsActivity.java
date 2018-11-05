@@ -199,25 +199,29 @@ public class GetActionsActivity extends BaseActivity
             TextView tv_name = holder.get(R.id.tv_name);
             TextView tv_time = holder.get(R.id.tv_time);
             TextView tv_data = holder.get(R.id.tv_data);
+            TextView tv_trx_id = holder.get(R.id.tv_trx_id);
 
             tv_seq.setText(String.valueOf(model.getAccount_action_seq()));
             tv_account.setText(model.getAction_trace().getAct().getAccount());
             tv_name.setText(model.getAction_trace().getAct().getName());
 
+            final GetActionsResponse.Action.ActionTrace.Act.TransferData data = model.getAction_trace().getAct().getTransferData();
+            if (data != null)
+            {
+                tv_data.setText(data.getFrom() + " -> " + data.getTo() + "\n" + data.getQuantity());
+            }
+
+            tv_trx_id.setText(model.getAction_trace().getTrx_id());
+
             final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             dateFormat.setTimeZone(TimeZone.getTimeZone("GMT-8"));
             final String timeFormat = dateFormat.format(RpcUtils.toDate(model.getBlock_time()));
-
             tv_time.setText(timeFormat);
 
-            if (model.getAction_trace().getAct().getName().equals("transfer"))
-            {
-                final GetActionsResponse.Action.ActionTrace.Act.TransferData data = model.getAction_trace().getAct().getTransferData();
-                if (data != null)
-                {
-                    tv_data.setText(data.getFrom() + " -> " + data.getTo() + "\n" + data.getQuantity());
-                }
-            }
+            if (model.hasInlineTraces())
+                tv_seq.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+            else
+                tv_seq.setBackgroundColor(0);
         }
     };
 }

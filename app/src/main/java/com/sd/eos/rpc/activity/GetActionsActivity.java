@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sd.eos.rpc.R;
 import com.sd.lib.adapter.FSimpleRecyclerAdapter;
@@ -24,17 +25,16 @@ public class GetActionsActivity extends BaseActivity
 {
     public static final String TAG = GetActionsActivity.class.getSimpleName();
 
-    private static final int PAGE_SIZE = 10;
+    private static final int PAGE_SIZE = 100;
 
     private FPullToRefreshView mPullToRefreshView;
     private RecyclerView mRecyclerView;
 
     private final RpcApi mRpcApi = new RpcApi();
 
-    private String mAccountName = "liuliqin1234";
+    private String mAccountName = "ichenfq12345";
     private int mPosition;
-    private int mOffset;
-    private int mMaxPosition;
+    private int mOffset = -PAGE_SIZE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -53,17 +53,20 @@ public class GetActionsActivity extends BaseActivity
             public void onRefreshingFromHeader(PullToRefreshView view)
             {
                 mPosition = -1;
-                mOffset = -PAGE_SIZE;
                 requestData(false);
             }
 
             @Override
             public void onRefreshingFromFooter(PullToRefreshView view)
             {
-                if (mMaxPosition > 0 && mOffset < mMaxPosition)
+                if (mPosition > 0)
+                {
                     requestData(true);
-                else
+                } else
+                {
+                    Toast.makeText(GetActionsActivity.this, "没有更多数据了", Toast.LENGTH_SHORT).show();
                     mPullToRefreshView.stopRefreshing();
+                }
             }
         });
         mPullToRefreshView.startRefreshingFromHeader();
@@ -89,19 +92,8 @@ public class GetActionsActivity extends BaseActivity
                             if (list != null && !list.isEmpty())
                             {
                                 Log.i(TAG, "list size:" + list.size());
-
-                                GetActionsResponse.Action action = list.get(0);
-
-                                mOffset = action.getAccount_action_seq();
-                                mPosition = mOffset - PAGE_SIZE;
-
-
-                                if (!isLoadMore)
-                                {
-                                    mMaxPosition = list.get(list.size() - 1).getAccount_action_seq();
-                                    Log.i(TAG, "max position:" + mMaxPosition);
-                                }
-
+                                mPosition = list.get(0).getAccount_action_seq() - 1;
+                                Log.i(TAG, "next position:" + mPosition);
                                 Collections.reverse(list);
                             }
 

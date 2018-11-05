@@ -24,17 +24,17 @@ public class GetActionsActivity extends BaseActivity
 {
     public static final String TAG = GetActionsActivity.class.getSimpleName();
 
+    private static final int PAGE_SIZE = 10;
+
     private FPullToRefreshView mPullToRefreshView;
     private RecyclerView mRecyclerView;
 
     private final RpcApi mRpcApi = new RpcApi();
 
-    private String mAccountName = "liuliqin1234";
+    private String mAccountName = "ichenfq12345";
     private int mPosition;
     private int mOffset;
     private int mMaxPosition;
-
-    private GetActionsResponse.Action mLastAction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,7 +52,8 @@ public class GetActionsActivity extends BaseActivity
             @Override
             public void onRefreshingFromHeader(PullToRefreshView view)
             {
-                setPosition(-1);
+                mPosition = -1;
+                mOffset = -PAGE_SIZE;
                 requestData(false);
             }
 
@@ -68,14 +69,6 @@ public class GetActionsActivity extends BaseActivity
         mPullToRefreshView.startRefreshingFromHeader();
     }
 
-    public void setPosition(int position)
-    {
-        mPosition = position;
-        mOffset = position - 9;
-
-        Log.i(TAG, "position:" + position + " offset:" + mOffset);
-    }
-
     private void requestData(final boolean isLoadMore)
     {
         new FTask()
@@ -83,6 +76,7 @@ public class GetActionsActivity extends BaseActivity
             @Override
             protected void onRun() throws Exception
             {
+                Log.i(TAG, "requestData:" + mAccountName + " " + mPosition + " " + mOffset);
                 final ApiResponse<GetActionsResponse> apiResponse = mRpcApi.getActions(mAccountName, mPosition, mOffset);
                 if (apiResponse.isSuccessful())
                 {
@@ -96,17 +90,20 @@ public class GetActionsActivity extends BaseActivity
                             {
                                 Log.i(TAG, "list size:" + list.size());
 
-                                mLastAction = list.get(0);
-                                setPosition(mLastAction.getAccount_action_seq());
+                                GetActionsResponse.Action action = list.get(0);
+
+                                mOffset = action.getAccount_action_seq();
+                                mPosition = mOffset - PAGE_SIZE;
+
 
                                 if (!isLoadMore)
                                 {
                                     mMaxPosition = list.get(list.size() - 1).getAccount_action_seq();
-                                    Log.e(TAG, "max position:" + mMaxPosition);
+                                    Log.i(TAG, "max position:" + mMaxPosition);
                                 }
-                            }
 
-                            Collections.reverse(list);
+                                Collections.reverse(list);
+                            }
 
                             if (isLoadMore)
                                 mAdapter.getDataHolder().addData(list);

@@ -1,5 +1,7 @@
 package com.sd.lib.eos.rpc.api.model;
 
+import com.sd.lib.eos.rpc.core.FEOSManager;
+
 import java.util.List;
 
 public class GetActionsResponse
@@ -29,17 +31,17 @@ public class GetActionsResponse
 
     public static class Action
     {
-        private long account_action_seq;
+        private int account_action_seq;
         private long block_num;
         private String block_time;
         private ActionTrace action_trace;
 
-        public long getAccount_action_seq()
+        public int getAccount_action_seq()
         {
             return account_action_seq;
         }
 
-        public void setAccount_action_seq(long account_action_seq)
+        public void setAccount_action_seq(int account_action_seq)
         {
             this.account_action_seq = account_action_seq;
         }
@@ -186,6 +188,19 @@ public class GetActionsResponse
                 private String name;
                 private List<Authorization> authorization;
                 private String hex_data;
+                private String data;
+
+                public TransferData getTransferData()
+                {
+                    try
+                    {
+                        final TransferData transferData = FEOSManager.getInstance().getJsonConverter().jsonToObject(data, TransferData.class);
+                        return transferData;
+                    } catch (Exception e)
+                    {
+                        return null;
+                    }
+                }
 
                 public String getAccount()
                 {
@@ -227,6 +242,16 @@ public class GetActionsResponse
                     this.hex_data = hex_data;
                 }
 
+                public String getData()
+                {
+                    return data;
+                }
+
+                public void setData(String data)
+                {
+                    this.data = data;
+                }
+
                 public static class Authorization
                 {
                     private String actor;
@@ -253,21 +278,53 @@ public class GetActionsResponse
                     }
                 }
 
-                public static class Data
+                public static class TransferData
                 {
-                    private String message;
+                    private String from;
+                    private String to;
+                    private String quantity;
+                    private String memo;
 
-                    public String getMessage()
+                    public String getFrom()
                     {
-                        return message;
+                        return from;
                     }
 
-                    public void setMessage(String message)
+                    public void setFrom(String from)
                     {
-                        this.message = message;
+                        this.from = from;
+                    }
+
+                    public String getTo()
+                    {
+                        return to;
+                    }
+
+                    public void setTo(String to)
+                    {
+                        this.to = to;
+                    }
+
+                    public String getQuantity()
+                    {
+                        return quantity;
+                    }
+
+                    public void setQuantity(String quantity)
+                    {
+                        this.quantity = quantity;
+                    }
+
+                    public String getMemo()
+                    {
+                        return memo;
+                    }
+
+                    public void setMemo(String memo)
+                    {
+                        this.memo = memo;
                     }
                 }
-
             }
         }
     }

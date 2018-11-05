@@ -1,6 +1,7 @@
 package com.sd.lib.eos.rpc.params;
 
 import com.sd.lib.eos.rpc.utils.RpcUtils;
+import com.sd.lib.eos.rpc.utils.Utils;
 
 /**
  * 购买内存
@@ -102,6 +103,9 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
          */
         public Builder setQuantity(double quantity, String symbol)
         {
+            if (Utils.isEmpty(symbol))
+                symbol = "EOS";
+
             this.quantity = RpcUtils.formatMoney(quantity, symbol);
             return this;
         }

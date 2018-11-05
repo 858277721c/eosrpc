@@ -1,6 +1,7 @@
 package com.sd.lib.eos.rpc.params;
 
 import com.sd.lib.eos.rpc.utils.RpcUtils;
+import com.sd.lib.eos.rpc.utils.Utils;
 
 /**
  * 转账
@@ -110,6 +111,9 @@ public class TransferActionParams extends BaseParams<TransferActionParams.Args, 
          */
         public Builder setQuantity(double quantity, String symbol)
         {
+            if (Utils.isEmpty(symbol))
+                symbol = "EOS";
+
             this.quantity = RpcUtils.formatMoney(quantity, symbol);
             return this;
         }

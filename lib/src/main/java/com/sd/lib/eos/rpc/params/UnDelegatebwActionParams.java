@@ -1,6 +1,7 @@
 package com.sd.lib.eos.rpc.params;
 
 import com.sd.lib.eos.rpc.utils.RpcUtils;
+import com.sd.lib.eos.rpc.utils.Utils;
 
 /**
  * 赎回抵押资源
@@ -110,6 +111,9 @@ public class UnDelegatebwActionParams extends BaseParams<UnDelegatebwActionParam
          */
         public Builder setUnstake_net_quantity(double quantity, String symbol)
         {
+            if (Utils.isEmpty(symbol))
+                symbol = "EOS";
+
             this.unstake_net_quantity = RpcUtils.formatMoney(quantity, symbol);
             return this;
         }
@@ -123,6 +127,9 @@ public class UnDelegatebwActionParams extends BaseParams<UnDelegatebwActionParam
          */
         public Builder setUnstake_cpu_quantity(double quantity, String symbol)
         {
+            if (Utils.isEmpty(symbol))
+                symbol = "EOS";
+
             this.unstake_cpu_quantity = RpcUtils.formatMoney(quantity, symbol);
             return this;
         }

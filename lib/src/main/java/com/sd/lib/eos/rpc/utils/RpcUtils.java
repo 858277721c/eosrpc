@@ -152,13 +152,13 @@ public class RpcUtils
         if (mode == null)
             mode = RoundingMode.DOWN;
 
-        if (Utils.isEmpty(symbol))
-            symbol = "EOS";
-
         final double amountScale = new BigDecimal(amount).setScale(4, mode).doubleValue();
         final String amountFormat = new DecimalFormat("#.0000").format(amountScale);
 
-        return amountFormat + " " + symbol;
+        if (Utils.isEmpty(symbol))
+            return amountFormat;
+        else
+            return amountFormat + " " + symbol;
     }
 
     /**

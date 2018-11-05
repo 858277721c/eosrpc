@@ -146,7 +146,7 @@ public class GetActionsActivity extends BaseActivity
             tv_name.setText(model.getAction_trace().getAct().getName());
 
             final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
+            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT-8"));
             final String timeFormat = dateFormat.format(RpcUtils.toDate(model.getBlock_time()));
 
             tv_time.setText(timeFormat);

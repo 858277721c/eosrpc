@@ -21,8 +21,12 @@ import com.sd.lib.task.FTask;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class GetActionsActivity extends BaseActivity
@@ -38,6 +42,8 @@ public class GetActionsActivity extends BaseActivity
     private String mAccountName = "ichenfq12345";
     private int mPosition;
     private int mOffset = -PAGE_SIZE;
+
+    private final Map<String, String> mMapInline = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -86,20 +92,25 @@ public class GetActionsActivity extends BaseActivity
                 final ApiResponse<GetActionsResponse> apiResponse = mRpcApi.getActions(mAccountName, mPosition, mOffset);
                 if (apiResponse.isSuccessful())
                 {
+                    final List<GetActionsResponse.Action> list = apiResponse.getSuccess().getActions();
+                    if (list != null && !list.isEmpty())
+                    {
+                        Log.i(TAG, "list size:" + list.size());
+
+                        mPosition = list.get(0).getAccount_action_seq() - 1;
+                        Log.i(TAG, "next position:" + mPosition);
+
+                        filterAction(list);
+                        Log.i(TAG, "list size filter:" + list.size());
+
+                        Collections.reverse(list);
+                    }
+
                     runOnUiThread(new Runnable()
                     {
                         @Override
                         public void run()
                         {
-                            final List<GetActionsResponse.Action> list = apiResponse.getSuccess().getActions();
-                            if (list != null && !list.isEmpty())
-                            {
-                                Log.i(TAG, "list size:" + list.size());
-                                mPosition = list.get(0).getAccount_action_seq() - 1;
-                                Log.i(TAG, "next position:" + mPosition);
-                                Collections.reverse(list);
-                            }
-
                             if (isLoadMore)
                                 mAdapter.getDataHolder().addData(list);
                             else
@@ -123,6 +134,53 @@ public class GetActionsActivity extends BaseActivity
                 });
             }
         }.submit();
+    }
+
+    private void filterAction(List<GetActionsResponse.Action> list)
+    {
+        if (list == null || list.isEmpty())
+            return;
+
+        Iterator<GetActionsResponse.Action> it = list.iterator();
+        while (it.hasNext())
+        {
+            final GetActionsResponse.Action item = it.next();
+
+            final String name = item.getAction_trace().getAct().getName();
+            if ("transfer".equals(name))
+            {
+                if (item.hasInlineTraces())
+                {
+                    mMapInline.put(item.getAction_trace().getTrx_id(), "");
+                    Log.i(TAG, "found inline:" + item.getAccount_action_seq());
+                }
+            } else
+            {
+                it.remove();
+            }
+        }
+
+        it = list.iterator();
+        while (it.hasNext())
+        {
+            final GetActionsResponse.Action item = it.next();
+
+            if (mMapInline.containsKey(item.getAction_trace().getTrx_id()) && !item.hasInlineTraces())
+            {
+                it.remove();
+                Log.e(TAG, "remove inline:" + item.getAccount_action_seq());
+            }
+        }
+    }
+
+    private List<GetActionsResponse.Action> getInlineAction(List<GetActionsResponse.Action> list)
+    {
+        final List<GetActionsResponse.Action> result = new ArrayList<>();
+        if (list != null && !list.isEmpty())
+        {
+        }
+
+        return result;
     }
 
     private final FSimpleRecyclerAdapter<GetActionsResponse.Action> mAdapter = new FSimpleRecyclerAdapter<GetActionsResponse.Action>()
@@ -157,7 +215,7 @@ public class GetActionsActivity extends BaseActivity
                 final GetActionsResponse.Action.ActionTrace.Act.TransferData data = model.getAction_trace().getAct().getTransferData();
                 if (data != null)
                 {
-                    tv_data.setText(data.getFrom() + " -> " + data.getTo() + "\n" + data.getQuantity() + "\n" + data.getMemo());
+                    tv_data.setText(data.getFrom() + " -> " + data.getTo() + "\n" + data.getQuantity());
                 }
             }
         }

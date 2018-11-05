@@ -14,25 +14,28 @@ import com.sd.lib.adapter.viewholder.FRecyclerViewHolder;
 import com.sd.lib.eos.rpc.api.RpcApi;
 import com.sd.lib.eos.rpc.api.model.ApiResponse;
 import com.sd.lib.eos.rpc.api.model.GetActionsResponse;
+import com.sd.lib.eos.rpc.utils.RpcUtils;
 import com.sd.lib.pulltorefresh.FPullToRefreshView;
 import com.sd.lib.pulltorefresh.PullToRefreshView;
 import com.sd.lib.task.FTask;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.TimeZone;
 
 public class GetActionsActivity extends BaseActivity
 {
-    public static final String TAG = GetActionsActivity.class.getSimpleName();
-
+    private static final String TAG = GetActionsActivity.class.getSimpleName();
     private static final int PAGE_SIZE = 100;
 
     private FPullToRefreshView mPullToRefreshView;
     private RecyclerView mRecyclerView;
 
-    private final RpcApi mRpcApi = new RpcApi();
+    private final RpcApi mRpcApi = new RpcApi("https://geo.eosasia.one");
 
-    private String mAccountName = "liuliqin1234";
+    private String mAccountName = "ichenfq12345";
     private int mPosition;
     private int mOffset = -PAGE_SIZE;
 
@@ -136,10 +139,17 @@ public class GetActionsActivity extends BaseActivity
             TextView tv_seq = holder.get(R.id.tv_seq);
             TextView tv_account = holder.get(R.id.tv_account);
             TextView tv_name = holder.get(R.id.tv_name);
+            TextView tv_time = holder.get(R.id.tv_time);
 
             tv_seq.setText(String.valueOf(model.getAccount_action_seq()));
             tv_account.setText(model.getAction_trace().getAct().getAccount());
             tv_name.setText(model.getAction_trace().getAct().getName());
+
+            final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
+            final String timeFormat = dateFormat.format(RpcUtils.toDate(model.getBlock_time()));
+
+            tv_time.setText(timeFormat);
         }
     };
 }

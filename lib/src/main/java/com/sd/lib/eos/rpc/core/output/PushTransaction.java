@@ -99,7 +99,7 @@ public class PushTransaction
         final GetBlockResponse block = blockApiResonse.getSuccess();
 
         final TransactionModel transaction = new TransactionModel();
-        transaction.setExpiration(RpcUtils.addTime(info.getHead_block_time(), 30 * 1000));
+        transaction.setExpiration(RpcUtils.addTimeToFormat(info.getHead_block_time(), 30 * 1000));
         transaction.setRef_block_num(block.getBlock_num());
         transaction.setRef_block_prefix(block.getRef_block_prefix());
         transaction.setActions(listAction);

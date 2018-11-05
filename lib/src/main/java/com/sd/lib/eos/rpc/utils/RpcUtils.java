@@ -11,7 +11,7 @@ import java.util.Date;
 
 public class RpcUtils
 {
-    public static final DateFormat DATE_FORMAT_EOS = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    public static final DateFormat EOS_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     private RpcUtils()
     {
@@ -166,42 +166,33 @@ public class RpcUtils
      *
      * @param time        格式：yyyy-MM-dd'T'HH:mm:ss
      * @param millisecond 指定毫秒
-     * @return
+     * @return yyyy-MM-dd'T'HH:mm:ss
      */
-    public static String addTime(String time, int millisecond)
+    public static String addTimeToFormat(String time, int millisecond)
     {
-        try
-        {
-            final Date date = DATE_FORMAT_EOS.parse(time);
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            calendar.add(Calendar.MILLISECOND, millisecond);
-
-            return DATE_FORMAT_EOS.format(calendar.getTime());
-        } catch (ParseException e)
-        {
-            e.printStackTrace();
-            return time;
-        }
+        final long addTime = addTimeToMilliSecond(time, millisecond);
+        return EOS_DATE_FORMAT.format(new Date(addTime));
     }
 
     /**
-     * EOS时间转为毫秒
+     * 返回指定EOS时间加上指定毫秒后的时间毫秒
      *
-     * @param time
-     * @return
+     * @param time        格式：yyyy-MM-dd'T'HH:mm:ss
+     * @param millisecond 指定毫秒
+     * @return 毫秒
      */
-    public static long toMilliSecond(String time)
+    public static long addTimeToMilliSecond(String time, int millisecond)
     {
         try
         {
-            final Date date = DATE_FORMAT_EOS.parse(time);
-            return date.getTime();
+            final Calendar calendar = Calendar.getInstance();
+            calendar.setTime(EOS_DATE_FORMAT.parse(time));
+            calendar.add(Calendar.MILLISECOND, millisecond);
+            return calendar.getTime().getTime();
         } catch (ParseException e)
         {
             e.printStackTrace();
-            return 0;
+            return millisecond;
         }
     }
 }

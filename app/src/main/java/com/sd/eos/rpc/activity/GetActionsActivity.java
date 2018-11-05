@@ -140,6 +140,7 @@ public class GetActionsActivity extends BaseActivity
             TextView tv_account = holder.get(R.id.tv_account);
             TextView tv_name = holder.get(R.id.tv_name);
             TextView tv_time = holder.get(R.id.tv_time);
+            TextView tv_data = holder.get(R.id.tv_data);
 
             tv_seq.setText(String.valueOf(model.getAccount_action_seq()));
             tv_account.setText(model.getAction_trace().getAct().getAccount());
@@ -150,6 +151,15 @@ public class GetActionsActivity extends BaseActivity
             final String timeFormat = dateFormat.format(RpcUtils.toDate(model.getBlock_time()));
 
             tv_time.setText(timeFormat);
+
+            if (model.getAction_trace().getAct().getName().equals("transfer"))
+            {
+                final GetActionsResponse.Action.ActionTrace.Act.TransferData data = model.getAction_trace().getAct().getTransferData();
+                if (data != null)
+                {
+                    tv_data.setText(data.getFrom() + " -> " + data.getTo() + "\n" + data.getQuantity() + "\n" + data.getMemo());
+                }
+            }
         }
     };
 }

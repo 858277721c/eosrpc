@@ -32,7 +32,7 @@ public class GetActionsActivity extends BaseActivity
 
     private final RpcApi mRpcApi = new RpcApi();
 
-    private String mAccountName = "ichenfq12345";
+    private String mAccountName = "liuliqin1234";
     private int mPosition;
     private int mOffset = -PAGE_SIZE;
 

@@ -282,7 +282,7 @@ public class GetAccountResponse
         public static class RequiredAuth
         {
             private int threshold;
-            private List<Key> key;
+            private List<Key> keys;
 
             public int getThreshold()
             {
@@ -294,14 +294,14 @@ public class GetAccountResponse
                 this.threshold = threshold;
             }
 
-            public List<Key> getKey()
+            public List<Key> getKeys()
             {
-                return key;
+                return keys;
             }
 
-            public void setKey(List<Key> key)
+            public void setKeys(List<Key> keys)
             {
-                this.key = key;
+                this.keys = keys;
             }
 
             public static class Key

@@ -36,6 +36,12 @@ public class GetActionsResponse
         private String block_time;
         private ActionTrace action_trace;
 
+        public boolean hasInlineTraces()
+        {
+            final List<Action> list = action_trace.getInline_traces();
+            return list != null && !list.isEmpty();
+        }
+
         public int getAccount_action_seq()
         {
             return account_action_seq;
@@ -81,6 +87,7 @@ public class GetActionsResponse
             private String trx_id;
             private Receipt receipt;
             private Act act;
+            private List<Action> inline_traces;
 
             public String getTrx_id()
             {
@@ -110,6 +117,16 @@ public class GetActionsResponse
             public void setAct(Act act)
             {
                 this.act = act;
+            }
+
+            public List<Action> getInline_traces()
+            {
+                return inline_traces;
+            }
+
+            public void setInline_traces(List<Action> inline_traces)
+            {
+                this.inline_traces = inline_traces;
             }
 
             public static class Receipt

@@ -1,6 +1,7 @@
 package com.sd.lib.eos.rpc.api.model;
 
 import com.sd.lib.eos.rpc.core.FEOSManager;
+import com.sd.lib.eos.rpc.utils.RpcUtils;
 
 import java.util.List;
 
@@ -302,6 +303,16 @@ public class GetActionsResponse
                     private String quantity;
                     private String memo;
 
+                    public double getQuantityAmount()
+                    {
+                        return RpcUtils.getMoneyAmount(quantity);
+                    }
+
+                    public String getQuantitySymbol()
+                    {
+                        return RpcUtils.getMoneySymbol(quantity);
+                    }
+
                     public String getFrom()
                     {
                         return from;
@@ -334,12 +345,27 @@ public class GetActionsResponse
 
                     public String getMemo()
                     {
+                        if (memo == null)
+                            memo = "";
                         return memo;
                     }
 
                     public void setMemo(String memo)
                     {
                         this.memo = memo;
+                    }
+
+                    @Override
+                    public boolean equals(Object obj)
+                    {
+                        if (!(obj instanceof TransferData))
+                            return false;
+
+                        final TransferData other = (TransferData) obj;
+                        return getFrom().equals(other.getFrom())
+                                && getTo().equals(other.getTo())
+                                && getQuantity().equals(other.getQuantity())
+                                && getMemo().equals(other.getMemo());
                     }
                 }
             }

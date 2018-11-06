@@ -103,6 +103,26 @@ public class GetActionsActivity extends BaseActivity
                         filterAction(list);
                         Log.i(TAG, "list size filter:" + list.size());
 
+                        if (!list.isEmpty())
+                        {
+                            final GetActionsResponse.Action action = list.get(list.size() - 1);
+                            final List<GetActionsResponse.Action> listChecked = checkInlineAction(action);
+                            if (!listChecked.isEmpty())
+                            {
+                                runOnUiThread(new Runnable()
+                                {
+                                    @Override
+                                    public void run()
+                                    {
+                                        for (GetActionsResponse.Action item : listChecked)
+                                        {
+                                            mAdapter.getDataHolder().removeData(item);
+                                        }
+                                    }
+                                });
+                            }
+                        }
+
                         Collections.reverse(list);
                     }
 
@@ -173,13 +193,27 @@ public class GetActionsActivity extends BaseActivity
         }
     }
 
-    private List<GetActionsResponse.Action> getInlineAction(List<GetActionsResponse.Action> list)
+    private List<GetActionsResponse.Action> checkInlineAction(GetActionsResponse.Action action)
     {
         final List<GetActionsResponse.Action> result = new ArrayList<>();
-        if (list != null && !list.isEmpty())
+        if (action.hasInlineTraces())
         {
+            final List<GetActionsResponse.Action> list = mAdapter.getDataHolder().getData();
+            if (list != null && !list.isEmpty())
+            {
+                final int listSize = list.size();
+                final int inlineSize = action.getAction_trace().getInline_traces().size();
+                final int start = listSize - inlineSize;
+                for (int i = start; i < listSize; i++)
+                {
+                    final GetActionsResponse.Action item = list.get(i);
+                    if (mMapInline.containsKey(item.getAction_trace().getTrx_id()) && !item.hasInlineTraces())
+                    {
+                        result.add(item);
+                    }
+                }
+            }
         }
-
         return result;
     }
 

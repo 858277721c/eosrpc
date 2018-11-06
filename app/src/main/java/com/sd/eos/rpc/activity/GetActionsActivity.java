@@ -242,7 +242,17 @@ public class GetActionsActivity extends BaseActivity
             final GetActionsResponse.Action.ActionTrace.Act.TransferData data = model.getAction_trace().getAct().getTransferData();
             if (data != null)
             {
-                tv_data.setText(data.getFrom() + " -> " + data.getTo() + "\n" + data.getQuantity());
+                final StringBuilder sb = new StringBuilder();
+                sb.append(data.getFrom()).append(" -> ").append(data.getTo());
+                sb.append("\n");
+
+                if (mAccountName.equals(data.getFrom()))
+                    sb.append("-");
+                else if (mAccountName.equals(data.getTo()))
+                    sb.append("+");
+
+                sb.append(" ").append(data.getQuantity());
+                tv_data.setText(sb);
             }
 
             tv_trx_id.setText(model.getAction_trace().getTrx_id());

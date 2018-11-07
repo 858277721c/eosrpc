@@ -153,7 +153,7 @@ public class RpcUtils
             mode = RoundingMode.DOWN;
 
         final double amountScale = new BigDecimal(amount).setScale(4, mode).doubleValue();
-        final String amountFormat = new DecimalFormat("#.0000").format(amountScale);
+        final String amountFormat = new DecimalFormat("0.0000").format(amountScale);
 
         if (Utils.isEmpty(symbol))
             return amountFormat;

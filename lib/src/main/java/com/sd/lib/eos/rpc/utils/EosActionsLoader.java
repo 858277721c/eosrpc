@@ -101,7 +101,7 @@ public abstract class EosActionsLoader
                 setPosition(mStart);
             } else
             {
-                if (mOriginalEnd < 0)
+                if (mOriginalEnd < 0 || mOriginalEnd >= mMaxSize)
                     setEnd(mMaxSize - 1);
 
                 setPosition(mStart);

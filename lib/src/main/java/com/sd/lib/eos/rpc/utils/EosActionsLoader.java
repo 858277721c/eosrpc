@@ -14,7 +14,7 @@ import java.util.List;
 
 public abstract class EosActionsLoader
 {
-    private static final int MAX_POSITION = Integer.MIN_VALUE;
+    private static final int MAX_POSITION = Integer.MAX_VALUE;
 
     private final String mAccountName;
     private final int mOriginalPosition;
@@ -29,6 +29,11 @@ public abstract class EosActionsLoader
         mRpcApi = rpcApi;
 
         reset();
+    }
+
+    public int getPosition()
+    {
+        return mPosition;
     }
 
     public void reset()

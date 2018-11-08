@@ -13,7 +13,7 @@ import com.sd.lib.adapter.viewholder.FRecyclerViewHolder;
 import com.sd.lib.eos.rpc.api.RpcApi;
 import com.sd.lib.eos.rpc.api.model.ErrorResponse;
 import com.sd.lib.eos.rpc.api.model.GetActionsResponse;
-import com.sd.lib.eos.rpc.utils.EosActionsBoundLoader;
+import com.sd.lib.eos.rpc.utils.EosActionsLoader;
 import com.sd.lib.eos.rpc.utils.RpcUtils;
 import com.sd.lib.pulltorefresh.FPullToRefreshView;
 import com.sd.lib.pulltorefresh.PullToRefreshView;
@@ -40,7 +40,7 @@ public class GetActionsActivity extends BaseActivity
     private String mAccountName = "ichenfq12345";
     private final Map<String, String> mMapInline = new HashMap<>();
 
-    private EosActionsBoundLoader mActionsLoader;
+    private EosActionsLoader mActionsLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -70,11 +70,11 @@ public class GetActionsActivity extends BaseActivity
         mPullToRefreshView.startRefreshingFromHeader();
     }
 
-    public EosActionsBoundLoader getActionsLoader()
+    public EosActionsLoader getActionsLoader()
     {
         if (mActionsLoader == null)
         {
-            mActionsLoader = new EosActionsBoundLoader(mAccountName, -1, 0, mRpcApi)
+            mActionsLoader = new EosActionsLoader(mAccountName, -1, mRpcApi)
             {
                 @Override
                 protected void onError(ErrorResponse errorResponse)
@@ -96,7 +96,7 @@ public class GetActionsActivity extends BaseActivity
             @Override
             protected void onRun() throws Exception
             {
-                final List<GetActionsResponse.Action> list = getActionsLoader().loadNextPage(50);
+                final List<GetActionsResponse.Action> list = getActionsLoader().loadPage(-50);
                 if (list != null && !list.isEmpty())
                 {
                     Log.i(TAG, "list size:" + list.size());

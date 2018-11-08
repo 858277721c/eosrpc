@@ -6,15 +6,14 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.sd.eos.rpc.R;
 import com.sd.lib.adapter.FSimpleRecyclerAdapter;
 import com.sd.lib.adapter.viewholder.FRecyclerViewHolder;
 import com.sd.lib.eos.rpc.api.RpcApi;
-import com.sd.lib.eos.rpc.api.model.ApiResponse;
+import com.sd.lib.eos.rpc.api.model.ErrorResponse;
 import com.sd.lib.eos.rpc.api.model.GetActionsResponse;
-import com.sd.lib.eos.rpc.utils.ActionsSizeListener;
+import com.sd.lib.eos.rpc.utils.EosActionsLoader;
 import com.sd.lib.eos.rpc.utils.RpcUtils;
 import com.sd.lib.pulltorefresh.FPullToRefreshView;
 import com.sd.lib.pulltorefresh.PullToRefreshView;
@@ -33,7 +32,6 @@ import java.util.TimeZone;
 public class GetActionsActivity extends BaseActivity
 {
     private static final String TAG = GetActionsActivity.class.getSimpleName();
-    private static final int PAGE_SIZE = 100;
 
     private FPullToRefreshView mPullToRefreshView;
     private RecyclerView mRecyclerView;
@@ -41,10 +39,9 @@ public class GetActionsActivity extends BaseActivity
     private final RpcApi mRpcApi = new RpcApi("https://geo.eosasia.one");
 
     private String mAccountName = "ichenfq12345";
-    private int mPosition;
-    private int mOffset = -PAGE_SIZE;
-
     private final Map<String, String> mMapInline = new HashMap<>();
+
+    private EosActionsLoader mActionsLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -62,94 +59,93 @@ public class GetActionsActivity extends BaseActivity
             @Override
             public void onRefreshingFromHeader(PullToRefreshView view)
             {
-                mActionsSizeListener.check(mAccountName);
-
-                mPosition = -1;
                 requestData(false);
             }
 
             @Override
             public void onRefreshingFromFooter(PullToRefreshView view)
             {
-                if (mPosition > 0)
-                {
-                    requestData(true);
-                } else
-                {
-                    Toast.makeText(GetActionsActivity.this, "没有更多数据了", Toast.LENGTH_SHORT).show();
-                    mPullToRefreshView.stopRefreshing();
-                }
+                requestData(true);
             }
         });
         mPullToRefreshView.startRefreshingFromHeader();
     }
 
-    private final ActionsSizeListener mActionsSizeListener = new ActionsSizeListener("https://geo.eosasia.one")
+    public EosActionsLoader getActionsLoader()
     {
-        @Override
-        protected void onResult(int size)
+        if (mActionsLoader == null)
         {
-            Log.i(TAG, "ActionsSizeListener:" + size);
+            mActionsLoader = new EosActionsLoader(mAccountName, -1, 0, mRpcApi)
+            {
+                @Override
+                protected void onError(ErrorResponse errorResponse)
+                {
+                    Log.e(TAG, "onError:" + errorResponse.getCode() + " " + errorResponse.getMessage());
+                }
+            };
         }
-    };
+        return mActionsLoader;
+    }
 
     private void requestData(final boolean isLoadMore)
     {
+        if (!isLoadMore)
+            getActionsLoader().reset();
+
         new FTask()
         {
             @Override
             protected void onRun() throws Exception
             {
-                Log.i(TAG, "requestData:" + mAccountName + " " + mPosition + " " + mOffset);
-                final ApiResponse<GetActionsResponse> apiResponse = mRpcApi.getActions(mAccountName, mPosition, mOffset);
-                if (apiResponse.isSuccessful())
+                final List<GetActionsResponse.Action> list = getActionsLoader().loadNextPage();
+                if (list != null && !list.isEmpty())
                 {
-                    final List<GetActionsResponse.Action> list = apiResponse.getSuccess().getActions();
-                    if (list != null && !list.isEmpty())
+                    Log.i(TAG, "list size:" + list.size());
+
+                    filterAction(list);
+                    Log.i(TAG, "list size filter:" + list.size());
+
+                    if (!list.isEmpty())
                     {
-                        Log.i(TAG, "list size:" + list.size());
-
-                        mPosition = list.get(0).getAccount_action_seq() - 1;
-                        Log.i(TAG, "next position:" + mPosition);
-
-                        filterAction(list);
-                        Log.i(TAG, "list size filter:" + list.size());
-
-                        if (!list.isEmpty())
+                        final GetActionsResponse.Action action = list.get(list.size() - 1);
+                        final List<GetActionsResponse.Action> listChecked = checkInlineAction(action);
+                        if (!listChecked.isEmpty())
                         {
-                            final GetActionsResponse.Action action = list.get(list.size() - 1);
-                            final List<GetActionsResponse.Action> listChecked = checkInlineAction(action);
-                            if (!listChecked.isEmpty())
+                            runOnUiThread(new Runnable()
                             {
-                                runOnUiThread(new Runnable()
+                                @Override
+                                public void run()
                                 {
-                                    @Override
-                                    public void run()
+                                    for (GetActionsResponse.Action item : listChecked)
                                     {
-                                        for (GetActionsResponse.Action item : listChecked)
-                                        {
-                                            mAdapter.getDataHolder().removeData(item);
-                                        }
+                                        mAdapter.getDataHolder().removeData(item);
                                     }
-                                });
-                            }
+                                }
+                            });
                         }
-
-                        Collections.reverse(list);
                     }
 
-                    runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            if (isLoadMore)
-                                mAdapter.getDataHolder().addData(list);
-                            else
-                                mAdapter.getDataHolder().setData(list);
-                        }
-                    });
+                    Collections.reverse(list);
                 }
+
+                runOnUiThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        if (isLoadMore)
+                            mAdapter.getDataHolder().addData(list);
+                        else
+                            mAdapter.getDataHolder().setData(list);
+                    }
+                });
+            }
+
+            @Override
+            protected void onError(Exception e)
+            {
+                super.onError(e);
+                Log.e(TAG, e.toString());
             }
 
             @Override
@@ -184,7 +180,6 @@ public class GetActionsActivity extends BaseActivity
                 if (item.hasInlineTraces())
                 {
                     mMapInline.put(item.getAction_trace().getTrx_id(), "");
-                    Log.i(TAG, "found inline:" + item.getAccount_action_seq());
                 }
             } else
             {
@@ -200,7 +195,6 @@ public class GetActionsActivity extends BaseActivity
             if (mMapInline.containsKey(item.getAction_trace().getTrx_id()) && !item.hasInlineTraces())
             {
                 it.remove();
-                Log.e(TAG, "remove inline:" + item.getAccount_action_seq());
             }
         }
     }

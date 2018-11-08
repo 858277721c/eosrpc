@@ -74,7 +74,7 @@ public class GetActionsActivity extends BaseActivity
     {
         if (mActionsLoader == null)
         {
-            mActionsLoader = new EosActionsBoundLoader(mAccountName, 1, 1, mRpcApi)
+            mActionsLoader = new EosActionsBoundLoader(mAccountName, -1, 0, mRpcApi)
             {
                 @Override
                 protected void onError(ErrorResponse errorResponse)
@@ -96,7 +96,7 @@ public class GetActionsActivity extends BaseActivity
             @Override
             protected void onRun() throws Exception
             {
-                final List<GetActionsResponse.Action> list = getActionsLoader().loadNextPage();
+                final List<GetActionsResponse.Action> list = getActionsLoader().loadNextPage(50);
                 if (list != null && !list.isEmpty())
                 {
                     Log.i(TAG, "list size:" + list.size());

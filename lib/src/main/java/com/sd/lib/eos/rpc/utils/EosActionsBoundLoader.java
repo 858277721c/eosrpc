@@ -14,15 +14,11 @@ import java.util.List;
 
 public abstract class EosActionsBoundLoader
 {
-    private static final String TAG = EosActionsBoundLoader.class.getSimpleName();
-
     private final String mAccountName;
     private final int mOriginalStart;
     private final int mOriginalEnd;
     private final RpcApi mRpcApi;
     private final boolean mIsReverse;
-
-    private int mPageSize;
 
     private int mMaxSize;
     private int mStart;
@@ -51,16 +47,7 @@ public abstract class EosActionsBoundLoader
             mIsReverse = start > end;
         }
 
-        setPageSize(50);
         reset();
-    }
-
-    public void setPageSize(int pageSize)
-    {
-        if (pageSize <= 0)
-            throw new IllegalArgumentException("Illegal pageSize:" + pageSize);
-
-        mPageSize = pageSize;
     }
 
     public int getMaxSize()
@@ -73,6 +60,11 @@ public abstract class EosActionsBoundLoader
         return mIsReverse;
     }
 
+    public boolean hasNextPage()
+    {
+        return mPosition != mEnd && mPosition >= 0;
+    }
+
     public void reset()
     {
         mMaxSize = -1;
@@ -80,10 +72,10 @@ public abstract class EosActionsBoundLoader
         mEnd = -1;
         mPosition = -1;
         mOffset = 0;
-        Log.i(TAG, "reset");
+        Log.i(EosActionsBoundLoader.class.getSimpleName(), "reset");
     }
 
-    public List<GetActionsResponse.Action> loadNextPage() throws RpcJsonToObjectException, RpcApiExecutorException
+    public List<GetActionsResponse.Action> loadNextPage(int pageSize) throws RpcJsonToObjectException, RpcApiExecutorException
     {
         if (mMaxSize < 0)
         {
@@ -93,7 +85,7 @@ public abstract class EosActionsBoundLoader
 
             mMaxSize = list.get(0).getAccount_action_seq() + 1;
 
-            Log.i(TAG, "max size:" + mMaxSize);
+            Log.i(EosActionsBoundLoader.class.getSimpleName(), "max size:" + mMaxSize);
 
             setStart(mOriginalStart);
             setEnd(mOriginalEnd);
@@ -114,17 +106,21 @@ public abstract class EosActionsBoundLoader
         }
 
         if (mMaxSize < 0)
-            return null;
-        if (mOffset == 0)
+            throw new RuntimeException("max size was not found");
+
+        if (!hasNextPage())
             return null;
 
-        Log.i(TAG, "loadNextPage position:" + mPosition + " offset:" + mOffset);
+        final int delta = Math.min(Math.abs(mPosition - mEnd), Math.abs(pageSize));
+        mOffset = mIsReverse ? -delta : delta;
+
+        Log.i(EosActionsBoundLoader.class.getSimpleName(), "loadNextPage position:" + mPosition + " offset:" + mOffset);
 
         final List<GetActionsResponse.Action> list = getActions(mPosition, mOffset);
         if (list == null || list.isEmpty())
             return null;
 
-        Log.i(TAG, "loadNextPage size:" + list.size());
+        Log.i(EosActionsBoundLoader.class.getSimpleName(), "loadNextPage size:" + list.size());
 
         final int nextPosition = mIsReverse ? list.get(0).getAccount_action_seq() - 1 : list.get(list.size() - 1).getAccount_action_seq() + 1;
         if (isPositionLegal(nextPosition))
@@ -155,7 +151,7 @@ public abstract class EosActionsBoundLoader
         if (mStart != start)
         {
             mStart = start;
-            Log.i(TAG, "setStart:" + start);
+            Log.i(EosActionsBoundLoader.class.getSimpleName(), "setStart:" + start);
         }
     }
 
@@ -164,7 +160,7 @@ public abstract class EosActionsBoundLoader
         if (mEnd != end)
         {
             mEnd = end;
-            Log.i(TAG, "setEnd:" + end);
+            Log.i(EosActionsBoundLoader.class.getSimpleName(), "setEnd:" + end);
         }
     }
 
@@ -177,10 +173,7 @@ public abstract class EosActionsBoundLoader
         if (mPosition != position)
         {
             mPosition = position;
-            Log.i(TAG, "setPosition:" + position);
-
-            final int delta = Math.min(Math.abs(position - mEnd), mPageSize);
-            mOffset = mIsReverse ? -delta : delta;
+            Log.i(EosActionsBoundLoader.class.getSimpleName(), "setPosition:" + position);
         }
     }
 

@@ -37,7 +37,7 @@ public abstract class EosActionsLoader
         Log.i(EosActionsLoader.class.getSimpleName(), "reset");
     }
 
-    public List<GetActionsResponse.Action> loadNextPage(int offset) throws RpcJsonToObjectException, RpcApiExecutorException
+    public List<GetActionsResponse.Action> loadPage(int offset) throws RpcJsonToObjectException, RpcApiExecutorException
     {
         if (offset == 0)
             throw new IllegalArgumentException("Illegal offset:" + offset);
@@ -60,13 +60,13 @@ public abstract class EosActionsLoader
 
         offset = isReverse ? -offset : offset;
 
-        Log.i(EosActionsLoader.class.getSimpleName(), "loadNextPage position:" + position + " offset:" + offset);
+        Log.i(EosActionsLoader.class.getSimpleName(), "loadPage position:" + position + " offset:" + offset);
 
         final List<GetActionsResponse.Action> list = getActions(position, offset);
         if (list == null || list.isEmpty())
             return null;
 
-        Log.i(EosActionsLoader.class.getSimpleName(), "loadNextPage size:" + list.size());
+        Log.i(EosActionsLoader.class.getSimpleName(), "loadPage size:" + list.size());
 
         final int nextPosition = isReverse ? list.get(0).getAccount_action_seq() - 1 : list.get(list.size() - 1).getAccount_action_seq() + 1;
         setPosition(nextPosition);

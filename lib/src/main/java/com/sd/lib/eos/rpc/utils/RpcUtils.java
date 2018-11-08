@@ -3,7 +3,7 @@ package com.sd.lib.eos.rpc.utils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -152,8 +152,11 @@ public class RpcUtils
         if (mode == null)
             mode = RoundingMode.DOWN;
 
-        final double amountScale = new BigDecimal(amount).setScale(4, mode).doubleValue();
-        final String amountFormat = new DecimalFormat("0.0000").format(amountScale);
+        final NumberFormat format = NumberFormat.getNumberInstance();
+        format.setRoundingMode(mode);
+        format.setMaximumFractionDigits(4);
+        format.setMinimumFractionDigits(4);
+        final String amountFormat = format.format(amount);
 
         if (Utils.isEmpty(symbol))
             return amountFormat;

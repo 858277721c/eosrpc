@@ -3,17 +3,17 @@ package com.sd.lib.eos.rpc.utils;
 import android.util.Log;
 
 import com.sd.lib.eos.rpc.api.RpcApi;
-import com.sd.lib.eos.rpc.api.model.ApiResponse;
 import com.sd.lib.eos.rpc.api.model.ErrorResponse;
 import com.sd.lib.eos.rpc.api.model.GetActionsResponse;
 import com.sd.lib.eos.rpc.exception.RpcApiExecutorException;
 import com.sd.lib.eos.rpc.exception.RpcJsonToObjectException;
 
-import java.util.Collections;
 import java.util.List;
 
 public abstract class EosActionsBoundLoader
 {
+    private EosActionsLoader mActionsLoader;
+
     private final String mAccountName;
     private final int mOriginalStart;
     private final int mOriginalEnd;
@@ -23,8 +23,6 @@ public abstract class EosActionsBoundLoader
     private int mMaxSize;
     private int mStart;
     private int mEnd;
-    private int mPosition;
-    private int mOffset;
 
     public EosActionsBoundLoader(String accountName, int start, int end, RpcApi rpcApi)
     {
@@ -62,24 +60,30 @@ public abstract class EosActionsBoundLoader
 
     public boolean hasNextPage()
     {
-        return mPosition != mEnd && mPosition >= 0;
+        if (mActionsLoader == null)
+            return false;
+
+        final int position = mActionsLoader.getPosition();
+        return position != mEnd && position >= 0;
     }
 
     public void reset()
     {
+        mActionsLoader = null;
         mMaxSize = -1;
         mStart = -1;
         mEnd = -1;
-        mPosition = -1;
-        mOffset = 0;
         Log.i(EosActionsBoundLoader.class.getSimpleName(), "reset");
     }
 
-    public List<GetActionsResponse.Action> loadNextPage(int pageSize) throws RpcJsonToObjectException, RpcApiExecutorException
+    public List<GetActionsResponse.Action> loadPage(int pageSize) throws RpcJsonToObjectException, RpcApiExecutorException
     {
+        if (pageSize <= 0)
+            throw new IllegalArgumentException("Illegal page size:" + pageSize);
+
         if (mMaxSize < 0)
         {
-            final List<GetActionsResponse.Action> list = getActions(-1, -1);
+            final List<GetActionsResponse.Action> list = new InternalEosActionsLoader(-1).loadPage(-1);
             if (list == null || list.isEmpty())
                 return null;
 
@@ -94,56 +98,31 @@ public abstract class EosActionsBoundLoader
             {
                 if (mOriginalStart < 0 || mOriginalStart >= mMaxSize)
                     setStart(mMaxSize - 1);
-
-                setPosition(mStart);
             } else
             {
                 if (mOriginalEnd < 0 || mOriginalEnd >= mMaxSize)
                     setEnd(mMaxSize - 1);
-
-                setPosition(mStart);
             }
         }
 
         if (mMaxSize < 0)
             throw new RuntimeException("max size was not found");
 
+        checkBound();
+
         if (!hasNextPage())
             return null;
 
-        final int delta = Math.min(Math.abs(mPosition - mEnd), Math.abs(pageSize));
-        mOffset = mIsReverse ? -delta : delta;
+        final int position = mActionsLoader.getPosition();
+        final int delta = Math.min(Math.abs(position - mEnd), pageSize);
+        final int offset = mIsReverse ? -delta : delta;
 
-        Log.i(EosActionsBoundLoader.class.getSimpleName(), "loadNextPage position:" + mPosition + " offset:" + mOffset);
+        Log.i(EosActionsBoundLoader.class.getSimpleName(), "loadPage position:" + position + " offset:" + offset);
 
-        final List<GetActionsResponse.Action> list = getActions(mPosition, mOffset);
-        if (list == null || list.isEmpty())
-            return null;
+        final List<GetActionsResponse.Action> list = mActionsLoader.loadPage(offset);
 
-        Log.i(EosActionsBoundLoader.class.getSimpleName(), "loadNextPage size:" + list.size());
-
-        final int nextPosition = mIsReverse ? list.get(0).getAccount_action_seq() - 1 : list.get(list.size() - 1).getAccount_action_seq() + 1;
-        if (isPositionLegal(nextPosition))
-            setPosition(nextPosition);
-        else
-            setPosition(mEnd);
-
-        if (mIsReverse)
-            Collections.reverse(list);
 
         return list;
-    }
-
-    private List<GetActionsResponse.Action> getActions(int position, int offset) throws RpcJsonToObjectException, RpcApiExecutorException
-    {
-        final ApiResponse<GetActionsResponse> apiResponse = mRpcApi.getActions(mAccountName, position, offset);
-        if (!apiResponse.isSuccessful())
-        {
-            onError(apiResponse.getError());
-            return null;
-        }
-
-        return apiResponse.getSuccess().getActions();
     }
 
     private void setStart(int start)
@@ -151,6 +130,7 @@ public abstract class EosActionsBoundLoader
         if (mStart != start)
         {
             mStart = start;
+            mActionsLoader = new InternalEosActionsLoader(mStart);
             Log.i(EosActionsBoundLoader.class.getSimpleName(), "setStart:" + start);
         }
     }
@@ -161,19 +141,6 @@ public abstract class EosActionsBoundLoader
         {
             mEnd = end;
             Log.i(EosActionsBoundLoader.class.getSimpleName(), "setEnd:" + end);
-        }
-    }
-
-    private void setPosition(int position)
-    {
-        checkBound();
-        if (!isPositionLegal(position))
-            throw new IllegalArgumentException("Illegal position:" + position + " for bound [" + mStart + "," + mEnd + "]");
-
-        if (mPosition != position)
-        {
-            mPosition = position;
-            Log.i(EosActionsBoundLoader.class.getSimpleName(), "setPosition:" + position);
         }
     }
 
@@ -202,13 +169,19 @@ public abstract class EosActionsBoundLoader
         }
     }
 
-    private boolean isPositionLegal(int position)
-    {
-        final int min = Math.min(mStart, mEnd);
-        final int max = Math.max(mStart, mEnd);
-
-        return position >= min && position <= max;
-    }
-
     protected abstract void onError(ErrorResponse errorResponse);
+
+    private class InternalEosActionsLoader extends EosActionsLoader
+    {
+        public InternalEosActionsLoader(int position)
+        {
+            super(mAccountName, position, mRpcApi);
+        }
+
+        @Override
+        protected void onError(ErrorResponse errorResponse)
+        {
+            EosActionsBoundLoader.this.onError(errorResponse);
+        }
+    }
 }

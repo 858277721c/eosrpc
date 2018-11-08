@@ -9,6 +9,7 @@ import com.sd.lib.eos.rpc.api.model.GetActionsResponse;
 import com.sd.lib.eos.rpc.exception.RpcApiExecutorException;
 import com.sd.lib.eos.rpc.exception.RpcJsonToObjectException;
 
+import java.util.Collections;
 import java.util.List;
 
 public abstract class EosActionsLoader
@@ -19,10 +20,9 @@ public abstract class EosActionsLoader
     private final int mOriginalStart;
     private final int mOriginalEnd;
     private final RpcApi mRpcApi;
-
     private final boolean mIsReverse;
 
-    private int mPageSize = 100;
+    private int mPageSize;
 
     private int mMaxSize;
     private int mStart;
@@ -51,11 +51,15 @@ public abstract class EosActionsLoader
             mIsReverse = end > start;
         }
 
+        setPageSize(50);
         reset();
     }
 
     public void setPageSize(int pageSize)
     {
+        if (pageSize <= 0)
+            throw new IllegalArgumentException("Illegal pageSize:" + pageSize);
+
         mPageSize = pageSize;
     }
 
@@ -97,6 +101,9 @@ public abstract class EosActionsLoader
                 setPosition(mStart);
             } else
             {
+                if (mOriginalEnd < 0)
+                    setEnd(mMaxSize - 1);
+
                 setPosition(mStart);
             }
         }
@@ -120,6 +127,9 @@ public abstract class EosActionsLoader
         else
             setPosition(mEnd);
 
+        if (mIsReverse)
+            Collections.reverse(list);
+
         return list;
     }
 
@@ -137,14 +147,20 @@ public abstract class EosActionsLoader
 
     private void setStart(int start)
     {
-        Log.i(TAG, "setStart:" + start);
-        mStart = start;
+        if (mStart != start)
+        {
+            mStart = start;
+            Log.i(TAG, "setStart:" + start);
+        }
     }
 
     private void setEnd(int end)
     {
-        Log.i(TAG, "setEnd:" + end);
-        mEnd = end;
+        if (mEnd != end)
+        {
+            mEnd = end;
+            Log.i(TAG, "setEnd:" + end);
+        }
     }
 
     private void setPosition(int position)
@@ -153,11 +169,14 @@ public abstract class EosActionsLoader
         if (!isPositionLegal(position))
             throw new IllegalArgumentException("Illegal position:" + position + " for bound [" + mStart + "," + mEnd + "]");
 
-        mPosition = position;
-        Log.i(TAG, "setPosition:" + position);
+        if (mPosition != position)
+        {
+            mPosition = position;
+            Log.i(TAG, "setPosition:" + position);
 
-        final int delta = Math.min(Math.abs(position - mEnd), mPageSize);
-        mOffset = mIsReverse ? -delta : delta;
+            final int delta = Math.min(Math.abs(position - mEnd), mPageSize);
+            mOffset = mIsReverse ? -delta : delta;
+        }
     }
 
     private void checkBound()
@@ -181,7 +200,7 @@ public abstract class EosActionsLoader
         if (mMaxSize > 0)
         {
             if (bound < 0 || bound >= mMaxSize)
-                throw new RuntimeException("bound out of range [0," + (mMaxSize - 1) + "]");
+                throw new RuntimeException("bound " + bound + " out of range [0," + (mMaxSize - 1) + "]");
         }
     }
 

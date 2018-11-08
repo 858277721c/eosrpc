@@ -124,8 +124,6 @@ public class GetActionsActivity extends BaseActivity
                             });
                         }
                     }
-
-                    Collections.reverse(list);
                 }
 
                 runOnUiThread(new Runnable()

@@ -68,6 +68,11 @@ public abstract class EosActionsLoader
         return mMaxSize;
     }
 
+    public boolean isReverse()
+    {
+        return mIsReverse;
+    }
+
     public void reset()
     {
         mMaxSize = -1;

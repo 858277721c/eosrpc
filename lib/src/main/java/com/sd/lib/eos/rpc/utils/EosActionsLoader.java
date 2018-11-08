@@ -18,16 +18,14 @@ public abstract class EosActionsLoader
 
     private final String mAccountName;
     private final int mOriginalPosition;
-    private final boolean mIsReverse;
     private final RpcApi mRpcApi;
 
     private int mPosition;
 
-    public EosActionsLoader(String accountName, int position, boolean isReverse, RpcApi rpcApi)
+    public EosActionsLoader(String accountName, int position, RpcApi rpcApi)
     {
         mAccountName = accountName;
         mOriginalPosition = position;
-        mIsReverse = isReverse;
         mRpcApi = rpcApi;
 
         reset();
@@ -39,13 +37,15 @@ public abstract class EosActionsLoader
         Log.i(EosActionsLoader.class.getSimpleName(), "reset");
     }
 
-    public List<GetActionsResponse.Action> loadNextPage(int pageSize) throws RpcJsonToObjectException, RpcApiExecutorException
+    public List<GetActionsResponse.Action> loadNextPage(int offset) throws RpcJsonToObjectException, RpcApiExecutorException
     {
-        if (pageSize <= 0)
-            throw new IllegalArgumentException("Illegal page size:" + pageSize);
+        if (offset == 0)
+            throw new IllegalArgumentException("Illegal offset:" + offset);
+
+        final boolean isReverse = offset < 0;
+        offset = Math.abs(offset);
 
         int position = 0;
-
         if (mPosition == MAX_POSITION)
         {
             position = -1;
@@ -55,11 +55,10 @@ public abstract class EosActionsLoader
         } else
         {
             position = mPosition;
-            if (pageSize > 0)
-                pageSize--;
+            offset--;
         }
 
-        final int offset = mIsReverse ? -pageSize : pageSize;
+        offset = isReverse ? -offset : offset;
 
         Log.i(EosActionsLoader.class.getSimpleName(), "loadNextPage position:" + position + " offset:" + offset);
 
@@ -69,10 +68,10 @@ public abstract class EosActionsLoader
 
         Log.i(EosActionsLoader.class.getSimpleName(), "loadNextPage size:" + list.size());
 
-        final int nextPosition = mIsReverse ? list.get(0).getAccount_action_seq() - 1 : list.get(list.size() - 1).getAccount_action_seq() + 1;
+        final int nextPosition = isReverse ? list.get(0).getAccount_action_seq() - 1 : list.get(list.size() - 1).getAccount_action_seq() + 1;
         setPosition(nextPosition);
 
-        if (mIsReverse)
+        if (isReverse)
             Collections.reverse(list);
 
         return list;

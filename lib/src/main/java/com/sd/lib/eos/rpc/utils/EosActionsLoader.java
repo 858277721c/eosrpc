@@ -48,7 +48,7 @@ public abstract class EosActionsLoader
             mIsReverse = false;
         } else
         {
-            mIsReverse = end > start;
+            mIsReverse = start > end;
         }
 
         setPageSize(50);

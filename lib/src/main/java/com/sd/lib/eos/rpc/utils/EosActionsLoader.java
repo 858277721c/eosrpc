@@ -41,7 +41,7 @@ public abstract class EosActionsLoader
 
     public List<GetActionsResponse.Action> loadNextPage(int pageSize) throws RpcJsonToObjectException, RpcApiExecutorException
     {
-        if (pageSize < 0)
+        if (pageSize <= 0)
             throw new IllegalArgumentException("Illegal page size:" + pageSize);
 
         int position = 0;
@@ -49,8 +49,6 @@ public abstract class EosActionsLoader
         if (mPosition == MAX_POSITION)
         {
             position = -1;
-            if (pageSize == 0)
-                pageSize = 1;
         } else if (mPosition < 0)
         {
             return null;

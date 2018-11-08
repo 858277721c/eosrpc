@@ -14,6 +14,8 @@ import java.util.List;
 
 public abstract class EosActionsLoader
 {
+    private static final int MAX_POSITION = Integer.MIN_VALUE;
+
     private final String mAccountName;
     private final int mOriginalPosition;
     private final boolean mIsReverse;
@@ -27,22 +29,43 @@ public abstract class EosActionsLoader
         mOriginalPosition = position;
         mIsReverse = isReverse;
         mRpcApi = rpcApi;
+
         reset();
     }
 
     public void reset()
     {
-        mPosition = mOriginalPosition;
+        mPosition = mOriginalPosition < 0 ? MAX_POSITION : mOriginalPosition;
+        Log.i(EosActionsLoader.class.getSimpleName(), "reset");
     }
 
     public List<GetActionsResponse.Action> loadNextPage(int pageSize) throws RpcJsonToObjectException, RpcApiExecutorException
     {
-        pageSize = Math.abs(pageSize);
+        if (pageSize < 0)
+            throw new IllegalArgumentException("Illegal page size:" + pageSize);
+
+        int position = 0;
+
+        if (mPosition == MAX_POSITION)
+        {
+            position = -1;
+            if (pageSize == 0)
+                pageSize = 1;
+        } else if (mPosition < 0)
+        {
+            return null;
+        } else
+        {
+            position = mPosition;
+            if (pageSize > 0)
+                pageSize--;
+        }
+
         final int offset = mIsReverse ? -pageSize : pageSize;
 
-        Log.i(EosActionsLoader.class.getSimpleName(), "loadNextPage position:" + mPosition + " offset:" + offset);
+        Log.i(EosActionsLoader.class.getSimpleName(), "loadNextPage position:" + position + " offset:" + offset);
 
-        final List<GetActionsResponse.Action> list = getActions(mPosition, offset);
+        final List<GetActionsResponse.Action> list = getActions(position, offset);
         if (list == null || list.isEmpty())
             return null;
 

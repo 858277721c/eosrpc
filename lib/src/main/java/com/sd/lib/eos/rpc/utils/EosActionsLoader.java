@@ -65,8 +65,6 @@ public abstract class EosActionsLoader
 
         offset = isReverse ? -offset : offset;
 
-        Log.i(EosActionsLoader.class.getSimpleName(), "loadPage position:" + position + " offset:" + offset);
-
         final List<GetActionsResponse.Action> list = getActions(position, offset);
         if (list == null || list.isEmpty())
             return null;
@@ -93,6 +91,7 @@ public abstract class EosActionsLoader
 
     private List<GetActionsResponse.Action> getActions(int position, int offset) throws RpcJsonToObjectException, RpcApiExecutorException
     {
+        Log.i(EosActionsLoader.class.getSimpleName(), "getActions position:" + position + " offset:" + offset);
         final ApiResponse<GetActionsResponse> apiResponse = mRpcApi.getActions(mAccountName, position, offset);
         if (!apiResponse.isSuccessful())
         {

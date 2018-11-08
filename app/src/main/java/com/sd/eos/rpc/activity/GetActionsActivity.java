@@ -14,6 +14,7 @@ import com.sd.lib.adapter.viewholder.FRecyclerViewHolder;
 import com.sd.lib.eos.rpc.api.RpcApi;
 import com.sd.lib.eos.rpc.api.model.ApiResponse;
 import com.sd.lib.eos.rpc.api.model.GetActionsResponse;
+import com.sd.lib.eos.rpc.utils.ActionsSizeListener;
 import com.sd.lib.eos.rpc.utils.RpcUtils;
 import com.sd.lib.pulltorefresh.FPullToRefreshView;
 import com.sd.lib.pulltorefresh.PullToRefreshView;
@@ -61,6 +62,8 @@ public class GetActionsActivity extends BaseActivity
             @Override
             public void onRefreshingFromHeader(PullToRefreshView view)
             {
+                mActionsSizeListener.check(mAccountName);
+
                 mPosition = -1;
                 requestData(false);
             }
@@ -80,6 +83,15 @@ public class GetActionsActivity extends BaseActivity
         });
         mPullToRefreshView.startRefreshingFromHeader();
     }
+
+    private final ActionsSizeListener mActionsSizeListener = new ActionsSizeListener("https://geo.eosasia.one")
+    {
+        @Override
+        protected void onResult(int size)
+        {
+            Log.i(TAG, "ActionsSizeListener:" + size);
+        }
+    };
 
     private void requestData(final boolean isLoadMore)
     {

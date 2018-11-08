@@ -13,7 +13,7 @@ import com.sd.lib.adapter.viewholder.FRecyclerViewHolder;
 import com.sd.lib.eos.rpc.api.RpcApi;
 import com.sd.lib.eos.rpc.api.model.ErrorResponse;
 import com.sd.lib.eos.rpc.api.model.GetActionsResponse;
-import com.sd.lib.eos.rpc.utils.EosActionsLoader;
+import com.sd.lib.eos.rpc.utils.EosActionsBoundLoader;
 import com.sd.lib.eos.rpc.utils.RpcUtils;
 import com.sd.lib.pulltorefresh.FPullToRefreshView;
 import com.sd.lib.pulltorefresh.PullToRefreshView;
@@ -22,7 +22,6 @@ import com.sd.lib.task.FTask;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -41,7 +40,7 @@ public class GetActionsActivity extends BaseActivity
     private String mAccountName = "ichenfq12345";
     private final Map<String, String> mMapInline = new HashMap<>();
 
-    private EosActionsLoader mActionsLoader;
+    private EosActionsBoundLoader mActionsLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -71,11 +70,11 @@ public class GetActionsActivity extends BaseActivity
         mPullToRefreshView.startRefreshingFromHeader();
     }
 
-    public EosActionsLoader getActionsLoader()
+    public EosActionsBoundLoader getActionsLoader()
     {
         if (mActionsLoader == null)
         {
-            mActionsLoader = new EosActionsLoader(mAccountName, -1, 0, mRpcApi)
+            mActionsLoader = new EosActionsBoundLoader(mAccountName, 1, 1, mRpcApi)
             {
                 @Override
                 protected void onError(ErrorResponse errorResponse)

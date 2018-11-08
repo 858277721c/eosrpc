@@ -12,9 +12,9 @@ import com.sd.lib.eos.rpc.exception.RpcJsonToObjectException;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class EosActionsLoader
+public abstract class EosActionsBoundLoader
 {
-    private static final String TAG = EosActionsLoader.class.getSimpleName();
+    private static final String TAG = EosActionsBoundLoader.class.getSimpleName();
 
     private final String mAccountName;
     private final int mOriginalStart;
@@ -30,7 +30,7 @@ public abstract class EosActionsLoader
     private int mPosition;
     private int mOffset;
 
-    public EosActionsLoader(String accountName, int start, int end, RpcApi rpcApi)
+    public EosActionsBoundLoader(String accountName, int start, int end, RpcApi rpcApi)
     {
         if (start < 0 && end < 0)
             throw new IllegalArgumentException("");

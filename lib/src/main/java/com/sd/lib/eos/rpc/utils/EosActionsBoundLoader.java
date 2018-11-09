@@ -71,6 +71,9 @@ public abstract class EosActionsBoundLoader
     {
         checkInit();
 
+        if (mMaxSize <= 0)
+            return false;
+
         final int position = mActionsLoader.getNextPosition();
         if (mIsReverse)
         {

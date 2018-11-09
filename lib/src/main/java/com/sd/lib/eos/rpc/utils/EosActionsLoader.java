@@ -32,6 +32,11 @@ abstract class EosActionsLoader
         reset();
     }
 
+    public String getAccountName()
+    {
+        return mAccountName;
+    }
+
     public int getNextPosition()
     {
         return mNextPosition;

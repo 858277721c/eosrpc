@@ -52,6 +52,11 @@ public abstract class EosActionsBoundLoader
         reset();
     }
 
+    public String getAccountName()
+    {
+        return mAccountName;
+    }
+
     public int getMaxSize()
     {
         return mMaxSize;

@@ -21,6 +21,7 @@ public abstract class EosActionsLoader
     private final RpcApi mRpcApi;
 
     private int mNextPosition;
+    private int mLastPosition;
 
     public EosActionsLoader(String accountName, int position, RpcApi rpcApi)
     {
@@ -38,7 +39,9 @@ public abstract class EosActionsLoader
 
     public void reset()
     {
-        setNextPosition(mOriginalPosition < 0 ? MAX_POSITION : mOriginalPosition);
+        final int position = mOriginalPosition < 0 ? MAX_POSITION : mOriginalPosition;
+        mLastPosition = position;
+        mNextPosition = position;
         Log.i(EosActionsLoader.class.getSimpleName(), "reset");
     }
 
@@ -84,6 +87,7 @@ public abstract class EosActionsLoader
     {
         if (mNextPosition != position)
         {
+            mLastPosition = mNextPosition;
             mNextPosition = position;
             Log.i(EosActionsLoader.class.getSimpleName(), "setNextPosition:" + position);
         }
@@ -100,6 +104,11 @@ public abstract class EosActionsLoader
         }
 
         return apiResponse.getSuccess().getActions();
+    }
+
+    public void seekToLastPosition()
+    {
+        mNextPosition = mLastPosition;
     }
 
     protected abstract void onError(ErrorResponse errorResponse);

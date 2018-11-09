@@ -134,6 +134,8 @@ public abstract class EosActionsBoundLoader
         if (size != list.size())
         {
             Log.e(EosActionsBoundLoader.class.getSimpleName(), "loadPage expect " + size + " but " + list.size());
+            mActionsLoader.seekToLastPosition();
+            return loadPage(pageSize);
         }
 
         return list;

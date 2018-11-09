@@ -126,7 +126,13 @@ public abstract class EosActionsBoundLoader
         Log.i(EosActionsBoundLoader.class.getSimpleName(), "loadPage position:" + position + " offset:" + offset);
 
         final List<GetActionsResponse.Action> list = mActionsLoader.loadPage(offset);
+        if (list == null || list.isEmpty())
+            return null;
 
+        if (size != list.size())
+        {
+            Log.e(EosActionsBoundLoader.class.getSimpleName(), "loadPage expect " + size + " but " + list.size());
+        }
 
         return list;
     }

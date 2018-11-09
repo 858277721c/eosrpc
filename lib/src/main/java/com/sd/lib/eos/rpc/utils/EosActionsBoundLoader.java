@@ -153,6 +153,7 @@ public abstract class EosActionsBoundLoader
             return null;
 
         Log.i(EosActionsBoundLoader.class.getSimpleName(), "loadPage size:" + list.size());
+        Log.i(EosActionsBoundLoader.class.getSimpleName(), "loadPage next position:" + mActionsLoader.getNextPosition());
 
         if (size != list.size())
         {

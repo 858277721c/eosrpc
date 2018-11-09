@@ -27,6 +27,7 @@
         <activity android:name=".activity.BuyRamActivity" />
         <activity android:name=".activity.DelegatebwActivity" />
         <activity android:name=".activity.GetActionsActivity" />
+        <activity android:name=".activity.TransferActionsActivity" />
 
     </application>
 

@@ -39,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_get_actions:
                 startActivity(new Intent(this, GetActionsActivity.class));
                 break;
+            case R.id.btn_transfer_actions:
+                startActivity(new Intent(this, TransferActionsActivity.class));
+                break;
         }
     }
 }

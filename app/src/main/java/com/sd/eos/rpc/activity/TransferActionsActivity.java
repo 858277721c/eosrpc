@@ -21,18 +21,25 @@ import com.sd.lib.task.FTask;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
-public class GetActionsActivity extends BaseActivity
+public class TransferActionsActivity extends BaseActivity
 {
-    private static final String TAG = GetActionsActivity.class.getSimpleName();
+    private static final String TAG = TransferActionsActivity.class.getSimpleName();
 
     private FPullToRefreshView mPullToRefreshView;
     private RecyclerView mRecyclerView;
 
     private final RpcApi mRpcApi = new RpcApi("https://geo.eosasia.one");
+
     private String mAccountName = "ichenfq12345";
+    private final Map<String, String> mMapInline = new HashMap<>();
+
     private EosActionsBoundLoader mActionsLoader;
 
     @Override
@@ -67,7 +74,7 @@ public class GetActionsActivity extends BaseActivity
     {
         if (mActionsLoader == null)
         {
-            mActionsLoader = new EosActionsBoundLoader(mAccountName, 0, -1, mRpcApi)
+            mActionsLoader = new EosActionsBoundLoader(mAccountName, -1, 0, mRpcApi)
             {
                 @Override
                 protected void onError(ErrorResponse errorResponse)
@@ -90,6 +97,34 @@ public class GetActionsActivity extends BaseActivity
             protected void onRun() throws Exception
             {
                 final List<GetActionsResponse.Action> list = getActionsLoader().loadPage(100);
+                if (list != null && !list.isEmpty())
+                {
+                    Log.i(TAG, "list size:" + list.size());
+
+                    filterAction(list);
+                    Log.i(TAG, "list size filter:" + list.size());
+
+                    if (!list.isEmpty())
+                    {
+                        final GetActionsResponse.Action action = list.get(list.size() - 1);
+                        final List<GetActionsResponse.Action> listChecked = checkInlineAction(action);
+                        if (!listChecked.isEmpty())
+                        {
+                            runOnUiThread(new Runnable()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    for (GetActionsResponse.Action item : listChecked)
+                                    {
+                                        mAdapter.getDataHolder().removeData(item);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+
                 runOnUiThread(new Runnable()
                 {
                     @Override
@@ -124,6 +159,65 @@ public class GetActionsActivity extends BaseActivity
                 });
             }
         }.submit();
+    }
+
+    private void filterAction(List<GetActionsResponse.Action> list)
+    {
+        if (list == null || list.isEmpty())
+            return;
+
+        Iterator<GetActionsResponse.Action> it = list.iterator();
+        while (it.hasNext())
+        {
+            final GetActionsResponse.Action item = it.next();
+
+            final String name = item.getAction_trace().getAct().getName();
+            if ("transfer".equals(name))
+            {
+                if (item.hasInlineTraces())
+                {
+                    mMapInline.put(item.getAction_trace().getTrx_id(), "");
+                }
+            } else
+            {
+                it.remove();
+            }
+        }
+
+        it = list.iterator();
+        while (it.hasNext())
+        {
+            final GetActionsResponse.Action item = it.next();
+
+            if (mMapInline.containsKey(item.getAction_trace().getTrx_id()) && !item.hasInlineTraces())
+            {
+                it.remove();
+            }
+        }
+    }
+
+    private List<GetActionsResponse.Action> checkInlineAction(GetActionsResponse.Action action)
+    {
+        final List<GetActionsResponse.Action> result = new ArrayList<>();
+        if (action.hasInlineTraces())
+        {
+            final List<GetActionsResponse.Action> list = mAdapter.getDataHolder().getData();
+            if (list != null && !list.isEmpty())
+            {
+                final int listSize = list.size();
+                final int inlineSize = action.getAction_trace().getInline_traces().size();
+                final int start = listSize - inlineSize;
+                for (int i = start; i < listSize; i++)
+                {
+                    final GetActionsResponse.Action item = list.get(i);
+                    if (mMapInline.containsKey(item.getAction_trace().getTrx_id()) && !item.hasInlineTraces())
+                    {
+                        result.add(item);
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     private final FSimpleRecyclerAdapter<GetActionsResponse.Action> mAdapter = new FSimpleRecyclerAdapter<GetActionsResponse.Action>()
@@ -164,7 +258,7 @@ public class GetActionsActivity extends BaseActivity
                 tv_data.setText(sb);
             } else
             {
-                tv_data.setText(model.getAction_trace().getAct().getData());
+                tv_data.setText("");
             }
 
             tv_trx_id.setText(model.getAction_trace().getTrx_id());

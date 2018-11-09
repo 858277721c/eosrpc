@@ -12,6 +12,8 @@ import java.util.List;
 
 public abstract class EosActionsBoundLoader
 {
+    private static final int MAX_RETRY_COUNT = 3;
+
     private EosActionsLoader mActionsLoader;
 
     private final String mAccountName;
@@ -23,6 +25,8 @@ public abstract class EosActionsBoundLoader
     private int mMaxSize;
     private int mStart;
     private int mEnd;
+
+    private int mRetryCount;
 
     public EosActionsBoundLoader(String accountName, int start, int end, RpcApi rpcApi)
     {
@@ -79,6 +83,7 @@ public abstract class EosActionsBoundLoader
         mMaxSize = -1;
         mStart = -1;
         mEnd = -1;
+        mRetryCount = 0;
         Log.i(EosActionsBoundLoader.class.getSimpleName(), "reset");
     }
 
@@ -133,9 +138,21 @@ public abstract class EosActionsBoundLoader
 
         if (size != list.size())
         {
-            Log.e(EosActionsBoundLoader.class.getSimpleName(), "loadPage expect " + size + " but " + list.size());
+            if (mRetryCount >= MAX_RETRY_COUNT)
+            {
+                Log.e(EosActionsBoundLoader.class.getSimpleName(), "loadPage size error after " + MAX_RETRY_COUNT + " retry");
+                mRetryCount = 0;
+                return null;
+            }
+
+            mRetryCount++;
+
+            Log.e(EosActionsBoundLoader.class.getSimpleName(), "loadPage expect " + size + " but " + list.size() + " retry:" + mRetryCount);
             mActionsLoader.seekToLastPosition();
             return loadPage(pageSize);
+        } else
+        {
+            mRetryCount = 0;
         }
 
         return list;

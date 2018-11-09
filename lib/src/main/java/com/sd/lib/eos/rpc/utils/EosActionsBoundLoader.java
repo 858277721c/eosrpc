@@ -64,7 +64,13 @@ public abstract class EosActionsBoundLoader
             return false;
 
         final int position = mActionsLoader.getPosition();
-        return position != mEnd && mEnd >= 0;
+        if (mIsReverse)
+        {
+            return mEnd >= 0 && position >= mEnd;
+        } else
+        {
+            return mEnd >= 0 && position <= mEnd;
+        }
     }
 
     public void reset()
@@ -114,7 +120,7 @@ public abstract class EosActionsBoundLoader
             return null;
 
         final int position = mActionsLoader.getPosition();
-        final int delta = Math.min(Math.abs(position - mEnd), pageSize);
+        final int delta = Math.min(Math.abs(position - mEnd) + 1, pageSize);
         final int offset = mIsReverse ? -delta : delta;
 
         Log.i(EosActionsBoundLoader.class.getSimpleName(), "loadPage position:" + position + " offset:" + offset);

@@ -129,6 +129,8 @@ public abstract class EosActionsBoundLoader
         if (list == null || list.isEmpty())
             return null;
 
+        Log.i(EosActionsBoundLoader.class.getSimpleName(), "loadPage size:" + list.size());
+
         if (size != list.size())
         {
             Log.e(EosActionsBoundLoader.class.getSimpleName(), "loadPage expect " + size + " but " + list.size());

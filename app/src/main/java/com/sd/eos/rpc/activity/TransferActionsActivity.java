@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sd.eos.rpc.R;
 import com.sd.lib.adapter.FSimpleRecyclerAdapter;
@@ -64,7 +65,18 @@ public class TransferActionsActivity extends BaseActivity
             @Override
             public void onRefreshingFromFooter(PullToRefreshView view)
             {
-                requestData(true);
+                if (mAdapter.getDataHolder().size() <= 0)
+                    requestData(false);
+                else
+                {
+                    if (getActionsLoader().hasNextPage())
+                        requestData(true);
+                    else
+                    {
+                        Toast.makeText(TransferActionsActivity.this, "没有更多数据了", Toast.LENGTH_SHORT).show();
+                        mPullToRefreshView.stopRefreshing();
+                    }
+                }
             }
         });
         mPullToRefreshView.startRefreshingFromHeader();

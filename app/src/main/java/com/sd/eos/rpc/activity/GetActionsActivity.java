@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sd.eos.rpc.R;
 import com.sd.lib.adapter.FSimpleRecyclerAdapter;
@@ -57,7 +58,18 @@ public class GetActionsActivity extends BaseActivity
             @Override
             public void onRefreshingFromFooter(PullToRefreshView view)
             {
-                requestData(true);
+                if (mAdapter.getDataHolder().size() <= 0)
+                    requestData(false);
+                else
+                {
+                    if (getActionsLoader().hasNextPage())
+                        requestData(true);
+                    else
+                    {
+                        Toast.makeText(GetActionsActivity.this, "没有更多数据了", Toast.LENGTH_SHORT).show();
+                        mPullToRefreshView.stopRefreshing();
+                    }
+                }
             }
         });
         mPullToRefreshView.startRefreshingFromHeader();
@@ -67,7 +79,7 @@ public class GetActionsActivity extends BaseActivity
     {
         if (mActionsLoader == null)
         {
-            mActionsLoader = new EosActionsBoundLoader(mAccountName, 0, -1, mRpcApi)
+            mActionsLoader = new EosActionsBoundLoader(mAccountName, -1, 0, mRpcApi)
             {
                 @Override
                 protected void onError(ErrorResponse errorResponse)

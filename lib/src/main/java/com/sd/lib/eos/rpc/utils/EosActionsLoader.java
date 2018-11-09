@@ -12,7 +12,7 @@ import com.sd.lib.eos.rpc.exception.RpcJsonToObjectException;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class EosActionsLoader
+abstract class EosActionsLoader
 {
     private static final int MAX_POSITION = Integer.MAX_VALUE;
 

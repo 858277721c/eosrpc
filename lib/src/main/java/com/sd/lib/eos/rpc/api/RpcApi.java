@@ -73,7 +73,7 @@ public class RpcApi
     }
 
     /**
-     * {@link #getCurrencyBalance(String, String)}
+     * 查询eos余额
      *
      * @param account
      * @return
@@ -81,20 +81,22 @@ public class RpcApi
      */
     public ApiResponse<GetCurrencyBalanceResponse> getCurrencyBalance(String account) throws RpcApiExecutorException, RpcJsonToObjectException
     {
-        return getCurrencyBalance(account, "eos");
+        return getCurrencyBalance("eosio.token", account, "eos");
     }
 
     /**
      * 查看账号余额
      *
-     * @param account 要查看的账号
-     * @param symbol  要查看的币种
+     * @param code    合约
+     * @param account 账号
+     * @param symbol  币种
      * @return
      * @throws Exception
      */
-    public ApiResponse<GetCurrencyBalanceResponse> getCurrencyBalance(String account, String symbol) throws RpcApiExecutorException, RpcJsonToObjectException
+    public ApiResponse<GetCurrencyBalanceResponse> getCurrencyBalance(String code, String account, String symbol) throws RpcApiExecutorException, RpcJsonToObjectException
     {
         final GetCurrencyBalanceRequest request = new GetCurrencyBalanceRequest(mBaseUrl);
+        request.setCode(code);
         request.setAccount(account);
         request.setSymbol(symbol);
         return request.execute();

@@ -15,13 +15,23 @@ import java.util.Map;
  */
 class GetCurrencyBalanceRequest extends BaseRequest<GetCurrencyBalanceResponse>
 {
-    private final String code = "eosio.token";
+    private String code;
     private String account;
     private String symbol;
 
     public GetCurrencyBalanceRequest(String baseUrl)
     {
         super(baseUrl);
+    }
+
+    /**
+     * 设置合约
+     *
+     * @param code
+     */
+    public void setCode(String code)
+    {
+        this.code = code;
     }
 
     /**
@@ -65,8 +75,8 @@ class GetCurrencyBalanceRequest extends BaseRequest<GetCurrencyBalanceResponse>
     {
         super.beforeExecute();
         RpcUtils.checkAccountName(account, "account is empty");
-        if (Utils.isEmpty(symbol))
-            symbol = "eos";
+        Utils.checkEmpty(code, "code is empty");
+        Utils.checkEmpty(symbol, "symbol is empty");
     }
 
     @Override

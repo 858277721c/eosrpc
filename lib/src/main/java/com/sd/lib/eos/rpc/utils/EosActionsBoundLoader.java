@@ -64,8 +64,7 @@ public abstract class EosActionsBoundLoader
 
     public boolean hasNextPage()
     {
-        if (mActionsLoader == null)
-            return false;
+        checkInit();
 
         final int position = mActionsLoader.getNextPosition();
         if (mIsReverse)
@@ -79,12 +78,45 @@ public abstract class EosActionsBoundLoader
 
     public void reset()
     {
-        mActionsLoader = null;
         mMaxSize = -1;
         mStart = -1;
         mEnd = -1;
+        mActionsLoader = null;
         mRetryCount = 0;
         Log.i(EosActionsBoundLoader.class.getSimpleName(), "reset");
+    }
+
+    public void init() throws RpcJsonToObjectException, RpcApiExecutorException
+    {
+        if (mMaxSize < 0)
+        {
+            final List<GetActionsResponse.Action> list = new InternalEosActionsLoader(-1).loadPage(-1);
+            if (list == null || list.isEmpty())
+            {
+                mMaxSize = 0;
+            } else
+            {
+                mMaxSize = list.get(0).getAccount_action_seq() + 1;
+            }
+
+            Log.i(EosActionsBoundLoader.class.getSimpleName(), "max size:" + mMaxSize);
+
+            if (mMaxSize > 0)
+            {
+                setStart(mOriginalStart);
+                setEnd(mOriginalEnd);
+
+                if (mIsReverse)
+                {
+                    if (mOriginalStart < 0 || mOriginalStart >= mMaxSize)
+                        setStart(mMaxSize - 1);
+                } else
+                {
+                    if (mOriginalEnd < 0 || mOriginalEnd >= mMaxSize)
+                        setEnd(mMaxSize - 1);
+                }
+            }
+        }
     }
 
     public List<GetActionsResponse.Action> loadPage(int pageSize) throws RpcJsonToObjectException, RpcApiExecutorException
@@ -92,32 +124,10 @@ public abstract class EosActionsBoundLoader
         if (pageSize <= 0)
             throw new IllegalArgumentException("Illegal page size:" + pageSize);
 
-        if (mMaxSize < 0)
-        {
-            final List<GetActionsResponse.Action> list = new InternalEosActionsLoader(-1).loadPage(-1);
-            if (list == null || list.isEmpty())
-                return null;
+        init();
 
-            mMaxSize = list.get(0).getAccount_action_seq() + 1;
-
-            Log.i(EosActionsBoundLoader.class.getSimpleName(), "max size:" + mMaxSize);
-
-            setStart(mOriginalStart);
-            setEnd(mOriginalEnd);
-
-            if (mIsReverse)
-            {
-                if (mOriginalStart < 0 || mOriginalStart >= mMaxSize)
-                    setStart(mMaxSize - 1);
-            } else
-            {
-                if (mOriginalEnd < 0 || mOriginalEnd >= mMaxSize)
-                    setEnd(mMaxSize - 1);
-            }
-        }
-
-        if (mMaxSize < 0)
-            throw new RuntimeException("max size was not found");
+        if (mMaxSize <= 0)
+            return null;
 
         checkBound();
 
@@ -163,7 +173,7 @@ public abstract class EosActionsBoundLoader
         if (mStart != start)
         {
             mStart = start;
-            mActionsLoader = new InternalEosActionsLoader(mStart);
+            mActionsLoader = new InternalEosActionsLoader(start);
             Log.i(EosActionsBoundLoader.class.getSimpleName(), "setStart:" + start);
         }
     }
@@ -200,6 +210,12 @@ public abstract class EosActionsBoundLoader
             if (bound < 0 || bound >= mMaxSize)
                 throw new RuntimeException("bound " + bound + " out of range [0," + (mMaxSize - 1) + "]");
         }
+    }
+
+    private void checkInit()
+    {
+        if (mMaxSize < 0)
+            throw new RuntimeException("loader is not initialized");
     }
 
     protected abstract void onError(ErrorResponse errorResponse);

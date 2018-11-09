@@ -64,7 +64,7 @@ public abstract class EosActionsBoundLoader
             return false;
 
         final int position = mActionsLoader.getPosition();
-        return position != mEnd && position >= 0;
+        return position != mEnd && mEnd >= 0;
     }
 
     public void reset()

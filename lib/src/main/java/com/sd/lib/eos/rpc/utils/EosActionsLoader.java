@@ -20,7 +20,7 @@ public abstract class EosActionsLoader
     private final int mOriginalPosition;
     private final RpcApi mRpcApi;
 
-    private int mPosition;
+    private int mNextPosition;
 
     public EosActionsLoader(String accountName, int position, RpcApi rpcApi)
     {
@@ -31,14 +31,14 @@ public abstract class EosActionsLoader
         reset();
     }
 
-    public int getPosition()
+    public int getNextPosition()
     {
-        return mPosition;
+        return mNextPosition;
     }
 
     public void reset()
     {
-        mPosition = mOriginalPosition < 0 ? MAX_POSITION : mOriginalPosition;
+        mNextPosition = mOriginalPosition < 0 ? MAX_POSITION : mOriginalPosition;
         Log.i(EosActionsLoader.class.getSimpleName(), "reset");
     }
 
@@ -51,15 +51,15 @@ public abstract class EosActionsLoader
         offset = Math.abs(offset);
 
         int position = 0;
-        if (mPosition == MAX_POSITION)
+        if (mNextPosition == MAX_POSITION)
         {
             position = -1;
-        } else if (mPosition < 0)
+        } else if (mNextPosition < 0)
         {
             return null;
         } else
         {
-            position = mPosition;
+            position = mNextPosition;
             offset--;
         }
 
@@ -72,7 +72,7 @@ public abstract class EosActionsLoader
         Log.i(EosActionsLoader.class.getSimpleName(), "loadPage size:" + list.size());
 
         final int nextPosition = isReverse ? list.get(0).getAccount_action_seq() - 1 : list.get(list.size() - 1).getAccount_action_seq() + 1;
-        setPosition(nextPosition);
+        setNextPosition(nextPosition);
 
         if (isReverse)
             Collections.reverse(list);
@@ -80,12 +80,12 @@ public abstract class EosActionsLoader
         return list;
     }
 
-    private void setPosition(int position)
+    private void setNextPosition(int position)
     {
-        if (mPosition != position)
+        if (mNextPosition != position)
         {
-            mPosition = position;
-            Log.i(EosActionsLoader.class.getSimpleName(), "setPosition:" + position);
+            mNextPosition = position;
+            Log.i(EosActionsLoader.class.getSimpleName(), "setNextPosition:" + position);
         }
     }
 

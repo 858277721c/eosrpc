@@ -63,7 +63,7 @@ public abstract class EosActionsBoundLoader
         if (mActionsLoader == null)
             return false;
 
-        final int position = mActionsLoader.getPosition();
+        final int position = mActionsLoader.getNextPosition();
         if (mIsReverse)
         {
             return mEnd >= 0 && position >= mEnd;
@@ -119,7 +119,7 @@ public abstract class EosActionsBoundLoader
         if (!hasNextPage())
             return null;
 
-        final int position = mActionsLoader.getPosition();
+        final int position = mActionsLoader.getNextPosition();
         final int size = Math.min(Math.abs(position - mEnd) + 1, pageSize);
         final int offset = mIsReverse ? -size : size;
 

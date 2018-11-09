@@ -38,7 +38,7 @@ public abstract class EosActionsLoader
 
     public void reset()
     {
-        mNextPosition = mOriginalPosition < 0 ? MAX_POSITION : mOriginalPosition;
+        setNextPosition(mOriginalPosition < 0 ? MAX_POSITION : mOriginalPosition);
         Log.i(EosActionsLoader.class.getSimpleName(), "reset");
     }
 

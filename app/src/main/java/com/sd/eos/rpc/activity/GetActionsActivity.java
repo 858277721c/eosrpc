@@ -160,25 +160,7 @@ public class GetActionsActivity extends BaseActivity
             tv_account.setText(model.getAction_trace().getAct().getAccount());
             tv_name.setText(model.getAction_trace().getAct().getName());
 
-            if ("transfer".equals(model.getAction_trace().getAct().getName()))
-            {
-                final GetActionsResponse.Action.ActionTrace.Act.TransferData data = model.getAction_trace().getAct().getTransferData();
-                final StringBuilder sb = new StringBuilder();
-                sb.append(data.getFrom()).append(" -> ").append(data.getTo());
-                sb.append("\n");
-
-                if (mAccountName.equals(data.getFrom()))
-                    sb.append("-");
-                else if (mAccountName.equals(data.getTo()))
-                    sb.append("+");
-
-                sb.append(" ").append(data.getQuantity());
-                tv_data.setText(sb);
-            } else
-            {
-                tv_data.setText(model.getAction_trace().getAct().getData());
-            }
-
+            tv_data.setText(model.getAction_trace().getAct().getData());
             tv_trx_id.setText(model.getAction_trace().getTrx_id());
 
             final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

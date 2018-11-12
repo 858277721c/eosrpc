@@ -12,14 +12,14 @@ import com.sd.lib.eos.rpc.exception.RpcJsonToObjectException;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class DefaultEosActionsLoader extends BaseEosActionsLoader
+public abstract class SimpleEosActionsLoader extends EosActionsLoader
 {
     private static final int MAX_RETRY_COUNT = 5;
 
     private final RpcApi mRpcApi;
     private int mRetryCount;
 
-    public DefaultEosActionsLoader(String accountName, int start, int end, RpcApi rpcApi)
+    public SimpleEosActionsLoader(String accountName, int start, int end, RpcApi rpcApi)
     {
         super(accountName, start, end);
         if (rpcApi == null)

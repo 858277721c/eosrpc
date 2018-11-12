@@ -50,13 +50,13 @@ public abstract class DefaultEosActionsLoader extends BaseEosActionsLoader
         {
             if (mRetryCount >= MAX_RETRY_COUNT)
             {
-                Log.e(DefaultEosActionsLoader.class.getSimpleName(), "loadPage size error after " + MAX_RETRY_COUNT + " retry");
+                Log.e(getLogTag(), "loadPage size error after " + MAX_RETRY_COUNT + " retry");
                 mRetryCount = 0;
                 return null;
             }
 
             mRetryCount++;
-            Log.e(DefaultEosActionsLoader.class.getSimpleName(), "loadPage expect " + pageSize + " but " + list.size() + " retry:" + mRetryCount);
+            Log.e(getLogTag(), "loadPage expect " + pageSize + " but " + list.size() + " retry:" + mRetryCount);
 
             list = getActions(position, offset);
             if (list == null)
@@ -79,11 +79,11 @@ public abstract class DefaultEosActionsLoader extends BaseEosActionsLoader
 
     private List<GetActionsResponse.Action> getActions(int position, int offset) throws RpcJsonToObjectException, RpcApiExecutorException
     {
-        Log.i(DefaultEosActionsLoader.class.getSimpleName(), "getActions position:" + position + " offset:" + offset);
+        Log.i(getLogTag(), "getActions position:" + position + " offset:" + offset);
         final ApiResponse<GetActionsResponse> apiResponse = mRpcApi.getActions(getAccountName(), position, offset);
         if (!apiResponse.isSuccessful())
         {
-            Log.e(DefaultEosActionsLoader.class.getSimpleName(), "onError:" + apiResponse.getError().getCode() + " " + apiResponse.getError().getMessage());
+            Log.e(getLogTag(), "onError:" + apiResponse.getError().getCode() + " " + apiResponse.getError().getMessage());
             onError(apiResponse.getError());
             return null;
         }

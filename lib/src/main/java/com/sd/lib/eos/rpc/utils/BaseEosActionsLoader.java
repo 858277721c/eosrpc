@@ -42,6 +42,11 @@ public abstract class BaseEosActionsLoader
         reset();
     }
 
+    protected String getLogTag()
+    {
+        return "EosActionsLoader";
+    }
+
     public final String getAccountName()
     {
         return mAccountName;
@@ -82,14 +87,14 @@ public abstract class BaseEosActionsLoader
         mStart = -1;
         mEnd = -1;
         mNextPosition = -1;
-        Log.i(BaseEosActionsLoader.class.getSimpleName(), "reset");
+        Log.i(getLogTag(), "reset");
     }
 
     public final int init() throws Exception
     {
         if (mMaxSize < 0)
         {
-            Log.i(BaseEosActionsLoader.class.getSimpleName(), "start init");
+            Log.i(getLogTag(), "start init");
             final int size = initImpl();
             if (size <= 0)
             {
@@ -99,7 +104,7 @@ public abstract class BaseEosActionsLoader
                 mMaxSize = size;
             }
 
-            Log.i(BaseEosActionsLoader.class.getSimpleName(), "init max size:" + mMaxSize);
+            Log.i(getLogTag(), "init max size:" + mMaxSize);
 
             if (mMaxSize > 0)
             {
@@ -138,12 +143,12 @@ public abstract class BaseEosActionsLoader
 
         if (!isBoundLegal(mStart))
         {
-            Log.e(BaseEosActionsLoader.class.getSimpleName(), "start bound " + mStart + " out of range [0," + (mMaxSize - 1) + "]");
+            Log.e(getLogTag(), "start bound " + mStart + " out of range [0," + (mMaxSize - 1) + "]");
             return null;
         }
         if (!isBoundLegal(mEnd))
         {
-            Log.e(BaseEosActionsLoader.class.getSimpleName(), "end bound " + mEnd + " out of range [0," + (mMaxSize - 1) + "]");
+            Log.e(getLogTag(), "end bound " + mEnd + " out of range [0," + (mMaxSize - 1) + "]");
             return null;
         }
 
@@ -152,17 +157,17 @@ public abstract class BaseEosActionsLoader
 
         final int position = mNextPosition;
         final int size = Math.min(Math.abs(position - mEnd) + 1, pageSize);
-        Log.i(BaseEosActionsLoader.class.getSimpleName(), "loadPage position:" + position + " size:" + size);
+        Log.i(getLogTag(), "loadPage position:" + position + " size:" + size);
 
         final List<GetActionsResponse.Action> list = loadPageImpl(position, size);
         if (list == null || list.isEmpty())
             return null;
 
-        Log.i(BaseEosActionsLoader.class.getSimpleName(), "loadPage size:" + list.size());
+        Log.i(getLogTag(), "loadPage size:" + list.size());
 
         final int nextPosition = provideNextPosition(list);
         mNextPosition = nextPosition;
-        Log.i(BaseEosActionsLoader.class.getSimpleName(), "loadPage next position:" + nextPosition);
+        Log.i(getLogTag(), "loadPage next position:" + nextPosition);
 
         return list;
     }
@@ -179,7 +184,7 @@ public abstract class BaseEosActionsLoader
         {
             mStart = start;
             mNextPosition = start;
-            Log.i(BaseEosActionsLoader.class.getSimpleName(), "setStart:" + start);
+            Log.i(getLogTag(), "setStart:" + start);
         }
     }
 
@@ -188,7 +193,7 @@ public abstract class BaseEosActionsLoader
         if (mEnd != end)
         {
             mEnd = end;
-            Log.i(BaseEosActionsLoader.class.getSimpleName(), "setEnd:" + end);
+            Log.i(getLogTag(), "setEnd:" + end);
         }
     }
 

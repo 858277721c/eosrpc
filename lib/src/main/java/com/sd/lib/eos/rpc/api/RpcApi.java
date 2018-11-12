@@ -9,6 +9,7 @@ import com.sd.lib.eos.rpc.api.model.GetCodeResponse;
 import com.sd.lib.eos.rpc.api.model.GetCurrencyBalanceResponse;
 import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 import com.sd.lib.eos.rpc.api.model.GetKeyAccountsResponse;
+import com.sd.lib.eos.rpc.api.model.GetTableRowsResponse;
 import com.sd.lib.eos.rpc.api.model.GetTransactionResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.core.FEOSManager;
@@ -159,6 +160,41 @@ public class RpcApi
     {
         final GetCodeRequest request = new GetCodeRequest(mBaseUrl);
         request.setAccount_name(account_name);
+        return request.execute();
+    }
+
+    /**
+     * 查询某个账号的可赎回的资源
+     *
+     * @param scope
+     * @param limit
+     * @return
+     * @throws RpcJsonToObjectException
+     * @throws RpcApiExecutorException
+     */
+    public ApiResponse<GetTableRowsResponse> getTableRowsDelband(String scope, int limit) throws RpcJsonToObjectException, RpcApiExecutorException
+    {
+        return getTableRows(scope, "eosio", "delband", limit);
+    }
+
+    /**
+     * 查询某个账号某个表的记录
+     *
+     * @param scope 账号
+     * @param code  合约
+     * @param table 表
+     * @param limit 限制返回多少条
+     * @return
+     * @throws RpcApiExecutorException
+     * @throws RpcJsonToObjectException
+     */
+    public ApiResponse<GetTableRowsResponse> getTableRows(String scope, String code, String table, int limit) throws RpcApiExecutorException, RpcJsonToObjectException
+    {
+        final GetTableRowsRequest request = new GetTableRowsRequest(mBaseUrl);
+        request.setScope(scope);
+        request.setCode(code);
+        request.setTable(table);
+        request.setLimit(limit);
         return request.execute();
     }
 

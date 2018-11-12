@@ -119,10 +119,16 @@ public abstract class EosActionsBoundLoader
                 {
                     if (mOriginalStart < 0 || mOriginalStart >= mMaxSize)
                         setStart(mMaxSize - 1);
+
+                    if (mStart < mEnd)
+                        throw new RuntimeException("Illegal bound [" + mStart + "," + mEnd + "]");
                 } else
                 {
                     if (mOriginalEnd < 0 || mOriginalEnd >= mMaxSize)
                         setEnd(mMaxSize - 1);
+
+                    if (mStart > mEnd)
+                        throw new RuntimeException("Illegal bound [" + mStart + "," + mEnd + "]");
                 }
             }
         }
@@ -138,7 +144,16 @@ public abstract class EosActionsBoundLoader
         if (mMaxSize <= 0)
             return null;
 
-        checkBound();
+        if (!isBoundLegal(mStart))
+        {
+            Log.e(EosActionsBoundLoader.class.getSimpleName(), "start bound " + mStart + " out of range [0," + (mMaxSize - 1) + "]");
+            return null;
+        }
+        if (!isBoundLegal(mEnd))
+        {
+            Log.e(EosActionsBoundLoader.class.getSimpleName(), "end bound " + mEnd + " out of range [0," + (mMaxSize - 1) + "]");
+            return null;
+        }
 
         if (!hasNextPage())
             return null;
@@ -197,29 +212,9 @@ public abstract class EosActionsBoundLoader
         }
     }
 
-    private void checkBound()
+    private boolean isBoundLegal(int bound)
     {
-        checkBound(mStart);
-        checkBound(mEnd);
-
-        if (mIsReverse)
-        {
-            if (mStart < mEnd)
-                throw new RuntimeException("Illegal bound [" + mStart + "," + mEnd + "]");
-        } else
-        {
-            if (mStart > mEnd)
-                throw new RuntimeException("Illegal bound [" + mStart + "," + mEnd + "]");
-        }
-    }
-
-    private void checkBound(int bound)
-    {
-        if (mMaxSize > 0)
-        {
-            if (bound < 0 || bound >= mMaxSize)
-                throw new RuntimeException("bound " + bound + " out of range [0," + (mMaxSize - 1) + "]");
-        }
+        return bound >= 0 && bound < mMaxSize;
     }
 
     private void checkInit()

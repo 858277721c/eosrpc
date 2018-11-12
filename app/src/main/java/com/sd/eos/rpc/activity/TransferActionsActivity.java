@@ -14,7 +14,7 @@ import com.sd.lib.adapter.viewholder.FRecyclerViewHolder;
 import com.sd.lib.eos.rpc.api.RpcApi;
 import com.sd.lib.eos.rpc.api.model.ErrorResponse;
 import com.sd.lib.eos.rpc.api.model.GetActionsResponse;
-import com.sd.lib.eos.rpc.utils.EosActionsBoundLoader;
+import com.sd.lib.eos.rpc.utils.DefaultEosActionsLoader;
 import com.sd.lib.eos.rpc.utils.RpcUtils;
 import com.sd.lib.pulltorefresh.FPullToRefreshView;
 import com.sd.lib.pulltorefresh.PullToRefreshView;
@@ -41,7 +41,7 @@ public class TransferActionsActivity extends BaseActivity
     private String mAccountName = "ichenfq12345";
     private final Map<String, String> mMapInline = new HashMap<>();
 
-    private EosActionsBoundLoader mActionsLoader;
+    private DefaultEosActionsLoader mActionsLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -82,11 +82,11 @@ public class TransferActionsActivity extends BaseActivity
         mPullToRefreshView.startRefreshingFromHeader();
     }
 
-    public EosActionsBoundLoader getActionsLoader()
+    public DefaultEosActionsLoader getActionsLoader()
     {
         if (mActionsLoader == null)
         {
-            mActionsLoader = new EosActionsBoundLoader(mAccountName, -1, 0, mRpcApi)
+            mActionsLoader = new DefaultEosActionsLoader(mAccountName, -1, 0, mRpcApi)
             {
                 @Override
                 protected void onError(ErrorResponse errorResponse)

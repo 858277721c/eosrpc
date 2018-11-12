@@ -40,8 +40,8 @@ public abstract class DefaultEosActionsLoader extends BaseEosActionsLoader
     @Override
     protected List<GetActionsResponse.Action> loadPageImpl(final int position, final int pageSize) throws Exception
     {
-        final int realPageSize = pageSize - 1;
-        final int offset = isReverse() ? -realPageSize : realPageSize;
+        final int offsetLength = pageSize - 1;
+        final int offset = isReverse() ? -offsetLength : offsetLength;
         List<GetActionsResponse.Action> list = getActions(position, offset);
         if (list == null || list.isEmpty())
             return null;

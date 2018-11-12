@@ -12,7 +12,7 @@ import java.util.List;
 
 public abstract class EosActionsBoundLoader
 {
-    private static final int MAX_RETRY_COUNT = 3;
+    private static final int MAX_RETRY_COUNT = 5;
 
     private EosActionsLoader mActionsLoader;
 
@@ -98,6 +98,7 @@ public abstract class EosActionsBoundLoader
     {
         if (mMaxSize < 0)
         {
+            Log.i(EosActionsBoundLoader.class.getSimpleName(), "start init");
             final List<GetActionsResponse.Action> list = new InternalEosActionsLoader(-1).loadPage(-1);
             if (list == null || list.isEmpty())
             {
@@ -107,7 +108,7 @@ public abstract class EosActionsBoundLoader
                 mMaxSize = list.get(0).getAccount_action_seq() + 1;
             }
 
-            Log.i(EosActionsBoundLoader.class.getSimpleName(), "max size:" + mMaxSize);
+            Log.i(EosActionsBoundLoader.class.getSimpleName(), "init max size:" + mMaxSize);
 
             if (mMaxSize > 0)
             {

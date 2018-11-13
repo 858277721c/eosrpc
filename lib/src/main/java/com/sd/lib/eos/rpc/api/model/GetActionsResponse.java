@@ -3,6 +3,8 @@ package com.sd.lib.eos.rpc.api.model;
 import com.sd.lib.eos.rpc.core.FEOSManager;
 import com.sd.lib.eos.rpc.utils.RpcUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GetActionsResponse
@@ -242,6 +244,8 @@ public class GetActionsResponse
 
                 public List<Authorization> getAuthorization()
                 {
+                    if (authorization == null)
+                        authorization = new ArrayList<>(1);
                     return authorization;
                 }
 
@@ -270,6 +274,21 @@ public class GetActionsResponse
                     this.data = data;
                 }
 
+                @Override
+                public boolean equals(Object obj)
+                {
+                    if (!(obj instanceof Act))
+                        return false;
+
+                    final Act other = (Act) obj;
+
+                    return getAccount().equals(other.getAccount())
+                            && getName().equals(other.getName())
+                            && getHex_data().equals(other.getHex_data())
+                            && getData().equals(other.getData())
+                            && Arrays.equals(getAuthorization().toArray(), other.getAuthorization().toArray());
+                }
+
                 public static class Authorization
                 {
                     private String actor;
@@ -293,6 +312,18 @@ public class GetActionsResponse
                     public void setPermission(String permission)
                     {
                         this.permission = permission;
+                    }
+
+                    @Override
+                    public boolean equals(Object obj)
+                    {
+                        if (!(obj instanceof Authorization))
+                            return false;
+
+                        final Authorization other = (Authorization) obj;
+
+                        return getActor().equals(other.getActor())
+                                && getPermission().equals(other.getPermission());
                     }
                 }
 
@@ -362,6 +393,7 @@ public class GetActionsResponse
                             return false;
 
                         final TransferData other = (TransferData) obj;
+
                         return getFrom().equals(other.getFrom())
                                 && getTo().equals(other.getTo())
                                 && getQuantity().equals(other.getQuantity())

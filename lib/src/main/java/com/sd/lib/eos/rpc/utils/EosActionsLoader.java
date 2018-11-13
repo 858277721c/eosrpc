@@ -165,6 +165,7 @@ public abstract class EosActionsLoader
 
         Log.i(getLogTag(), "loadPage size:" + list.size());
 
+        setNextPosition(provideNextPosition(list));
         if (mNextPosition == position)
             throw new RuntimeException("you must change next position after load page succcess");
 
@@ -176,13 +177,35 @@ public abstract class EosActionsLoader
 
     protected abstract List<GetActionsResponse.Action> loadPageImpl(int position, int pageSize) throws Exception;
 
+    protected final int provideNextPosition(List<GetActionsResponse.Action> list)
+    {
+        if (list == null || list.isEmpty())
+            throw new IllegalArgumentException("can not provide next position from empty list");
+
+        if (list.size() == 1)
+            return list.get(0).getAccount_action_seq() + (isReverse() ? -1 : 1);
+
+        final int startSeq = list.get(0).getAccount_action_seq();
+        final int endSeq = list.get(list.size() - 1).getAccount_action_seq();
+
+        if (startSeq == endSeq)
+            throw new IllegalArgumentException("list startSeq == endSeq");
+
+        final boolean isReverseList = startSeq > endSeq;
+
+        if (isReverseList)
+            return isReverse() ? endSeq - 1 : startSeq + 1;
+        else
+            return isReverse() ? startSeq - 1 : endSeq + 1;
+    }
+
     private void setStart(int start)
     {
         if (mStart != start)
         {
             mStart = start;
-            mNextPosition = start;
             Log.i(getLogTag(), "setStart:" + start);
+            setNextPosition(start);
         }
     }
 

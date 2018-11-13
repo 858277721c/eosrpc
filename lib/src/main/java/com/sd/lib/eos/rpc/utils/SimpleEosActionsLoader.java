@@ -67,10 +67,6 @@ public abstract class SimpleEosActionsLoader extends EosActionsLoader
         if (isReverse())
             Collections.reverse(list);
 
-        final int lastSeq = list.get(list.size() - 1).getAccount_action_seq();
-        final int nextPosition = isReverse() ? lastSeq - 1 : lastSeq + 1;
-        setNextPosition(nextPosition);
-
         return list;
     }
 

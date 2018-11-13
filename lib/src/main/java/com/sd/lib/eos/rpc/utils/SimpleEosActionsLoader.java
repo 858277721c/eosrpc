@@ -28,6 +28,12 @@ public abstract class SimpleEosActionsLoader extends EosActionsLoader
     }
 
     @Override
+    protected String getLogTag()
+    {
+        return SimpleEosActionsLoader.class.getSimpleName();
+    }
+
+    @Override
     protected int initImpl() throws Exception
     {
         final List<GetActionsResponse.Action> list = getActions(-1, -1);

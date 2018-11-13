@@ -1,11 +1,17 @@
 package com.sd.lib.eos.rpc.api.model;
 
+import android.util.Log;
+
 import com.sd.lib.eos.rpc.core.FEOSManager;
 import com.sd.lib.eos.rpc.utils.RpcUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class GetActionsResponse
 {
@@ -398,6 +404,84 @@ public class GetActionsResponse
                                 && getTo().equals(other.getTo())
                                 && getQuantity().equals(other.getQuantity())
                                 && getMemo().equals(other.getMemo());
+                    }
+                }
+            }
+        }
+    }
+
+    public static void filterTransferAction(List<GetActionsResponse.Action> list, boolean checkRepeat)
+    {
+        if (list == null || list.isEmpty())
+            return;
+
+        final Map<String, String> mapInline = new HashMap<>();
+        final Map<String, List<Action>> mapRepeatActions = new HashMap<>();
+
+        Iterator<Action> it = list.iterator();
+        while (it.hasNext())
+        {
+            final GetActionsResponse.Action item = it.next();
+
+            final String name = item.getAction_trace().getAct().getName();
+            if ("transfer".equals(name))
+            {
+                final String trxId = item.getAction_trace().getTrx_id();
+                if (item.hasInlineTraces())
+                    mapInline.put(trxId, "");
+
+                List<GetActionsResponse.Action> listMap = mapRepeatActions.get(trxId);
+                if (listMap == null)
+                {
+                    listMap = new LinkedList<>();
+                    mapRepeatActions.put(trxId, listMap);
+                }
+
+                listMap.add(item);
+            } else
+            {
+                it.remove();
+            }
+        }
+
+        it = list.iterator();
+        while (it.hasNext())
+        {
+            final GetActionsResponse.Action item = it.next();
+
+            final String trxId = item.getAction_trace().getTrx_id();
+            if (mapInline.containsKey(trxId) && !item.hasInlineTraces())
+            {
+                it.remove();
+                mapRepeatActions.remove(trxId);
+            }
+        }
+
+        if (checkRepeat)
+        {
+            for (List<GetActionsResponse.Action> itemList : mapRepeatActions.values())
+            {
+                if (itemList.size() > 1)
+                {
+                    boolean allEquals = true;
+                    final GetActionsResponse.Action itemFirst = itemList.get(0);
+                    for (int i = 1; i < itemList.size(); i++)
+                    {
+                        final GetActionsResponse.Action item = itemList.get(i);
+                        if (!itemFirst.getAction_trace().getAct().equals(item.getAction_trace().getAct()))
+                        {
+                            allEquals = false;
+                            break;
+                        }
+                    }
+
+                    if (allEquals)
+                    {
+                        for (GetActionsResponse.Action item : itemList)
+                        {
+                            list.remove(item);
+                            Log.i("filterTransferAction", "remove repeat action:" + item.getAccount_action_seq());
+                        }
                     }
                 }
             }

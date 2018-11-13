@@ -23,8 +23,6 @@ import com.sd.lib.task.FTask;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -111,7 +109,7 @@ public class TransferActionsActivity extends BaseActivity
                 if (list != null && !list.isEmpty())
                 {
                     Log.i(TAG, "list size:" + list.size());
-                    filterAction(list);
+                    GetActionsResponse.filterTransferAction(list, true);
                     Log.i(TAG, "list size filter:" + list.size());
                 }
 
@@ -149,82 +147,6 @@ public class TransferActionsActivity extends BaseActivity
                 });
             }
         }.submit();
-    }
-
-    private void filterAction(List<GetActionsResponse.Action> list)
-    {
-        if (list == null || list.isEmpty())
-            return;
-
-        final Map<String, List<GetActionsResponse.Action>> mapRepeatActions = new HashMap<>();
-
-        Iterator<GetActionsResponse.Action> it = list.iterator();
-        while (it.hasNext())
-        {
-            final GetActionsResponse.Action item = it.next();
-
-            final String name = item.getAction_trace().getAct().getName();
-            if ("transfer".equals(name))
-            {
-                final String trxId = item.getAction_trace().getTrx_id();
-                if (item.hasInlineTraces())
-                {
-                    mMapInline.put(trxId, "");
-                }
-
-                List<GetActionsResponse.Action> listMap = mapRepeatActions.get(trxId);
-                if (listMap == null)
-                {
-                    listMap = new LinkedList<>();
-                    mapRepeatActions.put(trxId, listMap);
-                }
-
-                listMap.add(item);
-            } else
-            {
-                it.remove();
-            }
-        }
-
-        it = list.iterator();
-        while (it.hasNext())
-        {
-            final GetActionsResponse.Action item = it.next();
-
-            final String trxId = item.getAction_trace().getTrx_id();
-            if (mMapInline.containsKey(trxId) && !item.hasInlineTraces())
-            {
-                it.remove();
-                mapRepeatActions.remove(trxId);
-            }
-        }
-
-        for (List<GetActionsResponse.Action> itemList : mapRepeatActions.values())
-        {
-            if (itemList.size() > 1)
-            {
-                boolean allEquals = true;
-                final GetActionsResponse.Action itemFirst = itemList.get(0);
-                for (int i = 1; i < itemList.size(); i++)
-                {
-                    final GetActionsResponse.Action item = itemList.get(i);
-                    if (!itemFirst.getAction_trace().getAct().equals(item.getAction_trace().getAct()))
-                    {
-                        allEquals = false;
-                        break;
-                    }
-                }
-
-                if (allEquals)
-                {
-                    for (GetActionsResponse.Action item : itemList)
-                    {
-                        list.remove(item);
-                        Log.i(TAG, "remove inline action:" + item.getAccount_action_seq());
-                    }
-                }
-            }
-        }
     }
 
     private final FSimpleRecyclerAdapter<GetActionsResponse.Action> mAdapter = new FSimpleRecyclerAdapter<GetActionsResponse.Action>()

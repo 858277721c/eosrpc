@@ -84,10 +84,10 @@ public abstract class EosActionsLoader
     public void reset()
     {
         mMaxSize = -1;
-        mStart = -1;
-        mEnd = -1;
-        mNextPosition = -1;
-        Log.i(getLogTag(), "reset");
+        setStart(-1);
+        setEnd(-1);
+        setNextPosition(-1);
+        Log.e(getLogTag(), "reset");
     }
 
     public final int init() throws Exception
@@ -169,7 +169,7 @@ public abstract class EosActionsLoader
         if (mNextPosition == position)
             throw new RuntimeException("you must change next position after load page succcess");
 
-        Log.i(getLogTag(), "loadPage next position:" + mNextPosition);
+        Log.i(getLogTag(), "loadPage finish next position:" + mNextPosition);
         return list;
     }
 
@@ -224,6 +224,7 @@ public abstract class EosActionsLoader
         {
             mNextPosition = nextPosition;
             Log.i(getLogTag(), "setNextPosition:" + nextPosition);
+            onNextPositionChanged(nextPosition);
         }
     }
 
@@ -236,5 +237,9 @@ public abstract class EosActionsLoader
     {
         if (mMaxSize < 0)
             throw new RuntimeException("loader is not initialized");
+    }
+
+    protected void onNextPositionChanged(int nextPosition)
+    {
     }
 }

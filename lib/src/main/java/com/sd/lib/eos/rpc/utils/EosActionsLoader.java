@@ -115,16 +115,10 @@ public abstract class EosActionsLoader
                 {
                     if (mOriginalStart < 0 || mOriginalStart >= mMaxSize)
                         setStart(mMaxSize - 1);
-
-                    if (mStart < mEnd)
-                        throw new RuntimeException("Illegal bound [" + mStart + "," + mEnd + "]");
                 } else
                 {
                     if (mOriginalEnd < 0 || mOriginalEnd >= mMaxSize)
                         setEnd(mMaxSize - 1);
-
-                    if (mStart > mEnd)
-                        throw new RuntimeException("Illegal bound [" + mStart + "," + mEnd + "]");
                 }
             }
         }
@@ -151,6 +145,8 @@ public abstract class EosActionsLoader
             Log.e(getLogTag(), "end bound " + mEnd + " out of range [0," + (mMaxSize - 1) + "]");
             return null;
         }
+        if (!isBoundLegal())
+            return null;
 
         if (!hasNextPage())
             return null;
@@ -231,6 +227,27 @@ public abstract class EosActionsLoader
     private boolean isBoundLegal(int bound)
     {
         return bound >= 0 && bound < mMaxSize;
+    }
+
+    private boolean isBoundLegal()
+    {
+        if (mIsReverse)
+        {
+            if (mStart < mEnd)
+            {
+                Log.e(getLogTag(), "Illegal bound [" + mStart + "," + mEnd + "] isReverse:" + mIsReverse);
+                return false;
+            }
+            return true;
+        } else
+        {
+            if (mStart > mEnd)
+            {
+                Log.e(getLogTag(), "Illegal bound [" + mStart + "," + mEnd + "] isReverse:" + mIsReverse);
+                return false;
+            }
+            return true;
+        }
     }
 
     private void checkInit()

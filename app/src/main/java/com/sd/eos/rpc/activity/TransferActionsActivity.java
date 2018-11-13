@@ -21,10 +21,10 @@ import com.sd.lib.pulltorefresh.PullToRefreshView;
 import com.sd.lib.task.FTask;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -111,29 +111,8 @@ public class TransferActionsActivity extends BaseActivity
                 if (list != null && !list.isEmpty())
                 {
                     Log.i(TAG, "list size:" + list.size());
-
                     filterAction(list);
                     Log.i(TAG, "list size filter:" + list.size());
-
-                    if (!list.isEmpty())
-                    {
-                        final GetActionsResponse.Action action = list.get(list.size() - 1);
-                        final List<GetActionsResponse.Action> listChecked = checkInlineAction(action);
-                        if (!listChecked.isEmpty())
-                        {
-                            runOnUiThread(new Runnable()
-                            {
-                                @Override
-                                public void run()
-                                {
-                                    for (GetActionsResponse.Action item : listChecked)
-                                    {
-                                        mAdapter.getDataHolder().removeData(item);
-                                    }
-                                }
-                            });
-                        }
-                    }
                 }
 
                 runOnUiThread(new Runnable()
@@ -177,6 +156,8 @@ public class TransferActionsActivity extends BaseActivity
         if (list == null || list.isEmpty())
             return;
 
+        final Map<String, List<GetActionsResponse.Action>> mapRepeatActions = new HashMap<>();
+
         Iterator<GetActionsResponse.Action> it = list.iterator();
         while (it.hasNext())
         {
@@ -185,10 +166,20 @@ public class TransferActionsActivity extends BaseActivity
             final String name = item.getAction_trace().getAct().getName();
             if ("transfer".equals(name))
             {
+                final String trxId = item.getAction_trace().getTrx_id();
                 if (item.hasInlineTraces())
                 {
-                    mMapInline.put(item.getAction_trace().getTrx_id(), "");
+                    mMapInline.put(trxId, "");
                 }
+
+                List<GetActionsResponse.Action> listMap = mapRepeatActions.get(trxId);
+                if (listMap == null)
+                {
+                    listMap = new LinkedList<>();
+                    mapRepeatActions.put(trxId, listMap);
+                }
+
+                listMap.add(item);
             } else
             {
                 it.remove();
@@ -200,35 +191,40 @@ public class TransferActionsActivity extends BaseActivity
         {
             final GetActionsResponse.Action item = it.next();
 
-            if (mMapInline.containsKey(item.getAction_trace().getTrx_id()) && !item.hasInlineTraces())
+            final String trxId = item.getAction_trace().getTrx_id();
+            if (mMapInline.containsKey(trxId) && !item.hasInlineTraces())
             {
                 it.remove();
+                mapRepeatActions.remove(trxId);
             }
         }
-    }
 
-    private List<GetActionsResponse.Action> checkInlineAction(GetActionsResponse.Action action)
-    {
-        final List<GetActionsResponse.Action> result = new ArrayList<>();
-        if (action.hasInlineTraces())
+        for (List<GetActionsResponse.Action> itemList : mapRepeatActions.values())
         {
-            final List<GetActionsResponse.Action> list = mAdapter.getDataHolder().getData();
-            if (list != null && !list.isEmpty())
+            if (itemList.size() > 1)
             {
-                final int listSize = list.size();
-                final int inlineSize = action.getAction_trace().getInline_traces().size();
-                final int start = listSize - inlineSize;
-                for (int i = start; i < listSize; i++)
+                boolean allEquals = true;
+                final GetActionsResponse.Action itemFirst = itemList.get(0);
+                for (int i = 1; i < itemList.size(); i++)
                 {
-                    final GetActionsResponse.Action item = list.get(i);
-                    if (mMapInline.containsKey(item.getAction_trace().getTrx_id()) && !item.hasInlineTraces())
+                    final GetActionsResponse.Action item = itemList.get(i);
+                    if (!itemFirst.getAction_trace().getAct().equals(item.getAction_trace().getAct()))
                     {
-                        result.add(item);
+                        allEquals = false;
+                        break;
+                    }
+                }
+
+                if (allEquals)
+                {
+                    for (GetActionsResponse.Action item : itemList)
+                    {
+                        list.remove(item);
+                        Log.i(TAG, "remove inline action:" + item.getAccount_action_seq());
                     }
                 }
             }
         }
-        return result;
     }
 
     private final FSimpleRecyclerAdapter<GetActionsResponse.Action> mAdapter = new FSimpleRecyclerAdapter<GetActionsResponse.Action>()

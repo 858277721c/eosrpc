@@ -13,11 +13,10 @@ public abstract class EosActionsLoader
     private final int mOriginalEnd;
     private final boolean mIsReverse;
 
-    private int mMaxSize;
-    private int mStart;
-    private int mEnd;
-
-    private int mNextPosition;
+    private int mMaxSize = -1;
+    private int mStart = -1;
+    private int mEnd = -1;
+    private int mNextPosition = -1;
 
     public EosActionsLoader(String accountName, int start, int end)
     {
@@ -38,8 +37,6 @@ public abstract class EosActionsLoader
         {
             mIsReverse = start > end;
         }
-
-        reset();
     }
 
     protected String getLogTag()
@@ -83,7 +80,7 @@ public abstract class EosActionsLoader
 
     public void reset()
     {
-        mMaxSize = -1;
+        setMaxSize(-1);
         setStart(-1);
         setEnd(-1);
         setNextPosition(-1);
@@ -98,13 +95,11 @@ public abstract class EosActionsLoader
             final int size = initImpl();
             if (size <= 0)
             {
-                mMaxSize = 0;
+                setMaxSize(0);
             } else
             {
-                mMaxSize = size;
+                setMaxSize(size);
             }
-
-            Log.i(getLogTag(), "init max size:" + mMaxSize);
 
             if (mMaxSize > 0)
             {
@@ -193,6 +188,15 @@ public abstract class EosActionsLoader
             return isReverse() ? endSeq - 1 : startSeq + 1;
         else
             return isReverse() ? startSeq - 1 : endSeq + 1;
+    }
+
+    private void setMaxSize(int maxSize)
+    {
+        if (mMaxSize != maxSize)
+        {
+            mMaxSize = maxSize;
+            Log.i(getLogTag(), "setMaxSize:" + maxSize);
+        }
     }
 
     private void setStart(int start)

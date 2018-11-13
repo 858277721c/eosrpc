@@ -165,18 +165,16 @@ public abstract class EosActionsLoader
 
         Log.i(getLogTag(), "loadPage size:" + list.size());
 
-        final int nextPosition = provideNextPosition(list);
-        mNextPosition = nextPosition;
-        Log.i(getLogTag(), "loadPage next position:" + nextPosition);
+        if (mNextPosition == position)
+            throw new RuntimeException("you must change next position after load page succcess");
 
+        Log.i(getLogTag(), "loadPage next position:" + mNextPosition);
         return list;
     }
 
     protected abstract int initImpl() throws Exception;
 
     protected abstract List<GetActionsResponse.Action> loadPageImpl(int position, int pageSize) throws Exception;
-
-    protected abstract int provideNextPosition(List<GetActionsResponse.Action> list);
 
     private void setStart(int start)
     {
@@ -194,6 +192,15 @@ public abstract class EosActionsLoader
         {
             mEnd = end;
             Log.i(getLogTag(), "setEnd:" + end);
+        }
+    }
+
+    public final void setNextPosition(int nextPosition)
+    {
+        if (mNextPosition != nextPosition)
+        {
+            mNextPosition = nextPosition;
+            Log.i(getLogTag(), "setNextPosition:" + nextPosition);
         }
     }
 

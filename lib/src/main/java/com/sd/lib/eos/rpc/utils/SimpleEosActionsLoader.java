@@ -67,14 +67,11 @@ public abstract class SimpleEosActionsLoader extends EosActionsLoader
         if (isReverse())
             Collections.reverse(list);
 
-        return list;
-    }
-
-    @Override
-    protected int provideNextPosition(List<GetActionsResponse.Action> list)
-    {
         final int lastSeq = list.get(list.size() - 1).getAccount_action_seq();
-        return isReverse() ? lastSeq - 1 : lastSeq + 1;
+        final int nextPosition = isReverse() ? lastSeq - 1 : lastSeq + 1;
+        setNextPosition(nextPosition);
+
+        return list;
     }
 
     private List<GetActionsResponse.Action> getActions(int position, int offset) throws RpcJsonToObjectException, RpcApiExecutorException

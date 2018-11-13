@@ -8,10 +8,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class RpcUtils
 {
-    public static final DateFormat EOS_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    public static final String EOS_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+    private static final DateFormat EOS_DATE_FORMATER = new SimpleDateFormat(EOS_DATE_FORMAT);
 
     private RpcUtils()
     {
@@ -173,30 +175,24 @@ public class RpcUtils
      */
     public static String addMilliSecond(String time, int addMilliSecond)
     {
-        final Date date = toDate(time);
-        if (date == null)
+        try
+        {
+            final Date date = EOS_DATE_FORMATER.parse(time);
+
+            final Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.MILLISECOND, addMilliSecond);
+
+            return EOS_DATE_FORMATER.format(calendar.getTime());
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
             return time;
-
-        return EOS_DATE_FORMAT.format(addMilliSecond(date.getTime(), addMilliSecond));
+        }
     }
 
     /**
-     * 返回某个时间加上指定毫秒后的时间毫秒
-     *
-     * @param time           某个时间（毫秒）
-     * @param addMilliSecond 要增加的毫秒
-     * @return 毫秒
-     */
-    public static Date addMilliSecond(long time, int addMilliSecond)
-    {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(time);
-        calendar.add(Calendar.MILLISECOND, addMilliSecond);
-        return calendar.getTime();
-    }
-
-    /**
-     * EOS时间转为日期
+     * EOS时间转为当前时区的日期
      *
      * @param time 格式：yyyy-MM-dd'T'HH:mm:ss
      * @return
@@ -205,7 +201,10 @@ public class RpcUtils
     {
         try
         {
-            return EOS_DATE_FORMAT.parse(time);
+            final DateFormat format = new SimpleDateFormat(EOS_DATE_FORMAT);
+            format.setTimeZone(TimeZone.getTimeZone("GMT+0:00"));
+            final Date date = format.parse(time);
+            return date;
         } catch (ParseException e)
         {
             e.printStackTrace();

@@ -14,16 +14,15 @@ import com.sd.lib.adapter.viewholder.FRecyclerViewHolder;
 import com.sd.lib.eos.rpc.api.RpcApi;
 import com.sd.lib.eos.rpc.api.model.ErrorResponse;
 import com.sd.lib.eos.rpc.api.model.GetActionsResponse;
-import com.sd.lib.eos.rpc.utils.SimpleEosActionsLoader;
 import com.sd.lib.eos.rpc.utils.RpcUtils;
+import com.sd.lib.eos.rpc.utils.SimpleEosActionsLoader;
 import com.sd.lib.pulltorefresh.FPullToRefreshView;
 import com.sd.lib.pulltorefresh.PullToRefreshView;
 import com.sd.lib.task.FTask;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 public class GetActionsActivity extends BaseActivity
 {
@@ -163,9 +162,9 @@ public class GetActionsActivity extends BaseActivity
             tv_data.setText(model.getAction_trace().getAct().getData());
             tv_trx_id.setText(model.getAction_trace().getTrx_id());
 
-            final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT-8"));
-            final String timeFormat = dateFormat.format(RpcUtils.toDate(model.getBlock_time()));
+            final Date date = RpcUtils.toDate(model.getBlock_time());
+            final String timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+
             tv_time.setText(timeFormat);
 
             if (model.hasInlineTraces())

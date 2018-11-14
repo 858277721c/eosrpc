@@ -82,14 +82,13 @@ class GetCurrencyBalanceRequest extends BaseRequest<GetCurrencyBalanceResponse>
     @Override
     protected final GetCurrencyBalanceResponse convertSuccess(String json, Class<GetCurrencyBalanceResponse> clazz, JsonConverter converter) throws Exception
     {
+        final GetCurrencyBalanceResponse response = new GetCurrencyBalanceResponse();
+
         final JSONArray jsonArray = new JSONArray(json);
         if (jsonArray.length() <= 0)
-            throw new RuntimeException("get currency balance error from json:" + json);
-
-        final String balance = jsonArray.getString(0);
-
-        final GetCurrencyBalanceResponse response = new GetCurrencyBalanceResponse();
-        response.setBalance(balance);
+            response.setBalance("0.0000 " + symbol);
+        else
+            response.setBalance(jsonArray.getString(0));
 
         return response;
     }

@@ -31,7 +31,7 @@ public class GetActionsActivity extends BaseActivity
     private FPullToRefreshView mPullToRefreshView;
     private RecyclerView mRecyclerView;
 
-    private final RpcApi mRpcApi = new RpcApi("http://api.hkeos.com");
+    private final RpcApi mRpcApi = new RpcApi("https://node.eosflare.io");
     private String mAccountName = "ichenfq12345";
     private SimpleEosActionsLoader mActionsLoader;
 
@@ -100,7 +100,7 @@ public class GetActionsActivity extends BaseActivity
             @Override
             protected void onRun() throws Exception
             {
-                final List<GetActionsResponse.Action> list = getActionsLoader().loadPage(100);
+                final List<GetActionsResponse.Action> list = getActionsLoader().loadPage(20);
                 runOnUiThread(new Runnable()
                 {
                     @Override

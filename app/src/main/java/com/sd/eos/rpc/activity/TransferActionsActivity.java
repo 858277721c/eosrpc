@@ -33,7 +33,7 @@ public class TransferActionsActivity extends BaseActivity
     private FPullToRefreshView mPullToRefreshView;
     private RecyclerView mRecyclerView;
 
-    private final RpcApi mRpcApi = new RpcApi("http://api.hkeos.com");
+    private final RpcApi mRpcApi = new RpcApi("https://node.eosflare.io");
 
     private String mAccountName = "ichenfq12345";
     private final Map<String, String> mMapInline = new HashMap<>();
@@ -105,7 +105,7 @@ public class TransferActionsActivity extends BaseActivity
             @Override
             protected void onRun() throws Exception
             {
-                final List<GetActionsResponse.Action> list = getActionsLoader().loadPage(100);
+                final List<GetActionsResponse.Action> list = getActionsLoader().loadPage(20);
                 if (list != null && !list.isEmpty())
                 {
                     Log.i(TAG, "list size:" + list.size());

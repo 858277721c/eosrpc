@@ -37,11 +37,6 @@ public class FEOSManager
         mBaseUrl = baseUrl;
     }
 
-    public void setJsonConverter(JsonConverter jsonConverter)
-    {
-        mJsonConverter = jsonConverter;
-    }
-
     public void setApiExecutor(RpcApiExecutor apiExecutor)
     {
         mApiExecutor = apiExecutor;

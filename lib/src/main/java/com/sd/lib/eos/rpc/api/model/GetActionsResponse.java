@@ -216,11 +216,16 @@ public class GetActionsResponse
                 private String hex_data;
                 private String data;
 
+                private TransferData transferData;
+
                 public TransferData getTransferData()
                 {
+                    if (transferData != null)
+                        return transferData;
+
                     try
                     {
-                        final TransferData transferData = FEOSManager.getInstance().getJsonConverter().jsonToObject(data, TransferData.class);
+                        transferData = FEOSManager.getInstance().getJsonConverter().jsonToObject(data, TransferData.class);
                         return transferData;
                     } catch (Exception e)
                     {

@@ -31,7 +31,7 @@ public class GetActionsActivity extends BaseActivity
     private FPullToRefreshView mPullToRefreshView;
     private RecyclerView mRecyclerView;
 
-    private final RpcApi mRpcApi = new RpcApi("https://geo.eosasia.one");
+    private final RpcApi mRpcApi = new RpcApi("http://api.hkeos.com");
     private String mAccountName = "ichenfq12345";
     private SimpleEosActionsLoader mActionsLoader;
 

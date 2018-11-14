@@ -6,6 +6,8 @@ import com.sd.lib.eos.rpc.core.FEOSManager;
 import com.sd.lib.eos.rpc.core.JsonConverter;
 import com.sd.lib.eos.rpc.core.RpcApiExecutor;
 import com.sd.lib.eos.rpc.exception.RpcApiExecutorException;
+import com.sd.lib.eos.rpc.exception.RpcApiUnknowCodeException;
+import com.sd.lib.eos.rpc.exception.RpcException;
 import com.sd.lib.eos.rpc.exception.RpcJsonToObjectException;
 import com.sd.lib.eos.rpc.utils.Utils;
 
@@ -37,7 +39,7 @@ abstract class BaseRequest<T>
      * @return
      * @throws Exception
      */
-    public final ApiResponse<T> execute() throws RpcApiExecutorException, RpcJsonToObjectException
+    public final ApiResponse<T> execute() throws RpcException
     {
         beforeExecute();
 
@@ -70,18 +72,7 @@ abstract class BaseRequest<T>
         final String json = result.string;
         Utils.checkEmpty(json, "RpcApiExecutor return empty string");
 
-        if (code == 500)
-        {
-            try
-            {
-                final ErrorResponse error = jsonConverter.jsonToObject(json, ErrorResponse.class);
-                final ApiResponse apiResponse = new ApiResponse(error);
-                return apiResponse;
-            } catch (Exception e)
-            {
-                throw new RpcJsonToObjectException("json to " + ErrorResponse.class.getSimpleName() + " error", e);
-            }
-        } else
+        if (code >= 200 && code < 400)
         {
             final Class<T> successClass = getSuccessClass();
             Utils.checkNotNull(successClass, "successful class was not specified when execute:" + this);
@@ -94,6 +85,23 @@ abstract class BaseRequest<T>
             } catch (Exception e)
             {
                 throw new RpcJsonToObjectException("json to " + successClass.getSimpleName() + " error:", e);
+            }
+        } else
+        {
+            if (code == 500)
+            {
+                try
+                {
+                    final ErrorResponse error = jsonConverter.jsonToObject(json, ErrorResponse.class);
+                    final ApiResponse apiResponse = new ApiResponse(error);
+                    return apiResponse;
+                } catch (Exception e)
+                {
+                    throw new RpcJsonToObjectException("json to " + ErrorResponse.class.getSimpleName() + " error", e);
+                }
+            } else
+            {
+                throw new RpcApiUnknowCodeException(json, null);
             }
         }
     }

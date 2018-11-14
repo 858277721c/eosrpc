@@ -11,8 +11,7 @@ import com.sd.lib.eos.rpc.core.TransactionSigner;
 import com.sd.lib.eos.rpc.core.output.model.ActionModel;
 import com.sd.lib.eos.rpc.core.output.model.TransactionModel;
 import com.sd.lib.eos.rpc.core.output.model.TransactionSignResult;
-import com.sd.lib.eos.rpc.exception.RpcApiExecutorException;
-import com.sd.lib.eos.rpc.exception.RpcJsonToObjectException;
+import com.sd.lib.eos.rpc.exception.RpcException;
 import com.sd.lib.eos.rpc.exception.RpcTransactionSignException;
 import com.sd.lib.eos.rpc.params.ActionParams;
 import com.sd.lib.eos.rpc.utils.RpcUtils;
@@ -43,11 +42,9 @@ public class PushTransaction
      *
      * @param privateKey
      * @param callback
-     * @throws RpcJsonToObjectException
-     * @throws RpcApiExecutorException
-     * @throws RpcTransactionSignException
+     * @throws RpcException
      */
-    public final void submit(String privateKey, Callback callback) throws RpcJsonToObjectException, RpcApiExecutorException, RpcTransactionSignException
+    public final void submit(String privateKey, Callback callback) throws RpcException
     {
         Utils.checkEmpty(privateKey, "private key is empty");
         Utils.checkNotNull(callback, "callback is null");

@@ -6,8 +6,7 @@ import com.sd.lib.eos.rpc.api.RpcApi;
 import com.sd.lib.eos.rpc.api.model.ApiResponse;
 import com.sd.lib.eos.rpc.api.model.ErrorResponse;
 import com.sd.lib.eos.rpc.api.model.GetActionsResponse;
-import com.sd.lib.eos.rpc.exception.RpcApiExecutorException;
-import com.sd.lib.eos.rpc.exception.RpcJsonToObjectException;
+import com.sd.lib.eos.rpc.exception.RpcException;
 
 import java.util.Collections;
 import java.util.List;
@@ -76,7 +75,7 @@ public abstract class SimpleEosActionsLoader extends EosActionsLoader
         return list;
     }
 
-    private List<GetActionsResponse.Action> getActions(int position, int offset) throws RpcJsonToObjectException, RpcApiExecutorException
+    private List<GetActionsResponse.Action> getActions(int position, int offset) throws RpcException
     {
         Log.i(getLogTag(), "getActions position:" + position + " offset:" + offset);
         final ApiResponse<GetActionsResponse> apiResponse = mRpcApi.getActions(getAccountName(), position, offset);

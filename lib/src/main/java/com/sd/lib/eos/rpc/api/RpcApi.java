@@ -13,8 +13,7 @@ import com.sd.lib.eos.rpc.api.model.GetTableRowsResponse;
 import com.sd.lib.eos.rpc.api.model.GetTransactionResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.core.FEOSManager;
-import com.sd.lib.eos.rpc.exception.RpcApiExecutorException;
-import com.sd.lib.eos.rpc.exception.RpcJsonToObjectException;
+import com.sd.lib.eos.rpc.exception.RpcException;
 import com.sd.lib.eos.rpc.utils.Utils;
 
 import java.util.List;
@@ -38,9 +37,9 @@ public class RpcApi
      * 获得区块链信息
      *
      * @return
-     * @throws Exception
+     * @throws RpcException
      */
-    public ApiResponse<GetInfoResponse> getInfo() throws RpcApiExecutorException, RpcJsonToObjectException
+    public ApiResponse<GetInfoResponse> getInfo() throws RpcException
     {
         return new GetInfoRequest(mBaseUrl).execute();
     }
@@ -50,9 +49,9 @@ public class RpcApi
      *
      * @param block_num_or_id
      * @return
-     * @throws Exception
+     * @throws RpcException
      */
-    public ApiResponse<GetBlockResponse> getBlock(String block_num_or_id) throws RpcApiExecutorException, RpcJsonToObjectException
+    public ApiResponse<GetBlockResponse> getBlock(String block_num_or_id) throws RpcException
     {
         final GetBlockRequest request = new GetBlockRequest(mBaseUrl);
         request.setBlock_num_or_id(block_num_or_id);
@@ -64,9 +63,9 @@ public class RpcApi
      *
      * @param account_name 要查询的账号
      * @return
-     * @throws Exception
+     * @throws RpcException
      */
-    public ApiResponse<GetAccountResponse> getAccount(String account_name) throws RpcApiExecutorException, RpcJsonToObjectException
+    public ApiResponse<GetAccountResponse> getAccount(String account_name) throws RpcException
     {
         final GetAccountRequest request = new GetAccountRequest(mBaseUrl);
         request.setAccount_name(account_name);
@@ -78,9 +77,9 @@ public class RpcApi
      *
      * @param account
      * @return
-     * @throws Exception
+     * @throws RpcException
      */
-    public ApiResponse<GetCurrencyBalanceResponse> getCurrencyBalance(String account) throws RpcApiExecutorException, RpcJsonToObjectException
+    public ApiResponse<GetCurrencyBalanceResponse> getCurrencyBalance(String account) throws RpcException
     {
         return getCurrencyBalance("eosio.token", account, "eos");
     }
@@ -92,9 +91,9 @@ public class RpcApi
      * @param account 账号
      * @param symbol  币种
      * @return
-     * @throws Exception
+     * @throws RpcException
      */
-    public ApiResponse<GetCurrencyBalanceResponse> getCurrencyBalance(String code, String account, String symbol) throws RpcApiExecutorException, RpcJsonToObjectException
+    public ApiResponse<GetCurrencyBalanceResponse> getCurrencyBalance(String code, String account, String symbol) throws RpcException
     {
         final GetCurrencyBalanceRequest request = new GetCurrencyBalanceRequest(mBaseUrl);
         request.setCode(code);
@@ -110,9 +109,9 @@ public class RpcApi
      * @param pos
      * @param offset
      * @return
-     * @throws Exception
+     * @throws RpcException
      */
-    public ApiResponse<GetActionsResponse> getActions(String account_name, int pos, int offset) throws RpcApiExecutorException, RpcJsonToObjectException
+    public ApiResponse<GetActionsResponse> getActions(String account_name, int pos, int offset) throws RpcException
     {
         final GetActionsRequest request = new GetActionsRequest(mBaseUrl);
         request.setAccount_name(account_name);
@@ -126,9 +125,9 @@ public class RpcApi
      *
      * @param id 交易id
      * @return
-     * @throws Exception
+     * @throws RpcException
      */
-    public ApiResponse<GetTransactionResponse> getTransaction(String id) throws RpcApiExecutorException, RpcJsonToObjectException
+    public ApiResponse<GetTransactionResponse> getTransaction(String id) throws RpcException
     {
         final GetTransactionRequest request = new GetTransactionRequest(mBaseUrl);
         request.setId(id);
@@ -140,9 +139,9 @@ public class RpcApi
      *
      * @param public_key 公钥
      * @return
-     * @throws Exception
+     * @throws RpcException
      */
-    public ApiResponse<GetKeyAccountsResponse> getKeyAccounts(String public_key) throws RpcApiExecutorException, RpcJsonToObjectException
+    public ApiResponse<GetKeyAccountsResponse> getKeyAccounts(String public_key) throws RpcException
     {
         final GetKeyAccountsRequest request = new GetKeyAccountsRequest(mBaseUrl);
         request.setPublic_key(public_key);
@@ -154,9 +153,9 @@ public class RpcApi
      *
      * @param account_name
      * @return
-     * @throws Exception
+     * @throws RpcException
      */
-    public ApiResponse<GetCodeResponse> getCode(String account_name) throws RpcApiExecutorException, RpcJsonToObjectException
+    public ApiResponse<GetCodeResponse> getCode(String account_name) throws RpcException
     {
         final GetCodeRequest request = new GetCodeRequest(mBaseUrl);
         request.setAccount_name(account_name);
@@ -169,10 +168,9 @@ public class RpcApi
      * @param scope
      * @param limit
      * @return
-     * @throws RpcJsonToObjectException
-     * @throws RpcApiExecutorException
+     * @throws RpcException
      */
-    public ApiResponse<GetTableRowsResponse> getTableRowsDelband(String scope, int limit) throws RpcJsonToObjectException, RpcApiExecutorException
+    public ApiResponse<GetTableRowsResponse> getTableRowsDelband(String scope, int limit) throws RpcException
     {
         return getTableRows(scope, "eosio", "delband", limit);
     }
@@ -185,10 +183,9 @@ public class RpcApi
      * @param table 表
      * @param limit 限制返回多少条
      * @return
-     * @throws RpcApiExecutorException
-     * @throws RpcJsonToObjectException
+     * @throws RpcException
      */
-    public ApiResponse<GetTableRowsResponse> getTableRows(String scope, String code, String table, int limit) throws RpcApiExecutorException, RpcJsonToObjectException
+    public ApiResponse<GetTableRowsResponse> getTableRows(String scope, String code, String table, int limit) throws RpcException
     {
         final GetTableRowsRequest request = new GetTableRowsRequest(mBaseUrl);
         request.setScope(scope);
@@ -205,9 +202,9 @@ public class RpcApi
      * @param action
      * @param args
      * @return
-     * @throws Exception
+     * @throws RpcException
      */
-    public ApiResponse<AbiJsonToBinResponse> abiJsonToBin(String code, String action, Object args) throws RpcApiExecutorException, RpcJsonToObjectException
+    public ApiResponse<AbiJsonToBinResponse> abiJsonToBin(String code, String action, Object args) throws RpcException
     {
         final AbiJsonToBinRequest request = new AbiJsonToBinRequest(mBaseUrl);
         request.setCode(code);
@@ -224,9 +221,9 @@ public class RpcApi
      * @param packed_context_free_data
      * @param packed_trx
      * @return
-     * @throws Exception
+     * @throws RpcException
      */
-    public ApiResponse<PushTransactionResponse> pushTransaction(List<String> signatures, String compression, String packed_context_free_data, String packed_trx) throws RpcApiExecutorException, RpcJsonToObjectException
+    public ApiResponse<PushTransactionResponse> pushTransaction(List<String> signatures, String compression, String packed_context_free_data, String packed_trx) throws RpcException
     {
         final PushTransactionRequest request = new PushTransactionRequest(mBaseUrl);
         request.setSignatures(signatures);

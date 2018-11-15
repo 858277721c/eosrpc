@@ -40,6 +40,7 @@ public class GetActionsResponse
 
     public static class Action
     {
+        private long global_action_seq;
         private int account_action_seq;
         private long block_num;
         private String block_time;
@@ -49,6 +50,16 @@ public class GetActionsResponse
         {
             final List<Action> list = action_trace.getInline_traces();
             return list != null && !list.isEmpty();
+        }
+
+        public long getGlobal_action_seq()
+        {
+            return global_action_seq;
+        }
+
+        public void setGlobal_action_seq(long global_action_seq)
+        {
+            this.global_action_seq = global_action_seq;
         }
 
         public int getAccount_action_seq()

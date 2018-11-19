@@ -8,12 +8,26 @@ public class SimpleEccTool implements EccTool
     @Override
     public String generatePrivateKey()
     {
-        return new EosPrivateKey().toString();
+        try
+        {
+            return new EosPrivateKey().toString();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public String privateToPublicKey(String privateKey)
     {
-        return new EosPrivateKey(privateKey).getPublicKey().toString();
+        try
+        {
+            return new EosPrivateKey(privateKey).getPublicKey().toString();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

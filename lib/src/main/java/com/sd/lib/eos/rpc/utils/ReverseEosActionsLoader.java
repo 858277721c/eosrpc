@@ -50,9 +50,7 @@ public abstract class ReverseEosActionsLoader
             position = mNextPosition;
         }
 
-        final int offset = position < 0 ? -pageSize : -(pageSize - 1);
-
-        final List<GetActionsResponse.Action> list = loadPageImpl(position, pageSize, offset);
+        final List<GetActionsResponse.Action> list = loadPageImpl(position, pageSize);
         if (list == null || list.isEmpty())
             return null;
 
@@ -73,7 +71,7 @@ public abstract class ReverseEosActionsLoader
         return list;
     }
 
-    protected abstract List<GetActionsResponse.Action> loadPageImpl(int position, int pageSize, int offset) throws Exception;
+    protected abstract List<GetActionsResponse.Action> loadPageImpl(int position, int pageSize) throws Exception;
 
     private void setMaxSize(int maxSize)
     {

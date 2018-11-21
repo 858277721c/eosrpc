@@ -34,8 +34,10 @@ public abstract class SimpleReverseEosActionsLoader extends ReverseEosActionsLoa
     }
 
     @Override
-    protected List<GetActionsResponse.Action> loadPageImpl(int position, int pageSize, int offset) throws Exception
+    protected List<GetActionsResponse.Action> loadPageImpl(int position, int pageSize) throws Exception
     {
+        final int offset = position < 0 ? -pageSize : -(pageSize - 1);
+
         List<GetActionsResponse.Action> list = getActions(position, offset);
         if (list == null || list.isEmpty())
             return null;

@@ -31,9 +31,6 @@ public class RpcUtils
         if (Utils.isEmpty(account))
             throw new RuntimeException(emptyExcetion);
 
-        if (account.length() != 12)
-            throw new RuntimeException("account name lengh must be 12");
-
         return account;
     }
 

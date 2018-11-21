@@ -1,5 +1,6 @@
 package com.sd.lib.eos.rpc.api;
 
+import com.sd.lib.eos.rpc.api.model.AbiBinToJsonResponse;
 import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
 import com.sd.lib.eos.rpc.api.model.ApiResponse;
 import com.sd.lib.eos.rpc.api.model.GetAccountResponse;
@@ -210,6 +211,24 @@ public class RpcApi
         request.setCode(code);
         request.setAction(action);
         request.setArgs(args);
+        return request.execute();
+    }
+
+    /**
+     * 二进制转json
+     *
+     * @param code
+     * @param action
+     * @param binargs
+     * @return
+     * @throws RpcException
+     */
+    public ApiResponse<AbiBinToJsonResponse> abiBinToJson(String code, String action, String binargs) throws RpcException
+    {
+        final AbiBinToJsonRequest request = new AbiBinToJsonRequest(mBaseUrl);
+        request.setCode(code);
+        request.setAction(action);
+        request.setBinargs(binargs);
         return request.execute();
     }
 

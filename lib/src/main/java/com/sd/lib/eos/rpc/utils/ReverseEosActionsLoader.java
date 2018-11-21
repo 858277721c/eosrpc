@@ -59,6 +59,9 @@ public abstract class ReverseEosActionsLoader
         final int first = list.get(0).getAccount_action_seq();
         final int last = list.get(list.size() - 1).getAccount_action_seq();
 
+        if (first < last)
+            throw new RuntimeException("list must be reverse");
+
         if (mNextPosition == MAX_POSITION)
         {
             final int maxSeq = Math.max(first, last);

@@ -6,7 +6,7 @@ import com.sd.lib.eos.rpc.api.model.GetActionsResponse;
 
 import java.util.List;
 
-public abstract class EosActionsLoader
+public abstract class BoundEosActionsLoader
 {
     private final String mAccountName;
     private final int mOriginalStart;
@@ -18,7 +18,7 @@ public abstract class EosActionsLoader
     private int mEnd = -1;
     private int mNextPosition = -1;
 
-    public EosActionsLoader(String accountName, int start, int end)
+    public BoundEosActionsLoader(String accountName, int start, int end)
     {
         if (start < 0 && end < 0)
             throw new IllegalArgumentException("");
@@ -41,7 +41,7 @@ public abstract class EosActionsLoader
 
     protected String getLogTag()
     {
-        return "EosActionsLoader";
+        return "BoundEosActionsLoader";
     }
 
     public final String getAccountName()

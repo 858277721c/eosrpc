@@ -11,14 +11,14 @@ import com.sd.lib.eos.rpc.exception.RpcException;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class SimpleEosActionsLoader extends EosActionsLoader
+public abstract class SimpleBoundEosActionsLoader extends BoundEosActionsLoader
 {
     private static final int MAX_RETRY_COUNT = 5;
 
     private final RpcApi mRpcApi;
     private int mRetryCount;
 
-    public SimpleEosActionsLoader(String accountName, int start, int end, RpcApi rpcApi)
+    public SimpleBoundEosActionsLoader(String accountName, int start, int end, RpcApi rpcApi)
     {
         super(accountName, start, end);
         if (rpcApi == null)
@@ -29,7 +29,7 @@ public abstract class SimpleEosActionsLoader extends EosActionsLoader
     @Override
     protected String getLogTag()
     {
-        return SimpleEosActionsLoader.class.getSimpleName();
+        return SimpleBoundEosActionsLoader.class.getSimpleName();
     }
 
     @Override

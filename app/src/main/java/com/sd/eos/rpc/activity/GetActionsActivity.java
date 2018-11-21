@@ -14,8 +14,9 @@ import com.sd.lib.adapter.viewholder.FRecyclerViewHolder;
 import com.sd.lib.eos.rpc.api.RpcApi;
 import com.sd.lib.eos.rpc.api.model.ErrorResponse;
 import com.sd.lib.eos.rpc.api.model.GetActionsResponse;
+import com.sd.lib.eos.rpc.utils.ReverseEosActionsLoader;
 import com.sd.lib.eos.rpc.utils.RpcUtils;
-import com.sd.lib.eos.rpc.utils.SimpleEosActionsLoader;
+import com.sd.lib.eos.rpc.utils.SimpleReverseEosActionsLoader;
 import com.sd.lib.pulltorefresh.FPullToRefreshView;
 import com.sd.lib.pulltorefresh.PullToRefreshView;
 import com.sd.lib.task.FTask;
@@ -33,7 +34,7 @@ public class GetActionsActivity extends BaseActivity
 
     private final RpcApi mRpcApi = new RpcApi("https://node.eosflare.io");
     private String mAccountName = "ichenfq12345";
-    private SimpleEosActionsLoader mActionsLoader;
+    private ReverseEosActionsLoader mActionsLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -74,11 +75,11 @@ public class GetActionsActivity extends BaseActivity
         mPullToRefreshView.startRefreshingFromHeader();
     }
 
-    public SimpleEosActionsLoader getActionsLoader()
+    public ReverseEosActionsLoader getActionsLoader()
     {
         if (mActionsLoader == null)
         {
-            mActionsLoader = new SimpleEosActionsLoader(mAccountName, -1, 0, mRpcApi)
+            mActionsLoader = new SimpleReverseEosActionsLoader(mAccountName, mRpcApi)
             {
                 @Override
                 protected void onError(ErrorResponse errorResponse)
@@ -100,7 +101,7 @@ public class GetActionsActivity extends BaseActivity
             @Override
             protected void onRun() throws Exception
             {
-                final List<GetActionsResponse.Action> list = getActionsLoader().loadPage(20);
+                final List<GetActionsResponse.Action> list = getActionsLoader().loadPage(50);
                 runOnUiThread(new Runnable()
                 {
                     @Override

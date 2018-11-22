@@ -1,10 +1,12 @@
 package com.sd.lib.eos.rpc.api.model;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.sd.lib.eos.rpc.utils.RpcUtils;
 
-import java.util.ArrayList;
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 public class GetTableRowsResponse
@@ -19,27 +21,34 @@ public class GetTableRowsResponse
      */
     public List<DelbandRow> getDelbandRows()
     {
-        final List<DelbandRow> list = new ArrayList<>();
         try
         {
-            final JSONArray jsonArray = new JSONArray(rows);
-            for (int i = 0; i < jsonArray.length(); i++)
+            final Type type = new TypeToken<List<DelbandRow>>()
             {
-                final JSONObject jsonObject = jsonArray.getJSONObject(i);
+            }.getType();
 
-                final DelbandRow delbandRow = new DelbandRow();
-                delbandRow.setFrom(jsonObject.getString("from"));
-                delbandRow.setTo(jsonObject.getString("to"));
-                delbandRow.setNet_weight(jsonObject.getString("net_weight"));
-                delbandRow.setCpu_weight(jsonObject.getString("cpu_weight"));
-                list.add(delbandRow);
-            }
-
-        } catch (JSONException e)
+            return new Gson().fromJson(rows, type);
+        } catch (Exception e)
         {
             e.printStackTrace();
+            return null;
         }
-        return list;
+    }
+
+    public List<RammarketRow> getRammarketRow()
+    {
+        try
+        {
+            final Type type = new TypeToken<List<RammarketRow>>()
+            {
+            }.getType();
+
+            return new Gson().fromJson(rows, type);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void setRows(String rows)
@@ -107,6 +116,89 @@ public class GetTableRowsResponse
         public void setCpu_weight(String cpu_weight)
         {
             this.cpu_weight = cpu_weight;
+        }
+    }
+
+    public static class RammarketRow
+    {
+        private String supply;
+        private Balance base;
+        private Balance quote;
+
+        /**
+         * 返回内存的价格，单位(EOS/kb)
+         *
+         * @param scale
+         * @return
+         */
+        public double getRamPrice(int scale)
+        {
+            final double quoteAmount = RpcUtils.getMoneyAmount(quote.getBalance());
+            final double baseAmount = RpcUtils.getMoneyAmount(base.getBalance());
+
+            final double baseAmountKb = new BigDecimal(baseAmount)
+                    .divide(new BigDecimal(1024), 10, RoundingMode.HALF_UP).doubleValue();
+
+            final double price = new BigDecimal(quoteAmount)
+                    .divide(new BigDecimal(baseAmountKb), scale, RoundingMode.HALF_UP).doubleValue();
+
+            return price;
+        }
+
+        public String getSupply()
+        {
+            return supply;
+        }
+
+        public void setSupply(String supply)
+        {
+            this.supply = supply;
+        }
+
+        public Balance getBase()
+        {
+            return base;
+        }
+
+        public void setBase(Balance base)
+        {
+            this.base = base;
+        }
+
+        public Balance getQuote()
+        {
+            return quote;
+        }
+
+        public void setQuote(Balance quote)
+        {
+            this.quote = quote;
+        }
+
+        public static class Balance
+        {
+            private String balance;
+            private String weight;
+
+            public String getBalance()
+            {
+                return balance;
+            }
+
+            public void setBalance(String balance)
+            {
+                this.balance = balance;
+            }
+
+            public String getWeight()
+            {
+                return weight;
+            }
+
+            public void setWeight(String weight)
+            {
+                this.weight = weight;
+            }
         }
     }
 }

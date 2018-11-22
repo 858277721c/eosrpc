@@ -177,6 +177,18 @@ public class RpcApi
     }
 
     /**
+     * 查询Ram市场
+     *
+     * @param limit
+     * @return
+     * @throws RpcException
+     */
+    public ApiResponse<GetTableRowsResponse> getTableRowsRammarket(int limit) throws RpcException
+    {
+        return getTableRows("eosio", "eosio", "rammarket", limit);
+    }
+
+    /**
      * 查询某个账号某个表的记录
      *
      * @param scope 账号

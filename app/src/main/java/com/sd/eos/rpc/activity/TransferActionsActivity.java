@@ -17,15 +17,14 @@ import com.sd.lib.eos.rpc.api.model.GetActionsResponse;
 import com.sd.lib.eos.rpc.utils.ReverseEosActionsLoader;
 import com.sd.lib.eos.rpc.utils.RpcUtils;
 import com.sd.lib.eos.rpc.utils.SimpleReverseEosActionsLoader;
+import com.sd.lib.eos.rpc.utils.TransferActionFilter;
 import com.sd.lib.pulltorefresh.FPullToRefreshView;
 import com.sd.lib.pulltorefresh.PullToRefreshView;
 import com.sd.lib.task.FTask;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TransferActionsActivity extends BaseActivity
 {
@@ -37,9 +36,9 @@ public class TransferActionsActivity extends BaseActivity
     private final RpcApi mRpcApi = new RpcApi("https://node.eosflare.io");
 
     private String mAccountName = "ichenfq12345";
-    private final Map<String, String> mMapInline = new HashMap<>();
 
     private ReverseEosActionsLoader mActionsLoader;
+    private final TransferActionFilter mTransferActionFilter = new TransferActionFilter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -110,7 +109,7 @@ public class TransferActionsActivity extends BaseActivity
                 if (list != null && !list.isEmpty())
                 {
                     Log.i(TAG, "list size:" + list.size());
-                    GetActionsResponse.filterTransferAction(list, true);
+                    mTransferActionFilter.filterPage(list, isLoadMore);
                     Log.i(TAG, "list size filter:" + list.size());
                 }
 

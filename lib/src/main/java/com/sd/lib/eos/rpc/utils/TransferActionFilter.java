@@ -35,7 +35,7 @@ public abstract class TransferActionFilter
         {
             filter(list, mMapInline, true);
 
-            if (list != null && !list.isEmpty() && mListLastPage != null && !mListLastPage.isEmpty())
+            if (isLoadMore && list != null && !list.isEmpty() && mListLastPage != null && !mListLastPage.isEmpty())
             {
                 final GetActionsResponse.Action actionFirst = list.get(0);
                 final int inlineSize = actionFirst.getInlineTracesSize();

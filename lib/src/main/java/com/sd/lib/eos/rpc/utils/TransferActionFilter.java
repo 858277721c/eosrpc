@@ -10,6 +10,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 转账记录筛选
+ */
 public abstract class TransferActionFilter
 {
     private final boolean mIsReverse;

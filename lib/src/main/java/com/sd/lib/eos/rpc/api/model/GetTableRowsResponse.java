@@ -126,7 +126,7 @@ public class GetTableRowsResponse
         private Balance quote;
 
         /**
-         * 返回内存的价格，单位(EOS/kb)
+         * 返回内存的价格，单位(EOS/KB)
          *
          * @param scale
          * @return

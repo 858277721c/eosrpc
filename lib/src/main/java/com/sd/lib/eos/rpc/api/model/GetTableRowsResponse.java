@@ -128,7 +128,7 @@ public class GetTableRowsResponse
         /**
          * 返回内存的价格，单位(EOS/KB)
          *
-         * @param scale
+         * @param scale 要保留几位小数
          * @return
          */
         public double getRamPrice(int scale)

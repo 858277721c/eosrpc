@@ -22,6 +22,12 @@ public abstract class TransferActionFilter
         mIsReverse = isReverse;
     }
 
+    /**
+     * 过滤分页的数据
+     *
+     * @param list
+     * @param isLoadMore
+     */
     public final void filterPage(List<GetActionsResponse.Action> list, boolean isLoadMore)
     {
         final Boolean isReverseList = isReverseList(list);
@@ -69,6 +75,11 @@ public abstract class TransferActionFilter
         }
     }
 
+    /**
+     * 移除上一页中的数据
+     *
+     * @param list
+     */
     protected abstract void removeLastPageActions(List<GetActionsResponse.Action> list);
 
     private Boolean isReverseList(List<GetActionsResponse.Action> list)

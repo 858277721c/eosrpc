@@ -10,21 +10,79 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class TransferActionFilter
+public abstract class TransferActionFilter
 {
+    private final boolean mIsReverse;
+
     private final Map<String, GetActionsResponse.Action> mMapInline = new HashMap<>();
+    private List<GetActionsResponse.Action> mListLastPage;
 
-    public void filterPage(List<GetActionsResponse.Action> list, boolean isLoadMore)
+    public TransferActionFilter(boolean isReverse)
     {
-        filterInternal(list, mMapInline, true);
+        mIsReverse = isReverse;
     }
 
-    public void filterTotal(List<GetActionsResponse.Action> list)
+    public final void filterPage(List<GetActionsResponse.Action> list, boolean isLoadMore)
     {
-        filterInternal(list, null, false);
+        final Boolean isReverseList = isReverseList(list);
+        if (isReverseList == null)
+            return;
+
+        if (isReverseList != mIsReverse)
+            throw new IllegalArgumentException("list must be reverse = " + mIsReverse);
+
+        if (mIsReverse)
+        {
+            filter(list, mMapInline, true);
+
+            if (list != null && !list.isEmpty() && mListLastPage != null && !mListLastPage.isEmpty())
+            {
+                final GetActionsResponse.Action actionFirst = list.get(0);
+                final int inlineSize = actionFirst.getInlineTracesSize();
+                if (inlineSize > 0)
+                {
+                    final String trxId = actionFirst.getAction_trace().getTrx_id();
+
+                    final List<GetActionsResponse.Action> listRemove = new LinkedList<>();
+                    for (int i = mListLastPage.size() - 1; i >= 0; i--)
+                    {
+                        final GetActionsResponse.Action item = mListLastPage.get(i);
+                        if (trxId.equals(item.getAction_trace().getTrx_id()))
+                        {
+                            listRemove.add(item);
+                            Log.e(TransferActionFilter.class.getSimpleName(), "should remove last page action:" + item.getAccount_action_seq());
+                        } else
+                        {
+                            break;
+                        }
+                    }
+
+                    if (!listRemove.isEmpty())
+                        removeLastPageActions(listRemove);
+                }
+            }
+
+            mListLastPage = list;
+        } else
+        {
+            filter(list, mMapInline, false);
+        }
     }
 
-    private static void filterInternal(final List<GetActionsResponse.Action> list, Map<String, GetActionsResponse.Action> mapInline, final boolean checkRepeat)
+    protected abstract void removeLastPageActions(List<GetActionsResponse.Action> list);
+
+    private Boolean isReverseList(List<GetActionsResponse.Action> list)
+    {
+        if (list == null || list.isEmpty())
+            return null;
+
+        final int startSeq = list.get(0).getAccount_action_seq();
+        final int endSeq = list.get(list.size() - 1).getAccount_action_seq();
+
+        return startSeq > endSeq;
+    }
+
+    public static void filter(final List<GetActionsResponse.Action> list, Map<String, GetActionsResponse.Action> mapInline, final boolean checkRepeat)
     {
         if (list == null || list.isEmpty())
             return;
@@ -43,7 +101,7 @@ public class TransferActionFilter
             if ("transfer".equals(name))
             {
                 final String trxId = item.getAction_trace().getTrx_id();
-                if (item.hasInlineTraces())
+                if (item.getInlineTracesSize() > 0)
                     mapInline.put(trxId, item);
 
                 if (checkRepeat)
@@ -69,7 +127,7 @@ public class TransferActionFilter
             final GetActionsResponse.Action item = it.next();
 
             final String trxId = item.getAction_trace().getTrx_id();
-            if (mapInline.containsKey(trxId) && !item.hasInlineTraces())
+            if (mapInline.containsKey(trxId) && item.getInlineTracesSize() <= 0)
             {
                 it.remove();
 

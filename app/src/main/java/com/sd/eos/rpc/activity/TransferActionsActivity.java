@@ -33,12 +33,10 @@ public class TransferActionsActivity extends BaseActivity
     private FPullToRefreshView mPullToRefreshView;
     private RecyclerView mRecyclerView;
 
-    private final RpcApi mRpcApi = new RpcApi("https://node.eosflare.io");
-
+    private final RpcApi mRpcApi = new RpcApi("http://api.hkeos.com");
     private String mAccountName = "ichenfq12345";
 
     private ReverseEosActionsLoader mActionsLoader;
-    private final TransferActionFilter mTransferActionFilter = new TransferActionFilter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -149,6 +147,25 @@ public class TransferActionsActivity extends BaseActivity
         }.submit();
     }
 
+    private final TransferActionFilter mTransferActionFilter = new TransferActionFilter(true)
+    {
+        @Override
+        protected void removeLastPageActions(final List<GetActionsResponse.Action> list)
+        {
+            runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    for (GetActionsResponse.Action item : list)
+                    {
+                        mAdapter.getDataHolder().removeData(item);
+                    }
+                }
+            });
+        }
+    };
+
     private final FSimpleRecyclerAdapter<GetActionsResponse.Action> mAdapter = new FSimpleRecyclerAdapter<GetActionsResponse.Action>()
     {
         @Override
@@ -197,7 +214,7 @@ public class TransferActionsActivity extends BaseActivity
 
             tv_time.setText(timeFormat);
 
-            if (model.hasInlineTraces())
+            if (model.getInlineTracesSize() > 0)
                 tv_seq.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             else
                 tv_seq.setBackgroundColor(0);

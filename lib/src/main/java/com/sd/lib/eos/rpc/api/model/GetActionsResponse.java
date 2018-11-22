@@ -40,10 +40,10 @@ public class GetActionsResponse
         private String block_time;
         private ActionTrace action_trace;
 
-        public boolean hasInlineTraces()
+        public int getInlineTracesSize()
         {
             final List<Action> list = action_trace.getInline_traces();
-            return list != null && !list.isEmpty();
+            return list == null ? 0 : list.size();
         }
 
         public long getGlobal_action_seq()

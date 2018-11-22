@@ -168,7 +168,7 @@ public class GetActionsActivity extends BaseActivity
 
             tv_time.setText(timeFormat);
 
-            if (model.hasInlineTraces())
+            if (model.getInlineTracesSize() > 0)
                 tv_seq.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             else
                 tv_seq.setBackgroundColor(0);

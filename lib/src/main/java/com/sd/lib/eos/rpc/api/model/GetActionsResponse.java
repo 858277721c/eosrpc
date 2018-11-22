@@ -426,27 +426,29 @@ public class GetActionsResponse
         }
     }
 
-    public static void filterTransferAction(List<GetActionsResponse.Action> list, boolean checkRepeat)
+    public static void filterTransferAction(List<Action> list, Map<String, Action> mapInline, boolean checkRepeat)
     {
         if (list == null || list.isEmpty())
             return;
 
-        final Map<String, String> mapInline = new HashMap<>();
+        if (mapInline == null)
+            mapInline = new HashMap<>();
+
         final Map<String, List<Action>> mapRepeatActions = new HashMap<>();
 
         Iterator<Action> it = list.iterator();
         while (it.hasNext())
         {
-            final GetActionsResponse.Action item = it.next();
+            final Action item = it.next();
 
             final String name = item.getAction_trace().getAct().getName();
             if ("transfer".equals(name))
             {
                 final String trxId = item.getAction_trace().getTrx_id();
                 if (item.hasInlineTraces())
-                    mapInline.put(trxId, "");
+                    mapInline.put(trxId, item);
 
-                List<GetActionsResponse.Action> listMap = mapRepeatActions.get(trxId);
+                List<Action> listMap = mapRepeatActions.get(trxId);
                 if (listMap == null)
                 {
                     listMap = new LinkedList<>();
@@ -463,7 +465,7 @@ public class GetActionsResponse
         it = list.iterator();
         while (it.hasNext())
         {
-            final GetActionsResponse.Action item = it.next();
+            final Action item = it.next();
 
             final String trxId = item.getAction_trace().getTrx_id();
             if (mapInline.containsKey(trxId) && !item.hasInlineTraces())
@@ -475,15 +477,15 @@ public class GetActionsResponse
 
         if (checkRepeat)
         {
-            for (List<GetActionsResponse.Action> itemList : mapRepeatActions.values())
+            for (List<Action> itemList : mapRepeatActions.values())
             {
                 if (itemList.size() > 1)
                 {
                     boolean allEquals = true;
-                    final GetActionsResponse.Action itemFirst = itemList.get(0);
+                    final Action itemFirst = itemList.get(0);
                     for (int i = 1; i < itemList.size(); i++)
                     {
-                        final GetActionsResponse.Action item = itemList.get(i);
+                        final Action item = itemList.get(i);
                         if (!itemFirst.getAction_trace().getAct().equals(item.getAction_trace().getAct()))
                         {
                             allEquals = false;
@@ -493,7 +495,7 @@ public class GetActionsResponse
 
                     if (allEquals)
                     {
-                        for (GetActionsResponse.Action item : itemList)
+                        for (Action item : itemList)
                         {
                             list.remove(item);
                             Log.i("filterTransferAction", "remove repeat action:" + item.getAccount_action_seq());

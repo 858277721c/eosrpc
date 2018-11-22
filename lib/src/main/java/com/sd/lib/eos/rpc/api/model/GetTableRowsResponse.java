@@ -126,7 +126,7 @@ public class GetTableRowsResponse
         private Balance quote;
 
         /**
-         * 返回内存的价格，单位(EOS/KB)
+         * 返回内存的价格，单位(EOS/B)
          *
          * @param scale 要保留几位小数
          * @return
@@ -136,11 +136,8 @@ public class GetTableRowsResponse
             final double quoteAmount = RpcUtils.getMoneyAmount(quote.getBalance());
             final double baseAmount = RpcUtils.getMoneyAmount(base.getBalance());
 
-            final double baseAmountKb = new BigDecimal(baseAmount)
-                    .divide(new BigDecimal(1024), 10, RoundingMode.HALF_UP).doubleValue();
-
             final double price = new BigDecimal(quoteAmount)
-                    .divide(new BigDecimal(baseAmountKb), scale, RoundingMode.HALF_UP).doubleValue();
+                    .divide(new BigDecimal(baseAmount), scale, RoundingMode.HALF_UP).doubleValue();
 
             return price;
         }

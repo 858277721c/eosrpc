@@ -37,8 +37,15 @@ public class SimpleEccTool implements EccTool
     @Override
     public String sign(byte[] data, String privateKey)
     {
-        final Sha256 sha256 = Sha256.from(data);
-        final EcSignature signature = EcDsa.sign(sha256, new EosPrivateKey(privateKey));
-        return signature.toString();
+        try
+        {
+            final Sha256 sha256 = Sha256.from(data);
+            final EcSignature signature = EcDsa.sign(sha256, new EosPrivateKey(privateKey));
+            return signature.toString();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

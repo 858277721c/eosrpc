@@ -35,7 +35,7 @@ public class GetTableRowsResponse
         }
     }
 
-    public List<RammarketRow> getRammarketRow()
+    public List<RammarketRow> getRammarketRows()
     {
         try
         {

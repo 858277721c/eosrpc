@@ -126,18 +126,28 @@ public class GetTableRowsResponse
         private Balance quote;
 
         /**
-         * 返回内存的价格，单位(EOS/B)
+         * 返回内存的价格，单位(EOS/KB)
+         * <p>
+         * RAM价格 = (KB * quote.balance) / (KB + base.balance / 1024)
          *
-         * @param scale 要保留几位小数
+         * @param KB
+         * @param scale
          * @return
          */
-        public double getRamPrice(int scale)
+        public double getRamPrice(int KB, int scale)
         {
             final double quoteAmount = RpcUtils.getMoneyAmount(quote.getBalance());
             final double baseAmount = RpcUtils.getMoneyAmount(base.getBalance());
 
-            final double price = new BigDecimal(quoteAmount)
-                    .divide(new BigDecimal(baseAmount), scale, RoundingMode.HALF_UP).doubleValue();
+            final double first = new BigDecimal(KB)
+                    .multiply(new BigDecimal(quoteAmount)).doubleValue();
+
+            final double second = new BigDecimal(baseAmount)
+                    .divide(new BigDecimal(1024), Math.max(scale, 30), RoundingMode.HALF_UP)
+                    .add(new BigDecimal(KB)).doubleValue();
+
+            final double price = new BigDecimal(first)
+                    .divide(new BigDecimal(second), scale, RoundingMode.HALF_UP).doubleValue();
 
             return price;
         }

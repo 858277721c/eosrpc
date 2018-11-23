@@ -134,7 +134,7 @@ public class GetTableRowsResponse
          * @param scale
          * @return
          */
-        public double getRamPrice(int KB, int scale)
+        public double getRamPrice(double KB, int scale)
         {
             final double quoteAmount = RpcUtils.getMoneyAmount(quote.getBalance());
             final double baseAmount = RpcUtils.getMoneyAmount(base.getBalance());

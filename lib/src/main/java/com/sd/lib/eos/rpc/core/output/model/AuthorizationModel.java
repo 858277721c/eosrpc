@@ -5,6 +5,16 @@ public class AuthorizationModel implements AuthorizationQuery
     private String actor;
     private String permission;
 
+    public AuthorizationModel()
+    {
+    }
+
+    public AuthorizationModel(String actor, String permission)
+    {
+        this.actor = actor;
+        this.permission = permission;
+    }
+
     public String getActor()
     {
         return actor;

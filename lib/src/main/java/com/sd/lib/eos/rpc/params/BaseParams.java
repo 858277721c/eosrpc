@@ -13,19 +13,13 @@ public abstract class BaseParams<A extends BaseParams.Args, B extends BaseParams
 
     protected BaseParams(B builder)
     {
-        final List<AuthorizationModel> authorization = builder.authorization;
-        if (authorization == null || authorization.isEmpty())
-            throw new RuntimeException("authorization was not specified");
+        final String authorizationActor = Utils.checkEmpty(builder.authorizationActor, "authorization actor was not specified");
+        final String authorizationPermission = Utils.checkEmpty(builder.authorizationPermission, "authorization permission was not specified");
 
-        for (AuthorizationModel item : authorization)
-        {
-            Utils.checkNotNull(item, "authorization item is null");
-            Utils.checkEmpty(item.getActor(), "authorization actor is empty");
-            if (Utils.isEmpty(item.getPermission()))
-                item.setPermission("active");
-        }
+        final List<AuthorizationModel> list = new ArrayList<>();
+        list.add(new AuthorizationModel(authorizationActor, authorizationPermission));
 
-        this.authorization = Collections.unmodifiableList(authorization);
+        this.authorization = Collections.unmodifiableList(list);
     }
 
     @Override
@@ -43,31 +37,26 @@ public abstract class BaseParams<A extends BaseParams.Args, B extends BaseParams
 
     protected static class Builder
     {
-        protected List<AuthorizationModel> authorization;
+        protected String authorizationActor;
+        protected String authorizationPermission;
 
         protected Builder setAuthorization(String actor)
         {
-            setAuthorization(actor, null);
+            setAuthorization(actor, "active");
             return this;
         }
 
         protected Builder setAuthorization(String actor, String permission)
         {
-            authorization = null;
-            addAuthorization(actor, permission);
+            this.authorizationActor = actor;
+            this.authorizationPermission = permission;
             return this;
         }
 
-        private void addAuthorization(String actor, String permission)
+        public Builder setAuthorizationPermission(String permission)
         {
-            final AuthorizationModel model = new AuthorizationModel();
-            model.setActor(actor);
-            model.setPermission(permission);
-
-            if (authorization == null)
-                authorization = new ArrayList<>();
-
-            authorization.add(model);
+            this.authorizationPermission = permission;
+            return this;
         }
     }
 }

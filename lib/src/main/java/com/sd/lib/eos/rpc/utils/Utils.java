@@ -7,10 +7,11 @@ public class Utils
         return content == null || content.length() == 0;
     }
 
-    public static void checkEmpty(String content, String exception)
+    public static String checkEmpty(String content, String exception)
     {
         if (isEmpty(content))
             throw new NullPointerException(exception);
+        return content;
     }
 
     public static <T> T checkNotNull(T object, String exception)

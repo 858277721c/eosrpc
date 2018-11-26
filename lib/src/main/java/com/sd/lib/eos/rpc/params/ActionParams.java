@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface ActionParams<A extends ActionParams.Args>
 {
-    String getAction();
-
     String getCode();
+
+    String getAction();
 
     A getArgs();
 

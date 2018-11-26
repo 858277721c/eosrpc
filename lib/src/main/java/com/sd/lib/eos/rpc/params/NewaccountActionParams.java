@@ -51,17 +51,11 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
             this.creator = RpcUtils.checkAccountName(builder.creator, "newaccount creator was not specified");
             this.name = RpcUtils.checkAccountName(builder.newAccount, "newaccount name was not specified");
 
-            final PermissionModel owner = Utils.checkNotNull(builder.owner, "newaccount owner permission was not specified");
-            if (owner.hasKey())
-                this.owner = PermissionModel.create(owner.getKeys().get(0).getKey());
-            else
-                throw new RuntimeException("newaccount owner permission is empty");
+            final String ownerPublicKey = Utils.checkEmpty(builder.ownerPublicKey, "newaccount owner public key was not specified");
+            this.owner = PermissionModel.create(ownerPublicKey);
 
-            final PermissionModel active = Utils.checkNotNull(builder.active, "newaccount active permission was not specified");
-            if (active.hasKey())
-                this.active = PermissionModel.create(active.getKeys().get(0).getKey());
-            else
-                throw new RuntimeException("newaccount active permission is empty");
+            final String activePublicKey = Utils.checkEmpty(builder.activePublicKey, "newaccount active public key was not specified");
+            this.active = PermissionModel.create(activePublicKey);
 
             this.newact = this.name;
         }
@@ -96,8 +90,9 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
     {
         private String creator;
         private String newAccount;
-        private PermissionModel owner;
-        private PermissionModel active;
+
+        private String ownerPublicKey;
+        private String activePublicKey;
 
         /**
          * 设置创建者账号
@@ -132,8 +127,8 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
          */
         public Builder setOwner(String publicKey)
         {
-            this.owner = PermissionModel.create(publicKey);
-            if (active == null)
+            this.ownerPublicKey = publicKey;
+            if (Utils.isEmpty(activePublicKey))
                 setActive(publicKey);
             return this;
         }
@@ -146,7 +141,7 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
          */
         public Builder setActive(String publicKey)
         {
-            this.active = PermissionModel.create(publicKey);
+            this.activePublicKey = publicKey;
             return this;
         }
 

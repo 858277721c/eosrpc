@@ -13,6 +13,7 @@ public class UnDelegatebwActionParams extends BaseParams<UnDelegatebwActionParam
     private UnDelegatebwActionParams(Builder builder)
     {
         super(builder);
+        setAuthorizationActor(builder.from);
         this.args = new Args(builder);
     }
 
@@ -71,7 +72,7 @@ public class UnDelegatebwActionParams extends BaseParams<UnDelegatebwActionParam
         }
     }
 
-    public static class Builder extends BaseParams.Builder
+    public static class Builder extends BaseParams.Builder<Builder>
     {
         private String from;
         private String receiver;
@@ -87,7 +88,6 @@ public class UnDelegatebwActionParams extends BaseParams<UnDelegatebwActionParam
         public Builder setFrom(String from)
         {
             this.from = from;
-            setAuthorization(from);
             return this;
         }
 

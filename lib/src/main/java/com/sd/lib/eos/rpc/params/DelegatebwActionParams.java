@@ -13,6 +13,7 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
     private DelegatebwActionParams(Builder builder)
     {
         super(builder);
+        setAuthorizationActor(builder.from);
         this.args = new Args(builder);
     }
 
@@ -84,7 +85,7 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
         }
     }
 
-    public static class Builder extends BaseParams.Builder
+    public static class Builder extends BaseParams.Builder<Builder>
     {
         private String from;
         private String receiver;
@@ -102,7 +103,6 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
         public Builder setFrom(String from)
         {
             this.from = from;
-            setAuthorization(from);
             return this;
         }
 

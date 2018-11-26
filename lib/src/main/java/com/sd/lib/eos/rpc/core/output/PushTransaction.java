@@ -3,6 +3,7 @@ package com.sd.lib.eos.rpc.core.output;
 import com.sd.lib.eos.rpc.api.RpcApi;
 import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
 import com.sd.lib.eos.rpc.api.model.ApiResponse;
+import com.sd.lib.eos.rpc.api.model.GetAccountResponse;
 import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
 import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
@@ -19,7 +20,9 @@ import com.sd.lib.eos.rpc.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 提交交易
@@ -28,13 +31,20 @@ public class PushTransaction
 {
     private final RpcApi mRpcApi = new RpcApi();
     private final ActionParams[] mActionParams;
+    private final boolean mAutoAuthorizationPermission;
 
     public PushTransaction(ActionParams... params)
+    {
+        this(true, params);
+    }
+
+    public PushTransaction(boolean autoAuthorizationPermission, ActionParams... params)
     {
         if (params == null || params.length <= 0)
             throw new IllegalArgumentException("params was not specified");
 
         mActionParams = Arrays.copyOf(params, params.length);
+        mAutoAuthorizationPermission = autoAuthorizationPermission;
     }
 
     /**
@@ -49,6 +59,12 @@ public class PushTransaction
         Utils.checkEmpty(privateKey, "private key is empty");
         Utils.checkNotNull(callback, "callback is null");
 
+        final String publicKey = FEOSManager.getInstance().getEccTool().privateToPublicKey(privateKey);
+        Utils.checkEmpty(publicKey, "private key format error");
+
+        if (!checkAutoAuthorizationPermission(publicKey, callback))
+            return;
+
         final List<ActionModel> listAction = new ArrayList<>();
         for (ActionParams item : mActionParams)
         {
@@ -59,7 +75,7 @@ public class PushTransaction
             final ApiResponse<AbiJsonToBinResponse> apiResponse = mRpcApi.abiJsonToBin(code, action, args);
             if (!apiResponse.isSuccessful())
             {
-                callback.onErrorAbiJsonToBin(apiResponse, "abiJsonToBin failed:" + code + " " + action);
+                callback.onErrorAbiJsonToBin(apiResponse, "abiJsonToBin failed");
                 return;
             }
 
@@ -126,21 +142,108 @@ public class PushTransaction
         callback.onSuccess(pushApiResponse);
     }
 
+    private boolean checkAutoAuthorizationPermission(String publicKey, Callback callback) throws RpcException
+    {
+        if (!mAutoAuthorizationPermission)
+            return true;
+
+        final Map<String, GetAccountResponse> mapGetAccountResponse = new HashMap<>();
+        for (ActionParams item : mActionParams)
+        {
+            final String actor = item.getAuthorizationActor();
+            Utils.checkEmpty(actor, "authorization actor was not specified");
+
+            GetAccountResponse response = mapGetAccountResponse.get(actor);
+            if (response == null)
+            {
+                final ApiResponse<GetAccountResponse> apiResponse = mRpcApi.getAccount(actor);
+                if (!apiResponse.isSuccessful())
+                {
+                    callback.onErrorGetAccount(apiResponse, "getAccount failed");
+                    return false;
+                }
+
+                response = apiResponse.getSuccess();
+                mapGetAccountResponse.put(actor, response);
+            }
+
+            final List<GetAccountResponse.Permission> permissions = response.getPermissions();
+            if (permissions == null || permissions.isEmpty())
+            {
+                callback.onError("getAccount permissions is empty");
+                return false;
+            }
+
+            GetAccountResponse.Permission targetPermission = null;
+            for (GetAccountResponse.Permission itemPermission : permissions)
+            {
+                final List<GetAccountResponse.Permission.RequiredAuth.Key> keys = itemPermission.getRequired_auth().getKeys();
+                if (keys == null || keys.isEmpty())
+                {
+                    callback.onError("getAccount permissions keys is empty");
+                    return false;
+                }
+
+                boolean found = false;
+                for (GetAccountResponse.Permission.RequiredAuth.Key itemKeys : keys)
+                {
+                    if (publicKey.equals(itemKeys.getKey()))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found)
+                {
+                    targetPermission = itemPermission;
+                    break;
+                }
+            }
+
+            if (targetPermission == null)
+            {
+                callback.onError("public key was not found in getAccount permissions");
+                return false;
+            }
+
+            item.setAuthorizationPermission(targetPermission.getPerm_name());
+        }
+
+        return true;
+    }
+
     protected TransactionSigner getTransactionSigner()
     {
         return FEOSManager.getInstance().getTransactionSigner();
     }
 
-    public interface Callback
+    public static abstract class Callback
     {
-        void onSuccess(ApiResponse<PushTransactionResponse> response);
+        public abstract void onSuccess(ApiResponse<PushTransactionResponse> response);
 
-        void onErrorAbiJsonToBin(ApiResponse<AbiJsonToBinResponse> response, String msg);
+        public void onErrorGetAccount(ApiResponse<GetAccountResponse> response, String msg)
+        {
+        }
 
-        void onErrorGetInfo(ApiResponse<GetInfoResponse> response, String msg);
+        public void onErrorAbiJsonToBin(ApiResponse<AbiJsonToBinResponse> response, String msg)
+        {
+        }
 
-        void onErrorGetBlock(ApiResponse<GetBlockResponse> response, String msg);
+        public void onErrorGetInfo(ApiResponse<GetInfoResponse> response, String msg)
+        {
+        }
 
-        void onErrorPushTransaction(ApiResponse<PushTransactionResponse> response, String msg);
+        public void onErrorGetBlock(ApiResponse<GetBlockResponse> response, String msg)
+        {
+        }
+
+        public void onErrorPushTransaction(ApiResponse<PushTransactionResponse> response, String msg)
+        {
+        }
+
+        public void onError(String msg)
+        {
+        }
     }
 }

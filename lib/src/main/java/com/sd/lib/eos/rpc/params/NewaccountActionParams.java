@@ -15,6 +15,7 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
     private NewaccountActionParams(Builder builder)
     {
         super(builder);
+        setAuthorizationActor(builder.creator);
         this.args = new Args(builder);
     }
 
@@ -86,7 +87,7 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
         }
     }
 
-    public static class Builder extends BaseParams.Builder
+    public static class Builder extends BaseParams.Builder<Builder>
     {
         private String creator;
         private String newAccount;
@@ -103,7 +104,6 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
         public Builder setCreator(String creator)
         {
             this.creator = creator;
-            setAuthorization(creator);
             return this;
         }
 

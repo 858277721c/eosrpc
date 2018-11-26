@@ -13,6 +13,7 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
     private BuyramActionParams(Builder builder)
     {
         super(builder);
+        setAuthorizationActor(builder.payer);
         this.args = new Args(builder);
     }
 
@@ -64,7 +65,7 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
         }
     }
 
-    public static class Builder extends BaseParams.Builder
+    public static class Builder extends BaseParams.Builder<Builder>
     {
         private String payer;
         private String receiver;
@@ -79,7 +80,6 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
         public Builder setPayer(String payer)
         {
             this.payer = payer;
-            setAuthorization(payer);
             return this;
         }
 

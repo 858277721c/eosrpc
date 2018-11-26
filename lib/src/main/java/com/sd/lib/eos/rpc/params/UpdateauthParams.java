@@ -14,6 +14,8 @@ public class UpdateauthParams extends BaseParams<UpdateauthParams.Args, Updateau
     protected UpdateauthParams(Builder builder)
     {
         super(builder);
+        setAuthorizationActor(builder.account);
+        setAuthorizationPermission("owner");
         this.args = new Args(builder);
     }
 
@@ -74,7 +76,7 @@ public class UpdateauthParams extends BaseParams<UpdateauthParams.Args, Updateau
         }
     }
 
-    public static class Builder extends BaseParams.Builder
+    public static class Builder extends BaseParams.Builder<Builder>
     {
         private String account;
         private String permission;
@@ -90,7 +92,6 @@ public class UpdateauthParams extends BaseParams<UpdateauthParams.Args, Updateau
         public Builder setAccount(String account)
         {
             this.account = account;
-            setAuthorization(account, "owner");
             return this;
         }
 

@@ -12,6 +12,10 @@ public interface ActionParams<A extends ActionParams.Args>
 
     A getArgs();
 
+    String getAuthorizationActor();
+
+    void setAuthorizationPermission(String permission);
+
     List<AuthorizationModel> getAuthorization();
 
     class Args

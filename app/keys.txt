@@ -1,8 +1,4 @@
-﻿fwtest111111
-私钥：5JQh92zjfWJW6a6suaLm7o2wMCNKZnqp4bb3Kb2dNSb7ts8vDWH
-公钥：EOS67Q8sXouXtxi72FFgih5hWx7Ks1Bkm8soNuzt9U9sRNuMtjHwT
-
-liuliqin1234
+﻿liuliqin1234
 私钥：5KbTuZTe6aBmtQ7aV6XxXtjs7Tu84ZZcqr4NAhSCxmvJ7797Kge
 公钥：EOS6EQbp8Skxc7YQL25NNGWimnCxPCMFYqUSRTWFJm2KeXxM2Hxft
 

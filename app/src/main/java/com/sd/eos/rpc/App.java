@@ -28,7 +28,7 @@ public class App extends Application
         /**
          * 设置节点地址（必须）
          */
-        FEOSManager.getInstance().setBaseUrl("http://jungle.cryptolions.io:18888");
+        FEOSManager.getInstance().setBaseUrl("https://jungle2.cryptolions.io:443");
         /**
          * 设置接口请求对象（非必须）
          */

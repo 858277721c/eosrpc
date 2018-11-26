@@ -22,8 +22,8 @@ public class App extends Application
                 .build(this));
 
         AccountHolder.get().add(new AccountModel("liuliqin1234",
-                "5KbTuZTe6aBmtQ7aV6XxXtjs7Tu84ZZcqr4NAhSCxmvJ7797Kge",
-                "EOS6EQbp8Skxc7YQL25NNGWimnCxPCMFYqUSRTWFJm2KeXxM2Hxft"));
+                "5KJtdq9xz4fE1sQrBHFDpCpb7EdyK6KJcMRyRLRnQurs1FVyRyf",
+                "EOS8YYJTzUTYaS65Mi7NoVrxjUnLGEUQTTYF3JxbMWqYNWz1AgD1s"));
 
         /**
          * 设置节点地址（必须）

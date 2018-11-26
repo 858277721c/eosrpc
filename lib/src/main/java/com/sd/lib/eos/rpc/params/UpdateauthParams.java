@@ -35,7 +35,7 @@ public class UpdateauthParams extends BaseParams<UpdateauthParams.Args, Updateau
         return this.args;
     }
 
-    public static class Args extends ActionParams.Args
+    public static class Args extends BaseParams.Args<Builder>
     {
         private String account;
         private String permission;
@@ -44,6 +44,7 @@ public class UpdateauthParams extends BaseParams<UpdateauthParams.Args, Updateau
 
         private Args(Builder builder)
         {
+            super(builder);
             this.account = RpcUtils.checkAccountName(builder.account, "updateauth account was not specified");
             this.permission = Utils.checkEmpty(builder.permission, "updateauth permission was not specified");
             this.parent = Utils.checkNotNull(builder.parent, "updateauth parent was not specified");
@@ -73,7 +74,7 @@ public class UpdateauthParams extends BaseParams<UpdateauthParams.Args, Updateau
         }
     }
 
-    public static class Builder extends BaseParams.Builder<Builder>
+    public static class Builder extends BaseParams.Builder
     {
         private String account;
         private String permission;

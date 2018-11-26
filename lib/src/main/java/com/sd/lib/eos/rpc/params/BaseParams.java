@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class BaseParams<A extends ActionParams.Args, B extends BaseParams.Builder> implements ActionParams<A>
+public abstract class BaseParams<A extends BaseParams.Args, B extends BaseParams.Builder> implements ActionParams<A>
 {
     private final List<AuthorizationModel> authorization;
 
@@ -34,22 +34,31 @@ public abstract class BaseParams<A extends ActionParams.Args, B extends BasePara
         return authorization;
     }
 
-    protected static class Builder<B extends Builder>
+    protected static class Args<B> extends ActionParams.Args
+    {
+        protected Args(B builder)
+        {
+        }
+    }
+
+    protected static class Builder
     {
         protected List<AuthorizationModel> authorization;
 
-        public B setAuthorization(String actor)
+        protected Builder setAuthorization(String actor)
         {
-            return setAuthorization(actor, null);
+            setAuthorization(actor, null);
+            return this;
         }
 
-        public B setAuthorization(String actor, String permission)
+        protected Builder setAuthorization(String actor, String permission)
         {
             authorization = null;
-            return addAuthorization(actor, permission);
+            addAuthorization(actor, permission);
+            return this;
         }
 
-        private B addAuthorization(String actor, String permission)
+        private void addAuthorization(String actor, String permission)
         {
             final AuthorizationModel model = new AuthorizationModel();
             model.setActor(actor);
@@ -59,7 +68,6 @@ public abstract class BaseParams<A extends ActionParams.Args, B extends BasePara
                 authorization = new ArrayList<>();
 
             authorization.add(model);
-            return (B) this;
         }
     }
 }

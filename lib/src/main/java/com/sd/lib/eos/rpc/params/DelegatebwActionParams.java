@@ -34,7 +34,7 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
         return this.args;
     }
 
-    public static class Args extends ActionParams.Args
+    public static class Args extends BaseParams.Args<Builder>
     {
         private final String from;
         private final String receiver;
@@ -45,6 +45,7 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
 
         private Args(Builder builder)
         {
+            super(builder);
             this.from = RpcUtils.checkAccountName(builder.from, "delegatebw from was not specified");
             this.receiver = RpcUtils.checkAccountName(builder.receiver, "delegatebw receiver was not specified");
             this.stake_net_quantity = RpcUtils.checkMoney(builder.stake_net_quantity, "delegatebw stake net quantity was not specified");
@@ -83,7 +84,7 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
         }
     }
 
-    public static class Builder extends BaseParams.Builder<Builder>
+    public static class Builder extends BaseParams.Builder
     {
         private String from;
         private String receiver;

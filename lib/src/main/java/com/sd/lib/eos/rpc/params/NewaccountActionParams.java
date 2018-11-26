@@ -36,7 +36,7 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
         return this.args;
     }
 
-    public static class Args extends ActionParams.Args
+    public static class Args extends BaseParams.Args<Builder>
     {
         private final String creator;
         private final String name;
@@ -47,6 +47,7 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
 
         private Args(Builder builder)
         {
+            super(builder);
             this.creator = RpcUtils.checkAccountName(builder.creator, "newaccount creator was not specified");
             this.name = RpcUtils.checkAccountName(builder.newAccount, "newaccount name was not specified");
 
@@ -91,7 +92,7 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
         }
     }
 
-    public static class Builder extends BaseParams.Builder<Builder>
+    public static class Builder extends BaseParams.Builder
     {
         private String creator;
         private String newAccount;

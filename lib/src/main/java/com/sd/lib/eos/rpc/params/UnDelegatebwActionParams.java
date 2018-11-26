@@ -34,7 +34,7 @@ public class UnDelegatebwActionParams extends BaseParams<UnDelegatebwActionParam
         return this.args;
     }
 
-    public static class Args extends ActionParams.Args
+    public static class Args extends BaseParams.Args<Builder>
     {
         private final String from;
         private final String receiver;
@@ -43,6 +43,7 @@ public class UnDelegatebwActionParams extends BaseParams<UnDelegatebwActionParam
 
         private Args(Builder builder)
         {
+            super(builder);
             this.from = RpcUtils.checkAccountName(builder.from, "undelegatebw from was not specified");
             this.receiver = RpcUtils.checkAccountName(builder.receiver, "undelegatebw receiver was not specified");
             this.unstake_net_quantity = RpcUtils.checkMoney(builder.unstake_net_quantity, "undelegatebw unstake net quantity was not specified");
@@ -70,7 +71,7 @@ public class UnDelegatebwActionParams extends BaseParams<UnDelegatebwActionParam
         }
     }
 
-    public static class Builder extends BaseParams.Builder<Builder>
+    public static class Builder extends BaseParams.Builder
     {
         private String from;
         private String receiver;

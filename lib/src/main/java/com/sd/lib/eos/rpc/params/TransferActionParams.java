@@ -34,7 +34,7 @@ public class TransferActionParams extends BaseParams<TransferActionParams.Args, 
         return this.args;
     }
 
-    public static class Args extends ActionParams.Args
+    public static class Args extends BaseParams.Args<Builder>
     {
         private final String from;
         private final String to;
@@ -43,6 +43,7 @@ public class TransferActionParams extends BaseParams<TransferActionParams.Args, 
 
         private Args(Builder builder)
         {
+            super(builder);
             this.from = RpcUtils.checkAccountName(builder.from, "transfer from was not specified");
             this.to = RpcUtils.checkAccountName(builder.to, "transfer to was not specified");
             this.quantity = RpcUtils.checkMoney(builder.quantity, "transfer quantity was not specified");
@@ -70,7 +71,7 @@ public class TransferActionParams extends BaseParams<TransferActionParams.Args, 
         }
     }
 
-    public static class Builder extends BaseParams.Builder<Builder>
+    public static class Builder extends BaseParams.Builder
     {
         private String from;
         private String to;

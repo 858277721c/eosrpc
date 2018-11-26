@@ -34,7 +34,7 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
         return this.args;
     }
 
-    public static class Args extends ActionParams.Args
+    public static class Args extends BaseParams.Args<Builder>
     {
         private final String payer;
         private final String receiver;
@@ -42,6 +42,7 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
 
         private Args(Builder builder)
         {
+            super(builder);
             this.payer = RpcUtils.checkAccountName(builder.payer, "buyram payer was not specified");
             this.receiver = RpcUtils.checkAccountName(builder.receiver, "buyram receiver was not specified");
             this.quant = RpcUtils.checkMoney(builder.quantity, "buyram quantity was not specified");
@@ -63,7 +64,7 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
         }
     }
 
-    public static class Builder extends BaseParams.Builder<Builder>
+    public static class Builder extends BaseParams.Builder
     {
         private String payer;
         private String receiver;

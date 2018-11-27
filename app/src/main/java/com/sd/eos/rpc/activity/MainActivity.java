@@ -6,9 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.sd.eos.rpc.R;
-import com.sd.lib.eos.rpc.api.RpcApi;
-import com.sd.lib.eos.rpc.api.model.AbiBinToJsonResponse;
-import com.sd.lib.task.FTask;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
@@ -17,20 +14,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_main);
-
-        new FTask()
-        {
-            @Override
-            protected void onRun() throws Exception
-            {
-                final AbiBinToJsonResponse response = new RpcApi("https://node.eosflare.io").abiBinToJson(
-                        "zkstokensr4u",
-                        "claim",
-                        "40860853bf3ff5fb005a4b5300000000").getSuccess();
-
-                response.getArgs();
-            }
-        }.submit();
     }
 
     @Override

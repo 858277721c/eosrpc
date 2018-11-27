@@ -8,6 +8,28 @@ public class ErrorResponse
     private String message;
     private Error error;
 
+    public String getErrorInformation()
+    {
+        final StringBuilder sb = new StringBuilder();
+
+        if (error != null)
+        {
+            sb.append(error.getCode()).append("\n");
+
+            final List<Error.Details> details = error.getDetails();
+            if (details != null && !details.isEmpty())
+            {
+                final Error.Details item = details.get(0);
+                sb.append(item.message).append("\n");
+            }
+        } else
+        {
+            sb.append(code).append(" ").append(message).append("\n");
+        }
+
+        return sb.toString();
+    }
+
     public int getCode()
     {
         return code;

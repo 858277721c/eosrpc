@@ -81,7 +81,7 @@ public class PushTransaction
             final ApiResponse<AbiJsonToBinResponse> apiResponse = mRpcApi.abiJsonToBin(code, action, args);
             if (!apiResponse.isSuccessful())
             {
-                callback.onErrorApi(ApiError.AbiJsonToBin, apiResponse.getError(), null);
+                callback.onErrorApi(ApiError.AbiJsonToBin, apiResponse.getError());
                 return;
             }
 
@@ -101,7 +101,7 @@ public class PushTransaction
         final ApiResponse<GetInfoResponse> infoApiResponse = mRpcApi.getInfo();
         if (!infoApiResponse.isSuccessful())
         {
-            callback.onErrorApi(ApiError.GetInfo, infoApiResponse.getError(), null);
+            callback.onErrorApi(ApiError.GetInfo, infoApiResponse.getError());
             return;
         }
 
@@ -111,7 +111,7 @@ public class PushTransaction
         final ApiResponse<GetBlockResponse> blockApiResonse = mRpcApi.getBlock(blockId);
         if (!blockApiResonse.isSuccessful())
         {
-            callback.onErrorApi(ApiError.GetBlock, blockApiResonse.getError(), null);
+            callback.onErrorApi(ApiError.GetBlock, blockApiResonse.getError());
             return;
         }
 
@@ -141,7 +141,7 @@ public class PushTransaction
 
         if (!pushApiResponse.isSuccessful())
         {
-            callback.onErrorApi(ApiError.PushTransaction, pushApiResponse.getError(), null);
+            callback.onErrorApi(ApiError.PushTransaction, pushApiResponse.getError());
             return;
         }
 
@@ -172,7 +172,7 @@ public class PushTransaction
                 final ApiResponse<GetAccountResponse> apiResponse = mRpcApi.getAccount(actor);
                 if (!apiResponse.isSuccessful())
                 {
-                    callback.onErrorApi(ApiError.GetAccount, apiResponse.getError(), null);
+                    callback.onErrorApi(ApiError.GetAccount, apiResponse.getError());
                     return false;
                 }
 
@@ -222,10 +222,8 @@ public class PushTransaction
     {
         public abstract void onSuccess(ApiResponse<PushTransactionResponse> response);
 
-        public void onErrorApi(ApiError error, ErrorResponse errorResponse, String msg)
+        public void onErrorApi(ApiError error, ErrorResponse errorResponse)
         {
-            if (Utils.isEmpty(msg))
-                msg = errorResponse.getCode() + " " + errorResponse.getMessage();
         }
 
         public void onError(Error error, String msg)

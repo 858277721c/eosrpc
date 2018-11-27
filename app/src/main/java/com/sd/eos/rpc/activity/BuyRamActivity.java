@@ -126,10 +126,10 @@ public class BuyRamActivity extends BaseActivity implements View.OnClickListener
                     }
 
                     @Override
-                    public void onErrorApi(PushTransaction.ApiError error, ErrorResponse errorResponse, String msg)
+                    public void onErrorApi(PushTransaction.ApiError error, ErrorResponse errorResponse)
                     {
-                        super.onErrorApi(error, errorResponse, msg);
-                        setTextContent(tv_content, msg);
+                        super.onErrorApi(error, errorResponse);
+                        setTextContent(tv_content, errorResponse.getErrorInformation());
                     }
 
                     @Override

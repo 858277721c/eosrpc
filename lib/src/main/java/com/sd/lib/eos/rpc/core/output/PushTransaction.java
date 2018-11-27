@@ -176,25 +176,12 @@ public class PushTransaction
                 }
 
                 final GetAccountResponse response = apiResponse.getSuccess();
-                final List<GetAccountResponse.Permission> permissions = response.getPermissions();
-                if (permissions == null || permissions.isEmpty())
-                {
-                    callback.onError("getAccount permissions is empty");
-                    return false;
-                }
 
                 GetAccountResponse.Permission targetPermission = null;
-                for (GetAccountResponse.Permission itemPermission : permissions)
+                for (GetAccountResponse.Permission itemPermission : response.getPermissions())
                 {
-                    final List<GetAccountResponse.Permission.RequiredAuth.Key> keys = itemPermission.getRequired_auth().getKeys();
-                    if (keys == null || keys.isEmpty())
-                    {
-                        callback.onError("getAccount permissions keys is empty");
-                        return false;
-                    }
-
                     boolean found = false;
-                    for (GetAccountResponse.Permission.RequiredAuth.Key itemKeys : keys)
+                    for (GetAccountResponse.Permission.RequiredAuth.Key itemKeys : itemPermission.getRequired_auth().getKeys())
                     {
                         if (publicKey.equals(itemKeys.getKey()))
                         {
@@ -212,7 +199,7 @@ public class PushTransaction
 
                 if (targetPermission == null)
                 {
-                    callback.onError("public key was not found in getAccount permissions");
+                    callback.onError(Error.NOT_ACCOUNT_KEY, "");
                     return false;
                 }
 
@@ -254,8 +241,16 @@ public class PushTransaction
         {
         }
 
-        public void onError(String msg)
+        public void onError(Error error, String msg)
         {
         }
+    }
+
+    public enum Error
+    {
+        /**
+         * 提供的密钥不是该账号对应的密钥
+         */
+        NOT_ACCOUNT_KEY
     }
 }

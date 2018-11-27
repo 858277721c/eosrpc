@@ -3,6 +3,7 @@ package com.sd.lib.eos.rpc.core.output;
 import com.sd.lib.eos.rpc.api.RpcApi;
 import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
 import com.sd.lib.eos.rpc.api.model.ApiResponse;
+import com.sd.lib.eos.rpc.api.model.ErrorResponse;
 import com.sd.lib.eos.rpc.api.model.GetAccountResponse;
 import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
 import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
@@ -80,7 +81,7 @@ public class PushTransaction
             final ApiResponse<AbiJsonToBinResponse> apiResponse = mRpcApi.abiJsonToBin(code, action, args);
             if (!apiResponse.isSuccessful())
             {
-                callback.onErrorAbiJsonToBin(apiResponse, "abiJsonToBin failed");
+                callback.onErrorApi(ApiError.AbiJsonToBin, apiResponse.getError(), null);
                 return;
             }
 
@@ -100,7 +101,7 @@ public class PushTransaction
         final ApiResponse<GetInfoResponse> infoApiResponse = mRpcApi.getInfo();
         if (!infoApiResponse.isSuccessful())
         {
-            callback.onErrorGetInfo(infoApiResponse, "getInfo fialed");
+            callback.onErrorApi(ApiError.GetInfo, infoApiResponse.getError(), null);
             return;
         }
 
@@ -110,7 +111,7 @@ public class PushTransaction
         final ApiResponse<GetBlockResponse> blockApiResonse = mRpcApi.getBlock(blockId);
         if (!blockApiResonse.isSuccessful())
         {
-            callback.onErrorGetBlock(blockApiResonse, "getBlock failed");
+            callback.onErrorApi(ApiError.GetBlock, blockApiResonse.getError(), null);
             return;
         }
 
@@ -140,7 +141,7 @@ public class PushTransaction
 
         if (!pushApiResponse.isSuccessful())
         {
-            callback.onErrorPushTransaction(pushApiResponse, "push transaction failed");
+            callback.onErrorApi(ApiError.PushTransaction, pushApiResponse.getError(), null);
             return;
         }
 
@@ -171,7 +172,7 @@ public class PushTransaction
                 final ApiResponse<GetAccountResponse> apiResponse = mRpcApi.getAccount(actor);
                 if (!apiResponse.isSuccessful())
                 {
-                    callback.onErrorGetAccount(apiResponse, "getAccount failed");
+                    callback.onErrorApi(ApiError.GetAccount, apiResponse.getError(), null);
                     return false;
                 }
 
@@ -199,7 +200,7 @@ public class PushTransaction
 
                 if (targetPermission == null)
                 {
-                    callback.onError(Error.NOT_ACCOUNT_KEY, "");
+                    callback.onError(Error.NotAccountKey, "The key provided is not the key of the account");
                     return false;
                 }
 
@@ -221,24 +222,10 @@ public class PushTransaction
     {
         public abstract void onSuccess(ApiResponse<PushTransactionResponse> response);
 
-        public void onErrorGetAccount(ApiResponse<GetAccountResponse> response, String msg)
+        public void onErrorApi(ApiError error, ErrorResponse errorResponse, String msg)
         {
-        }
-
-        public void onErrorAbiJsonToBin(ApiResponse<AbiJsonToBinResponse> response, String msg)
-        {
-        }
-
-        public void onErrorGetInfo(ApiResponse<GetInfoResponse> response, String msg)
-        {
-        }
-
-        public void onErrorGetBlock(ApiResponse<GetBlockResponse> response, String msg)
-        {
-        }
-
-        public void onErrorPushTransaction(ApiResponse<PushTransactionResponse> response, String msg)
-        {
+            if (Utils.isEmpty(msg))
+                msg = errorResponse.getCode() + " " + errorResponse.getMessage();
         }
 
         public void onError(Error error, String msg)
@@ -251,6 +238,15 @@ public class PushTransaction
         /**
          * 提供的密钥不是该账号对应的密钥
          */
-        NOT_ACCOUNT_KEY
+        NotAccountKey,
+    }
+
+    public enum ApiError
+    {
+        GetAccount,
+        AbiJsonToBin,
+        GetInfo,
+        GetBlock,
+        PushTransaction,
     }
 }

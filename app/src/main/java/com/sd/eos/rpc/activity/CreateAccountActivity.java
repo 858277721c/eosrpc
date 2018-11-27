@@ -11,10 +11,8 @@ import com.sd.eos.rpc.R;
 import com.sd.eos.rpc.dialog.LocalAccountDialog;
 import com.sd.eos.rpc.model.AccountHolder;
 import com.sd.eos.rpc.model.AccountModel;
-import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
 import com.sd.lib.eos.rpc.api.model.ApiResponse;
-import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
-import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
+import com.sd.lib.eos.rpc.api.model.ErrorResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.core.FEOSManager;
 import com.sd.lib.eos.rpc.core.output.PushTransaction;
@@ -196,27 +194,17 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
                     }
 
                     @Override
-                    public void onErrorAbiJsonToBin(ApiResponse<AbiJsonToBinResponse> response, String msg)
+                    public void onErrorApi(PushTransaction.ApiError error, ErrorResponse errorResponse, String msg)
                     {
-                        setTextContent(tv_content, new Gson().toJson(response.getError()) + " " + msg);
+                        super.onErrorApi(error, errorResponse, msg);
+                        setTextContent(tv_content, msg);
                     }
 
                     @Override
-                    public void onErrorGetInfo(ApiResponse<GetInfoResponse> response, String msg)
+                    public void onError(PushTransaction.Error error, String msg)
                     {
-                        setTextContent(tv_content, new Gson().toJson(response.getError()) + " " + msg);
-                    }
-
-                    @Override
-                    public void onErrorGetBlock(ApiResponse<GetBlockResponse> response, String msg)
-                    {
-                        setTextContent(tv_content, new Gson().toJson(response.getError()) + " " + msg);
-                    }
-
-                    @Override
-                    public void onErrorPushTransaction(ApiResponse<PushTransactionResponse> response, String msg)
-                    {
-                        setTextContent(tv_content, new Gson().toJson(response.getError()) + " " + msg);
+                        super.onError(error, msg);
+                        setTextContent(tv_content, msg);
                     }
                 });
             }

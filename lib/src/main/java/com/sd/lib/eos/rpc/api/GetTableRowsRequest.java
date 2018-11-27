@@ -17,7 +17,7 @@ public class GetTableRowsRequest extends BaseRequest<GetTableRowsResponse>
     private int upper_bound = -1;
     private int limit = -1;
     private String key_type;
-    private int index_position;
+    private int index_position = -1;
     private String encode_type;
 
     public GetTableRowsRequest(String baseUrl)

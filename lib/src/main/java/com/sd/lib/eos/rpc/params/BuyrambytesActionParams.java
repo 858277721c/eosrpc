@@ -1,16 +1,15 @@
 package com.sd.lib.eos.rpc.params;
 
 import com.sd.lib.eos.rpc.utils.RpcUtils;
-import com.sd.lib.eos.rpc.utils.Utils;
 
 /**
- * 购买内存（按EOS购买）
+ * 购买内存（按字节购买）
  */
-public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, BuyramActionParams.Builder>
+public class BuyrambytesActionParams extends BaseParams<BuyrambytesActionParams.Args, BuyrambytesActionParams.Builder>
 {
     private final Args args;
 
-    private BuyramActionParams(Builder builder)
+    private BuyrambytesActionParams(Builder builder)
     {
         super(builder);
         setAuthorizationActor(builder.payer);
@@ -26,7 +25,7 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
     @Override
     public final String getAction()
     {
-        return "buyram";
+        return "buyrambytes";
     }
 
     @Override
@@ -39,14 +38,18 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
     {
         private final String payer;
         private final String receiver;
-        private final String quant;
+        private final long bytes;
 
         private Args(Builder builder)
         {
             super(builder);
-            this.payer = RpcUtils.checkAccountName(builder.payer, "buyram payer was not specified");
-            this.receiver = RpcUtils.checkAccountName(builder.receiver, "buyram receiver was not specified");
-            this.quant = RpcUtils.checkMoney(builder.quantity, "buyram quantity was not specified");
+            this.payer = RpcUtils.checkAccountName(builder.payer, "buyrambytes payer was not specified");
+            this.receiver = RpcUtils.checkAccountName(builder.receiver, "buyrambytes receiver was not specified");
+
+            final long b = builder.bytes;
+            if (b <= 0)
+                throw new RuntimeException("buyrambytes bytes must > 0");
+            this.bytes = b;
         }
 
         public String getPayer()
@@ -59,9 +62,9 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
             return receiver;
         }
 
-        public String getQuant()
+        public long getBytes()
         {
-            return quant;
+            return bytes;
         }
     }
 
@@ -69,7 +72,7 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
     {
         private String payer;
         private String receiver;
-        private String quantity;
+        private long bytes;
 
         /**
          * 设置付款账号
@@ -96,24 +99,20 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
         }
 
         /**
-         * 设置购买金额
+         * 设置要购买的字节数量
          *
-         * @param quantity 数量数量
-         * @param symbol   币种，默认EOS
+         * @param bytes
          * @return
          */
-        public Builder setQuantity(double quantity, String symbol)
+        public Builder setBytes(long bytes)
         {
-            if (Utils.isEmpty(symbol))
-                symbol = "EOS";
-
-            this.quantity = RpcUtils.formatMoney(quantity, symbol);
+            this.bytes = bytes;
             return this;
         }
 
-        public BuyramActionParams build()
+        public BuyrambytesActionParams build()
         {
-            return new BuyramActionParams(this);
+            return new BuyrambytesActionParams(this);
         }
     }
 }

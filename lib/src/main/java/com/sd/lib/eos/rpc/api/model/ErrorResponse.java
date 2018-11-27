@@ -14,7 +14,7 @@ public class ErrorResponse
 
         if (error != null)
         {
-            sb.append(error.getCode()).append("\n");
+            sb.append("code:").append(error.getCode()).append("\n");
 
             final List<Error.Details> details = error.getDetails();
             if (details != null && !details.isEmpty())

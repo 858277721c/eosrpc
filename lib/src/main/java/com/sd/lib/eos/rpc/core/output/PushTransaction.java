@@ -10,6 +10,7 @@ import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.core.FEOSManager;
 import com.sd.lib.eos.rpc.core.TransactionSigner;
 import com.sd.lib.eos.rpc.core.output.model.ActionModel;
+import com.sd.lib.eos.rpc.core.output.model.AuthorizationModel;
 import com.sd.lib.eos.rpc.core.output.model.TransactionModel;
 import com.sd.lib.eos.rpc.core.output.model.TransactionSignResult;
 import com.sd.lib.eos.rpc.exception.RpcException;
@@ -20,6 +21,7 @@ import com.sd.lib.eos.rpc.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,20 +33,20 @@ public class PushTransaction
 {
     private final RpcApi mRpcApi = new RpcApi();
     private final ActionParams[] mActionParams;
-    private final boolean mAutoAuthorizationPermission;
+    private final boolean mCheckAuthorizationPermission;
 
     public PushTransaction(ActionParams... params)
     {
         this(true, params);
     }
 
-    public PushTransaction(boolean autoAuthorizationPermission, ActionParams... params)
+    public PushTransaction(boolean checkAuthorizationPermission, ActionParams... params)
     {
         if (params == null || params.length <= 0)
             throw new IllegalArgumentException("params was not specified");
 
         mActionParams = Arrays.copyOf(params, params.length);
-        mAutoAuthorizationPermission = autoAuthorizationPermission;
+        mCheckAuthorizationPermission = checkAuthorizationPermission;
     }
 
     /**
@@ -62,12 +64,15 @@ public class PushTransaction
         final String publicKey = FEOSManager.getInstance().getEccTool().privateToPublicKey(privateKey);
         Utils.checkEmpty(publicKey, "private key format error");
 
-        if (!checkAutoAuthorizationPermission(publicKey, callback))
+        if (!checkAuthorizationPermission(publicKey, callback))
             return;
 
         final List<ActionModel> listAction = new ArrayList<>();
         for (ActionParams item : mActionParams)
         {
+            final AuthorizationModel authorizationModel = item.getAuthorization();
+            authorizationModel.check();
+
             final String code = item.getCode();
             final String action = item.getAction();
             final ActionParams.Args args = item.getArgs();
@@ -86,7 +91,7 @@ public class PushTransaction
             final ActionModel actionModel = new ActionModel();
             actionModel.setAccount(code);
             actionModel.setName(action);
-            actionModel.setAuthorization(item.getAuthorization());
+            actionModel.setAuthorization(Collections.unmodifiableList(Arrays.asList(authorizationModel)));
             actionModel.setData(binary);
 
             listAction.add(actionModel);
@@ -142,19 +147,26 @@ public class PushTransaction
         callback.onSuccess(pushApiResponse);
     }
 
-    private boolean checkAutoAuthorizationPermission(String publicKey, Callback callback) throws RpcException
+    private boolean checkAuthorizationPermission(String publicKey, Callback callback) throws RpcException
     {
-        if (!mAutoAuthorizationPermission)
+        if (!mCheckAuthorizationPermission)
             return true;
 
-        final Map<String, GetAccountResponse> mapGetAccountResponse = new HashMap<>();
+        final Map<String, String> mapPermission = new HashMap<>();
         for (ActionParams item : mActionParams)
         {
-            final String actor = item.getAuthorizationActor();
+            final AuthorizationModel authorizationModel = item.getAuthorization();
+            if (!Utils.isEmpty(authorizationModel.getPermission()))
+                continue;
+
+            final String actor = authorizationModel.getActor();
             Utils.checkEmpty(actor, "authorization actor was not specified");
 
-            GetAccountResponse response = mapGetAccountResponse.get(actor);
-            if (response == null)
+            final String savedPermission = mapPermission.get(actor);
+            if (!Utils.isEmpty(savedPermission))
+            {
+                item.setAuthorizationPermission(savedPermission);
+            } else
             {
                 final ApiResponse<GetAccountResponse> apiResponse = mRpcApi.getAccount(actor);
                 if (!apiResponse.isSuccessful())
@@ -163,51 +175,49 @@ public class PushTransaction
                     return false;
                 }
 
-                response = apiResponse.getSuccess();
-                mapGetAccountResponse.put(actor, response);
-            }
-
-            final List<GetAccountResponse.Permission> permissions = response.getPermissions();
-            if (permissions == null || permissions.isEmpty())
-            {
-                callback.onError("getAccount permissions is empty");
-                return false;
-            }
-
-            GetAccountResponse.Permission targetPermission = null;
-            for (GetAccountResponse.Permission itemPermission : permissions)
-            {
-                final List<GetAccountResponse.Permission.RequiredAuth.Key> keys = itemPermission.getRequired_auth().getKeys();
-                if (keys == null || keys.isEmpty())
+                final GetAccountResponse response = apiResponse.getSuccess();
+                final List<GetAccountResponse.Permission> permissions = response.getPermissions();
+                if (permissions == null || permissions.isEmpty())
                 {
-                    callback.onError("getAccount permissions keys is empty");
+                    callback.onError("getAccount permissions is empty");
                     return false;
                 }
 
-                boolean found = false;
-                for (GetAccountResponse.Permission.RequiredAuth.Key itemKeys : keys)
+                GetAccountResponse.Permission targetPermission = null;
+                for (GetAccountResponse.Permission itemPermission : permissions)
                 {
-                    if (publicKey.equals(itemKeys.getKey()))
+                    final List<GetAccountResponse.Permission.RequiredAuth.Key> keys = itemPermission.getRequired_auth().getKeys();
+                    if (keys == null || keys.isEmpty())
                     {
-                        found = true;
+                        callback.onError("getAccount permissions keys is empty");
+                        return false;
+                    }
+
+                    boolean found = false;
+                    for (GetAccountResponse.Permission.RequiredAuth.Key itemKeys : keys)
+                    {
+                        if (publicKey.equals(itemKeys.getKey()))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (found)
+                    {
+                        targetPermission = itemPermission;
                         break;
                     }
                 }
 
-                if (found)
+                if (targetPermission == null)
                 {
-                    targetPermission = itemPermission;
-                    break;
+                    callback.onError("public key was not found in getAccount permissions");
+                    return false;
                 }
-            }
 
-            if (targetPermission == null)
-            {
-                callback.onError("public key was not found in getAccount permissions");
-                return false;
+                mapPermission.put(actor, targetPermission.getPerm_name());
             }
-
-            item.setAuthorizationPermission(targetPermission.getPerm_name());
         }
 
         return true;

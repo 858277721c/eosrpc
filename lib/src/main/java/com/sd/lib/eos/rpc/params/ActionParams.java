@@ -2,8 +2,6 @@ package com.sd.lib.eos.rpc.params;
 
 import com.sd.lib.eos.rpc.core.output.model.AuthorizationModel;
 
-import java.util.List;
-
 public interface ActionParams<A extends ActionParams.Args>
 {
     String getCode();
@@ -12,11 +10,9 @@ public interface ActionParams<A extends ActionParams.Args>
 
     A getArgs();
 
-    String getAuthorizationActor();
-
     void setAuthorizationPermission(String permission);
 
-    List<AuthorizationModel> getAuthorization();
+    AuthorizationModel getAuthorization();
 
     class Args
     {

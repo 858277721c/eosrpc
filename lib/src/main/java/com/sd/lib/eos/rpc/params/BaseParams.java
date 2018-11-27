@@ -1,10 +1,6 @@
 package com.sd.lib.eos.rpc.params;
 
 import com.sd.lib.eos.rpc.core.output.model.AuthorizationModel;
-import com.sd.lib.eos.rpc.utils.Utils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class BaseParams<A extends BaseParams.Args, B extends BaseParams.Builder> implements ActionParams<A>
 {
@@ -16,31 +12,21 @@ public abstract class BaseParams<A extends BaseParams.Args, B extends BaseParams
 
     }
 
-    public final String getAuthorizationActor()
-    {
-        return authorizationActor;
-    }
-
     protected final void setAuthorizationActor(String actor)
     {
         this.authorizationActor = actor;
     }
 
+    @Override
     public final void setAuthorizationPermission(String permission)
     {
         this.authorizationPermission = permission;
     }
 
     @Override
-    public final List<AuthorizationModel> getAuthorization()
+    public final AuthorizationModel getAuthorization()
     {
-        final String authorizationActor = Utils.checkEmpty(this.authorizationActor, "authorization actor was not specified");
-        final String authorizationPermission = Utils.checkEmpty(this.authorizationPermission, "authorization permission was not specified");
-
-        final List<AuthorizationModel> list = new ArrayList<>();
-        list.add(new AuthorizationModel(authorizationActor, authorizationPermission));
-
-        return list;
+        return new AuthorizationModel(authorizationActor, authorizationPermission);
     }
 
     protected static class Args<B> extends ActionParams.Args

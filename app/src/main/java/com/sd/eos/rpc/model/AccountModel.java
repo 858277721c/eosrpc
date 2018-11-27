@@ -29,18 +29,6 @@ public class AccountModel
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
-        if (!(obj instanceof AccountModel))
-        {
-            return false;
-        }
-
-        final AccountModel other = (AccountModel) obj;
-        return account.equals(other.account);
-    }
-
-    @Override
     public String toString()
     {
         return account;

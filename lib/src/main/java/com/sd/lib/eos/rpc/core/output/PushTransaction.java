@@ -162,7 +162,7 @@ public class PushTransaction
             final String actor = authorizationModel.getActor();
             Utils.checkEmpty(actor, "authorization actor was not specified");
 
-            final String savedPermission = mapPermission.get(actor);
+            String savedPermission = mapPermission.get(actor);
             if (!Utils.isEmpty(savedPermission))
             {
                 item.setAuthorizationPermission(savedPermission);
@@ -216,7 +216,9 @@ public class PushTransaction
                     return false;
                 }
 
-                mapPermission.put(actor, targetPermission.getPerm_name());
+                savedPermission = targetPermission.getPerm_name();
+                mapPermission.put(actor, savedPermission);
+                item.setAuthorizationPermission(savedPermission);
             }
         }
 

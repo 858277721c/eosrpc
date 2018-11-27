@@ -1,17 +1,20 @@
 package com.sd.eos.rpc.model;
 
+import android.text.TextUtils;
+
 import com.sd.lib.cache.FCache;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AccountHolder
 {
-    private List<AccountModel> accounts;
+    private Map<String, AccountModel> mapAccount = new LinkedHashMap<>();
 
     private AccountHolder()
     {
-        accounts = new ArrayList<>();
     }
 
     public static AccountHolder get()
@@ -25,25 +28,27 @@ public class AccountHolder
         return holder;
     }
 
+    private void save()
+    {
+        FCache.disk().cacheObject().put(this);
+    }
+
     public void add(AccountModel model)
     {
-        if (model == null)
+        if (model == null
+                || TextUtils.isEmpty(model.getAccount())
+                || TextUtils.isEmpty(model.getPrivateKey())
+                || TextUtils.isEmpty(model.getPublicKey()))
+        {
             throw new NullPointerException();
+        }
 
-        if (accounts.contains(model))
-            return;
-
-        accounts.add(model);
+        mapAccount.put(model.getAccount(), model);
         save();
     }
 
     public List<AccountModel> getAllAccount()
     {
-        return new ArrayList<>(accounts);
-    }
-
-    private void save()
-    {
-        FCache.disk().cacheObject().put(this);
+        return new ArrayList<>(mapAccount.values());
     }
 }

@@ -15,12 +15,12 @@ public class ErrorResponse
         if (error != null)
         {
             sb.append("code:").append(error.getCode()).append("\n");
+            sb.append("details:");
 
             final List<Error.Details> details = error.getDetails();
             if (details != null && !details.isEmpty())
             {
-                final Error.Details item = details.get(0);
-                sb.append(item.message).append("\n");
+                sb.append(details.get(0).message);
             }
         } else
         {

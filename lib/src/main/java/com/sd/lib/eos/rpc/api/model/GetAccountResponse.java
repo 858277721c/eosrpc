@@ -25,19 +25,31 @@ public class GetAccountResponse
     private RefundRequest refund_request;
     private VoterInfo voter_info;
 
-    public Map<String, Permission> getPermission(String publicKey)
+    /**
+     * 返回指定公钥对应的{@link Permission}
+     *
+     * @param publicKey 如果为null，返回所有的{@link Permission}
+     * @return
+     */
+    public Map<String, Permission> getPermission(final String publicKey)
     {
         final Map<String, Permission> map = new LinkedHashMap<>();
-        if (publicKey != null && permissions != null)
+        if (permissions != null)
         {
             for (Permission itemPermission : permissions)
             {
-                for (Permission.RequiredAuth.Key itemKeys : itemPermission.getRequired_auth().getKeys())
+                if (publicKey == null)
                 {
-                    if (publicKey.equals(itemKeys.getKey()))
+                    map.put(itemPermission.getPerm_name(), itemPermission);
+                } else
+                {
+                    for (Permission.RequiredAuth.Key itemKeys : itemPermission.getRequired_auth().getKeys())
                     {
-                        map.put(itemPermission.getPerm_name(), itemPermission);
-                        break;
+                        if (publicKey.equals(itemKeys.getKey()))
+                        {
+                            map.put(itemPermission.getPerm_name(), itemPermission);
+                            break;
+                        }
                     }
                 }
             }

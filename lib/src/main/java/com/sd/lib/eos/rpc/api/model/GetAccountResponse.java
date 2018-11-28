@@ -32,12 +32,11 @@ public class GetAccountResponse
         {
             for (Permission itemPermission : permissions)
             {
-                final String permissionName = itemPermission.getPerm_name();
                 for (Permission.RequiredAuth.Key itemKeys : itemPermission.getRequired_auth().getKeys())
                 {
                     if (publicKey.equals(itemKeys.getKey()))
                     {
-                        map.put(permissionName, itemPermission);
+                        map.put(itemPermission.getPerm_name(), itemPermission);
                         break;
                     }
                 }

@@ -153,7 +153,7 @@ public class PushTransaction
         if (!mCheckAuthorizationPermission)
             return true;
 
-        final Map<String, String> mapPermission = new HashMap<>();
+        final Map<String, String> mapPermissionCache = new HashMap<>();
         for (ActionParams item : mActionParams)
         {
             final AuthorizationModel authorizationModel = item.getAuthorization();
@@ -163,7 +163,7 @@ public class PushTransaction
             final String actor = authorizationModel.getActor();
             Utils.checkEmpty(actor, "authorization actor was not specified");
 
-            final String savedPermission = mapPermission.get(actor);
+            final String savedPermission = mapPermissionCache.get(actor);
             if (!Utils.isEmpty(savedPermission))
             {
                 item.setAuthorizationPermission(savedPermission);
@@ -177,7 +177,7 @@ public class PushTransaction
                 }
 
                 final GetAccountResponse response = apiResponse.getSuccess();
-                final List<GetAccountResponse.Permission> permissions = response.getPermission(publicKey);
+                final Map<String, GetAccountResponse.Permission> permissions = response.getPermission(publicKey);
 
                 if (permissions == null || permissions.isEmpty())
                 {
@@ -185,9 +185,10 @@ public class PushTransaction
                     return false;
                 }
 
-                final String permissionName = permissions.get(0).getPerm_name();
+                final List<GetAccountResponse.Permission> listPermission = new ArrayList<>(permissions.values());
+                final String permissionName = listPermission.get(0).getPerm_name();
 
-                mapPermission.put(actor, permissionName);
+                mapPermissionCache.put(actor, permissionName);
                 item.setAuthorizationPermission(permissionName);
             }
         }

@@ -1,7 +1,8 @@
 package com.sd.lib.eos.rpc.api.model;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GetAccountResponse
 {
@@ -24,24 +25,25 @@ public class GetAccountResponse
     private RefundRequest refund_request;
     private VoterInfo voter_info;
 
-    public List<Permission> getPermission(String publicKey)
+    public Map<String, Permission> getPermission(String publicKey)
     {
-        final List<Permission> list = new ArrayList<>();
+        final Map<String, Permission> map = new LinkedHashMap<>();
         if (publicKey != null && permissions != null)
         {
             for (Permission itemPermission : permissions)
             {
+                final String permissionName = itemPermission.getPerm_name();
                 for (Permission.RequiredAuth.Key itemKeys : itemPermission.getRequired_auth().getKeys())
                 {
                     if (publicKey.equals(itemKeys.getKey()))
                     {
-                        list.add(itemPermission);
+                        map.put(permissionName, itemPermission);
                         break;
                     }
                 }
             }
         }
-        return list;
+        return map;
     }
 
     public String getAccount_name()

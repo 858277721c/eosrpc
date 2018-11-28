@@ -44,10 +44,12 @@ public class GetTableRowsRequest extends BaseRequest<GetTableRowsRequest.Params,
             this.scope = scope;
             this.code = code;
             this.table = table;
+
             this.index_position = index_position;
             this.lower_bound = lower_bound;
             this.upper_bound = upper_bound;
             this.limit = limit;
+
             this.key_type = key_type;
             this.encode_type = encode_type;
         }

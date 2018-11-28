@@ -143,7 +143,7 @@ public class RpcUtils
      *
      * @param amount 金额数量
      * @param mode
-     * @param symbol 币种，如果为空，默认为EOS
+     * @param symbol
      * @return
      */
     public static String formatMoney(double amount, RoundingMode mode, String symbol)

@@ -120,7 +120,7 @@ abstract class BaseRequest<P extends BaseRequest.Params, T>
         final Type[] types = parameterizedType.getActualTypeArguments();
         if (types != null && types.length > 0)
         {
-            return (Class<T>) types[0];
+            return (Class<T>) types[types.length - 1];
         } else
         {
             throw new RuntimeException("generic type not found");

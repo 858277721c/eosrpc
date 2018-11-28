@@ -54,7 +54,7 @@ abstract class BaseRequest<P extends BaseRequest.Params, T>
                 jsonParams = params.toJson();
             } catch (Exception e)
             {
-                throw new RpcApiParamsToJsonException("params to json error", e);
+                throw new RpcApiParamsToJsonException(params + " to json error", e);
             }
         }
 

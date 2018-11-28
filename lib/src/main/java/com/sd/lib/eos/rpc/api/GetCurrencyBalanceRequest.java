@@ -7,51 +7,14 @@ import com.sd.lib.eos.rpc.utils.Utils;
 
 import org.json.JSONArray;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * 查看余额
  */
-class GetCurrencyBalanceRequest extends BaseRequest<GetCurrencyBalanceResponse>
+class GetCurrencyBalanceRequest extends BaseRequest<GetCurrencyBalanceRequest.Params, GetCurrencyBalanceResponse>
 {
-    private String code;
-    private String account;
-    private String symbol;
-
     public GetCurrencyBalanceRequest(String baseUrl)
     {
         super(baseUrl);
-    }
-
-    /**
-     * 设置合约
-     *
-     * @param code
-     */
-    public void setCode(String code)
-    {
-        this.code = code;
-    }
-
-    /**
-     * 设置要查询的账号
-     *
-     * @param account
-     */
-    public void setAccount(String account)
-    {
-        this.account = account;
-    }
-
-    /**
-     * 设置要查询的币种
-     *
-     * @param symbol
-     */
-    public void setSymbol(String symbol)
-    {
-        this.symbol = symbol;
     }
 
     @Override
@@ -61,35 +24,38 @@ class GetCurrencyBalanceRequest extends BaseRequest<GetCurrencyBalanceResponse>
     }
 
     @Override
-    protected final Map<String, Object> getParams()
-    {
-        final Map<String, Object> params = new HashMap<>();
-        params.put("code", code);
-        params.put("account", account);
-        params.put("symbol", symbol);
-        return params;
-    }
-
-    @Override
-    protected void beforeExecute()
-    {
-        super.beforeExecute();
-        RpcUtils.checkAccountName(account, "account is empty");
-        Utils.checkEmpty(code, "code is empty");
-        Utils.checkEmpty(symbol, "symbol is empty");
-    }
-
-    @Override
-    protected final GetCurrencyBalanceResponse convertSuccess(String json, Class<GetCurrencyBalanceResponse> clazz, JsonConverter converter) throws Exception
+    protected final GetCurrencyBalanceResponse convertSuccess(String json, Class<GetCurrencyBalanceResponse> clazz, JsonConverter converter, Params params) throws Exception
     {
         final GetCurrencyBalanceResponse response = new GetCurrencyBalanceResponse();
 
         final JSONArray jsonArray = new JSONArray(json);
         if (jsonArray.length() <= 0)
-            response.setBalance("0.0000 " + symbol);
+            response.setBalance("0.0000 " + params.symbol);
         else
             response.setBalance(jsonArray.getString(0));
 
         return response;
+    }
+
+    public static class Params extends BaseRequest.Params
+    {
+        public final String code;
+        public final String account;
+        public final String symbol;
+
+        public Params(String code, String account, String symbol)
+        {
+            this.code = code;
+            this.account = account;
+            this.symbol = symbol;
+        }
+
+        @Override
+        public void check()
+        {
+            RpcUtils.checkAccountName(account, this + " account is empty");
+            Utils.checkEmpty(code, this + " code is empty");
+            Utils.checkEmpty(symbol, this + " symbol is empty");
+        }
     }
 }

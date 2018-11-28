@@ -3,36 +3,14 @@ package com.sd.lib.eos.rpc.api;
 import com.sd.lib.eos.rpc.api.model.GetActionsResponse;
 import com.sd.lib.eos.rpc.utils.Utils;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * 查询交易记录
  */
-class GetActionsRequest extends BaseRequest<GetActionsResponse>
+class GetActionsRequest extends BaseRequest<GetActionsRequest.Params, GetActionsResponse>
 {
-    private String account_name;
-    private int pos;
-    private int offset;
-
     public GetActionsRequest(String baseUrl)
     {
         super(baseUrl);
-    }
-
-    public void setAccount_name(String account_name)
-    {
-        this.account_name = account_name;
-    }
-
-    public void setPos(int pos)
-    {
-        this.pos = pos;
-    }
-
-    public void setOffset(int offset)
-    {
-        this.offset = offset;
     }
 
     @Override
@@ -41,20 +19,23 @@ class GetActionsRequest extends BaseRequest<GetActionsResponse>
         return "/v1/history/get_actions";
     }
 
-    @Override
-    protected Map<String, Object> getParams()
+    public static class Params extends BaseRequest.Params
     {
-        final Map<String, Object> params = new HashMap<>();
-        params.put("account_name", account_name);
-        params.put("pos", pos);
-        params.put("offset", offset);
-        return params;
-    }
+        public final String account_name;
+        public final int pos;
+        public final int offset;
 
-    @Override
-    protected void beforeExecute()
-    {
-        super.beforeExecute();
-        Utils.checkEmpty(account_name, "account_name was not specified");
+        public Params(String account_name, int pos, int offset)
+        {
+            this.account_name = account_name;
+            this.pos = pos;
+            this.offset = offset;
+        }
+
+        @Override
+        public void check()
+        {
+            Utils.checkEmpty(account_name, this + " account_name is empty");
+        }
     }
 }

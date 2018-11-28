@@ -134,9 +134,9 @@ public class PushTransaction
 
         final ApiResponse<PushTransactionResponse> pushApiResponse = mRpcApi.pushTransaction(
                 signResult.getSignatures(),
-                signResult.getCompression(),
+                signResult.getPacked_trx(),
                 null,
-                signResult.getPacked_trx()
+                signResult.getCompression()
         );
 
         if (!pushApiResponse.isSuccessful())

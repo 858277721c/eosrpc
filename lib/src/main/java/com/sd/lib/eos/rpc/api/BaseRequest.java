@@ -6,6 +6,7 @@ import com.sd.lib.eos.rpc.core.FEOSManager;
 import com.sd.lib.eos.rpc.core.JsonConverter;
 import com.sd.lib.eos.rpc.core.RpcApiExecutor;
 import com.sd.lib.eos.rpc.exception.RpcApiExecutorException;
+import com.sd.lib.eos.rpc.exception.RpcApiParamsToJsonException;
 import com.sd.lib.eos.rpc.exception.RpcApiUnknowCodeException;
 import com.sd.lib.eos.rpc.exception.RpcException;
 import com.sd.lib.eos.rpc.exception.RpcJsonToObjectException;
@@ -13,9 +14,8 @@ import com.sd.lib.eos.rpc.utils.Utils;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Map;
 
-abstract class BaseRequest<T>
+abstract class BaseRequest<P extends BaseRequest.Params, T>
 {
     protected final String mBaseUrl;
 
@@ -27,22 +27,14 @@ abstract class BaseRequest<T>
 
     protected abstract String getPath();
 
-    protected abstract Map<String, Object> getParams();
-
-    protected void beforeExecute()
-    {
-    }
-
     /**
      * 执行请求(同步执行)
      *
      * @return
      * @throws Exception
      */
-    public final ApiResponse<T> execute() throws RpcException
+    public final ApiResponse<T> execute(final P params) throws RpcException
     {
-        beforeExecute();
-
         final String path = getPath();
         Utils.checkEmpty(path, "path was not specified when execute:" + this);
 
@@ -52,8 +44,19 @@ abstract class BaseRequest<T>
         final JsonConverter jsonConverter = FEOSManager.getInstance().getJsonConverter();
         Utils.checkNotNull(jsonConverter, "JsonConverter was not specified when execute:" + this);
 
-        final Map<String, Object> params = getParams();
-        final String jsonParams = params == null ? null : jsonConverter.objectToJson(params);
+        String jsonParams = null;
+
+        if (params != null)
+        {
+            params.check();
+            try
+            {
+                jsonParams = params.toJson();
+            } catch (Exception e)
+            {
+                throw new RpcApiParamsToJsonException("params to json error", e);
+            }
+        }
 
         RpcApiExecutor.Result result = null;
         try
@@ -79,7 +82,7 @@ abstract class BaseRequest<T>
 
             try
             {
-                final T success = convertSuccess(json, successClass, jsonConverter);
+                final T success = convertSuccess(json, successClass, jsonConverter, params);
                 final ApiResponse apiResponse = new ApiResponse(success);
                 return apiResponse;
             } catch (Exception e)
@@ -106,7 +109,7 @@ abstract class BaseRequest<T>
         }
     }
 
-    protected T convertSuccess(String json, Class<T> clazz, JsonConverter converter) throws Exception
+    protected T convertSuccess(String json, Class<T> clazz, JsonConverter converter, P params) throws Exception
     {
         return converter.jsonToObject(json, clazz);
     }
@@ -121,6 +124,16 @@ abstract class BaseRequest<T>
         } else
         {
             throw new RuntimeException("generic type not found");
+        }
+    }
+
+    protected static abstract class Params
+    {
+        public abstract void check();
+
+        public String toJson() throws Exception
+        {
+            return FEOSManager.getInstance().getJsonConverter().objectToJson(this);
         }
     }
 }

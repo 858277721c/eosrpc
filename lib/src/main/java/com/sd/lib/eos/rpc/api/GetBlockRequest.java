@@ -3,24 +3,14 @@ package com.sd.lib.eos.rpc.api;
 import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
 import com.sd.lib.eos.rpc.utils.Utils;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * 获得区块信息
  */
-class GetBlockRequest extends BaseRequest<GetBlockResponse>
+class GetBlockRequest extends BaseRequest<GetBlockRequest.Params, GetBlockResponse>
 {
-    private String block_num_or_id;
-
     public GetBlockRequest(String baseUrl)
     {
         super(baseUrl);
-    }
-
-    public void setBlock_num_or_id(String block_num_or_id)
-    {
-        this.block_num_or_id = block_num_or_id;
     }
 
     @Override
@@ -29,18 +19,19 @@ class GetBlockRequest extends BaseRequest<GetBlockResponse>
         return "/v1/chain/get_block";
     }
 
-    @Override
-    protected final Map<String, Object> getParams()
+    public static class Params extends BaseRequest.Params
     {
-        final Map<String, Object> params = new HashMap<>();
-        params.put("block_num_or_id", block_num_or_id);
-        return params;
-    }
+        public final String block_num_or_id;
 
-    @Override
-    protected void beforeExecute()
-    {
-        super.beforeExecute();
-        Utils.checkEmpty(block_num_or_id, "block_num_or_id is empty");
+        public Params(String block_num_or_id)
+        {
+            this.block_num_or_id = block_num_or_id;
+        }
+
+        @Override
+        public void check()
+        {
+            Utils.checkEmpty(block_num_or_id, this + " block_num_or_id is empty");
+        }
     }
 }

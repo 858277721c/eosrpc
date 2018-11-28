@@ -47,7 +47,7 @@ public class RpcApi
      */
     public ApiResponse<GetInfoResponse> getInfo() throws RpcException
     {
-        return new GetInfoRequest(mBaseUrl).execute();
+        return new GetInfoRequest(mBaseUrl).execute(null);
     }
 
     /**
@@ -59,9 +59,8 @@ public class RpcApi
      */
     public ApiResponse<GetBlockResponse> getBlock(String block_num_or_id) throws RpcException
     {
-        final GetBlockRequest request = new GetBlockRequest(mBaseUrl);
-        request.setBlock_num_or_id(block_num_or_id);
-        return request.execute();
+        final GetBlockRequest.Params params = new GetBlockRequest.Params(block_num_or_id);
+        return new GetBlockRequest(mBaseUrl).execute(params);
     }
 
     /**
@@ -73,9 +72,8 @@ public class RpcApi
      */
     public ApiResponse<GetAccountResponse> getAccount(String account_name) throws RpcException
     {
-        final GetAccountRequest request = new GetAccountRequest(mBaseUrl);
-        request.setAccount_name(account_name);
-        return request.execute();
+        final GetAccountRequest.Params params = new GetAccountRequest.Params(account_name);
+        return new GetAccountRequest(mBaseUrl).execute(params);
     }
 
     /**
@@ -101,11 +99,8 @@ public class RpcApi
      */
     public ApiResponse<GetCurrencyBalanceResponse> getCurrencyBalance(String code, String account, String symbol) throws RpcException
     {
-        final GetCurrencyBalanceRequest request = new GetCurrencyBalanceRequest(mBaseUrl);
-        request.setCode(code);
-        request.setAccount(account);
-        request.setSymbol(symbol);
-        return request.execute();
+        final GetCurrencyBalanceRequest.Params params = new GetCurrencyBalanceRequest.Params(code, account, symbol);
+        return new GetCurrencyBalanceRequest(mBaseUrl).execute(params);
     }
 
     /**
@@ -119,11 +114,8 @@ public class RpcApi
      */
     public ApiResponse<GetActionsResponse> getActions(String account_name, int pos, int offset) throws RpcException
     {
-        final GetActionsRequest request = new GetActionsRequest(mBaseUrl);
-        request.setAccount_name(account_name);
-        request.setPos(pos);
-        request.setOffset(offset);
-        return request.execute();
+        final GetActionsRequest.Params params = new GetActionsRequest.Params(account_name, pos, offset);
+        return new GetActionsRequest(mBaseUrl).execute(params);
     }
 
     /**
@@ -135,9 +127,8 @@ public class RpcApi
      */
     public ApiResponse<GetTransactionResponse> getTransaction(String id) throws RpcException
     {
-        final GetTransactionRequest request = new GetTransactionRequest(mBaseUrl);
-        request.setId(id);
-        return request.execute();
+        final GetTransactionRequest.Params params = new GetTransactionRequest.Params(id);
+        return new GetTransactionRequest(mBaseUrl).execute(params);
     }
 
     /**
@@ -149,9 +140,8 @@ public class RpcApi
      */
     public ApiResponse<GetKeyAccountsResponse> getKeyAccounts(String public_key) throws RpcException
     {
-        final GetKeyAccountsRequest request = new GetKeyAccountsRequest(mBaseUrl);
-        request.setPublic_key(public_key);
-        return request.execute();
+        final GetKeyAccountsRequest.Params params = new GetKeyAccountsRequest.Params(public_key);
+        return new GetKeyAccountsRequest(mBaseUrl).execute(params);
     }
 
     /**
@@ -163,9 +153,8 @@ public class RpcApi
      */
     public ApiResponse<GetCodeResponse> getCode(String account_name) throws RpcException
     {
-        final GetCodeRequest request = new GetCodeRequest(mBaseUrl);
-        request.setAccount_name(account_name);
-        return request.execute();
+        final GetCodeRequest.Params params = new GetCodeRequest.Params(account_name);
+        return new GetCodeRequest(mBaseUrl).execute(params);
     }
 
     /**
@@ -205,12 +194,8 @@ public class RpcApi
      */
     public ApiResponse<GetTableRowsResponse> getTableRows(String scope, String code, String table, int limit) throws RpcException
     {
-        final GetTableRowsRequest request = new GetTableRowsRequest(mBaseUrl);
-        request.setScope(scope);
-        request.setCode(code);
-        request.setTable(table);
-        request.setLimit(limit);
-        return request.execute();
+        final GetTableRowsRequest.Params params = new GetTableRowsRequest.Params(scope, code, table, limit);
+        return new GetTableRowsRequest(mBaseUrl).execute(params);
     }
 
     /**
@@ -224,11 +209,8 @@ public class RpcApi
      */
     public ApiResponse<AbiJsonToBinResponse> abiJsonToBin(String code, String action, Object args) throws RpcException
     {
-        final AbiJsonToBinRequest request = new AbiJsonToBinRequest(mBaseUrl);
-        request.setCode(code);
-        request.setAction(action);
-        request.setArgs(args);
-        return request.execute();
+        final AbiJsonToBinRequest.Params params = new AbiJsonToBinRequest.Params(code, action, args);
+        return new AbiJsonToBinRequest(mBaseUrl).execute(params);
     }
 
     /**
@@ -242,30 +224,23 @@ public class RpcApi
      */
     public ApiResponse<AbiBinToJsonResponse> abiBinToJson(String code, String action, String binargs) throws RpcException
     {
-        final AbiBinToJsonRequest request = new AbiBinToJsonRequest(mBaseUrl);
-        request.setCode(code);
-        request.setAction(action);
-        request.setBinargs(binargs);
-        return request.execute();
+        final AbiBinToJsonRequest.Params params = new AbiBinToJsonRequest.Params(code, action, binargs);
+        return new AbiBinToJsonRequest(mBaseUrl).execute(params);
     }
 
     /**
      * 推送交易
      *
      * @param signatures
-     * @param compression
-     * @param packed_context_free_data
      * @param packed_trx
+     * @param packed_context_free_data
+     * @param compression
      * @return
      * @throws RpcException
      */
-    public ApiResponse<PushTransactionResponse> pushTransaction(List<String> signatures, String compression, String packed_context_free_data, String packed_trx) throws RpcException
+    public ApiResponse<PushTransactionResponse> pushTransaction(List<String> signatures, String packed_trx, String packed_context_free_data, String compression) throws RpcException
     {
-        final PushTransactionRequest request = new PushTransactionRequest(mBaseUrl);
-        request.setSignatures(signatures);
-        request.setCompression(compression);
-        request.setPacked_context_free_data(packed_context_free_data);
-        request.setPacked_trx(packed_trx);
-        return request.execute();
+        final PushTransactionRequest.Params params = new PushTransactionRequest.Params(signatures, packed_trx, packed_context_free_data, compression);
+        return new PushTransactionRequest(mBaseUrl).execute(params);
     }
 }

@@ -2,12 +2,10 @@ package com.sd.lib.eos.rpc.api;
 
 import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 
-import java.util.Map;
-
 /**
  * 获得区块链信息
  */
-class GetInfoRequest extends BaseRequest<GetInfoResponse>
+class GetInfoRequest extends BaseRequest<GetInfoRequest.Params, GetInfoResponse>
 {
     public GetInfoRequest(String baseUrl)
     {
@@ -20,9 +18,15 @@ class GetInfoRequest extends BaseRequest<GetInfoResponse>
         return "/v1/chain/get_info";
     }
 
-    @Override
-    protected final Map<String, Object> getParams()
+    public static class Params extends BaseRequest.Params
     {
-        return null;
+        private Params()
+        {
+        }
+
+        @Override
+        public void check()
+        {
+        }
     }
 }

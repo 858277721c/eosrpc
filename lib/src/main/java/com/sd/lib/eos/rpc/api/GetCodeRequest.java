@@ -3,24 +3,14 @@ package com.sd.lib.eos.rpc.api;
 import com.sd.lib.eos.rpc.api.model.GetCodeResponse;
 import com.sd.lib.eos.rpc.utils.Utils;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * 查询合约
  */
-class GetCodeRequest extends BaseRequest<GetCodeResponse>
+class GetCodeRequest extends BaseRequest<GetCodeRequest.Params, GetCodeResponse>
 {
-    private String account_name;
-
     public GetCodeRequest(String baseUrl)
     {
         super(baseUrl);
-    }
-
-    public void setAccount_name(String account_name)
-    {
-        this.account_name = account_name;
     }
 
     @Override
@@ -29,18 +19,19 @@ class GetCodeRequest extends BaseRequest<GetCodeResponse>
         return "/v1/chain/get_code";
     }
 
-    @Override
-    protected final Map<String, Object> getParams()
+    public static class Params extends BaseRequest.Params
     {
-        final Map<String, Object> params = new HashMap<>();
-        params.put("account_name", account_name);
-        return params;
-    }
+        public final String account_name;
 
-    @Override
-    protected void beforeExecute()
-    {
-        super.beforeExecute();
-        Utils.checkEmpty(account_name, "account_name is empty");
+        public Params(String account_name)
+        {
+            this.account_name = account_name;
+        }
+
+        @Override
+        public void check()
+        {
+            Utils.checkEmpty(account_name, this + " account_name is empty");
+        }
     }
 }

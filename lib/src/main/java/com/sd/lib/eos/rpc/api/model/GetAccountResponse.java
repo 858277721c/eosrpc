@@ -1,5 +1,6 @@
 package com.sd.lib.eos.rpc.api.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GetAccountResponse
@@ -22,6 +23,26 @@ public class GetAccountResponse
     private SelfDelegatedBandwidth self_delegated_bandwidth;
     private RefundRequest refund_request;
     private VoterInfo voter_info;
+
+    public List<Permission> getPermission(String publicKey)
+    {
+        final List<Permission> list = new ArrayList<>();
+        if (publicKey != null && permissions != null)
+        {
+            for (Permission itemPermission : permissions)
+            {
+                for (Permission.RequiredAuth.Key itemKeys : itemPermission.getRequired_auth().getKeys())
+                {
+                    if (publicKey.equals(itemKeys.getKey()))
+                    {
+                        list.add(itemPermission);
+                        break;
+                    }
+                }
+            }
+        }
+        return list;
+    }
 
     public String getAccount_name()
     {

@@ -177,32 +177,15 @@ public class PushTransaction
                 }
 
                 final GetAccountResponse response = apiResponse.getSuccess();
+                final List<GetAccountResponse.Permission> permissions = response.getPermission(publicKey);
 
-                GetAccountResponse.Permission targetPermission = null;
-                for (GetAccountResponse.Permission itemPermission : response.getPermissions())
-                {
-                    boolean found = false;
-                    for (GetAccountResponse.Permission.RequiredAuth.Key itemKeys : itemPermission.getRequired_auth().getKeys())
-                    {
-                        if (publicKey.equals(itemKeys.getKey()))
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (found)
-                    {
-                        targetPermission = itemPermission;
-                        break;
-                    }
-                }
-
-                if (targetPermission == null)
+                if (permissions == null || permissions.isEmpty())
                 {
                     callback.onError(Error.NotAccountKey, "The key provided is not the key of the account");
                     return false;
                 }
+
+                final GetAccountResponse.Permission targetPermission = permissions.get(0);
 
                 savedPermission = targetPermission.getPerm_name();
                 mapPermission.put(actor, savedPermission);

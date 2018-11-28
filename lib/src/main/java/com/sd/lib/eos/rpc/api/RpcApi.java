@@ -34,6 +34,11 @@ public class RpcApi
         mBaseUrl = baseUrl;
     }
 
+    public final String getBaseUrl()
+    {
+        return mBaseUrl;
+    }
+
     /**
      * 获得区块链信息
      *

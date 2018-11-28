@@ -157,65 +157,75 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
             return;
         }
 
-        new Thread(new Runnable()
+        cancelTask();
+        mTask = new FTask()
         {
             @Override
-            public void run()
+            protected void onRun() throws Exception
             {
-                try
+                final NewaccountActionParams newaccountActionParams = new NewaccountActionParams.Builder()
+                        .setCreator(creator)
+                        .setNewAccount(newAccount)
+                        .setOwner(newAccountKeyPublic)
+                        .build();
+
+                final BuyramActionParams buyramActionParams = new BuyramActionParams.Builder()
+                        .setPayer(creator)
+                        .setReceiver(newAccount)
+                        .setQuantity(Double.valueOf(buyRam), null)
+                        .build();
+
+                final DelegatebwActionParams delegatebwActionParams = new DelegatebwActionParams.Builder()
+                        .setFrom(creator)
+                        .setReceiver(newAccount)
+                        .setStake_cpu_quantity(Double.parseDouble(stakeCpu), null)
+                        .setStake_net_quantity(Double.parseDouble(stakeNet), null)
+                        .setTransfer(1)
+                        .build();
+
+                final PushTransaction pushTransaction = new PushTransaction(newaccountActionParams, buyramActionParams, delegatebwActionParams);
+                pushTransaction.submit(creatorKeyPrivate, new PushTransaction.Callback()
                 {
-                    final NewaccountActionParams newaccountActionParams = new NewaccountActionParams.Builder()
-                            .setCreator(creator)
-                            .setNewAccount(newAccount)
-                            .setOwner(newAccountKeyPublic)
-                            .build();
-
-                    final BuyramActionParams buyramActionParams = new BuyramActionParams.Builder()
-                            .setPayer(creator)
-                            .setReceiver(newAccount)
-                            .setQuantity(Double.valueOf(buyRam), null)
-                            .build();
-
-                    final DelegatebwActionParams delegatebwActionParams = new DelegatebwActionParams.Builder()
-                            .setFrom(creator)
-                            .setReceiver(newAccount)
-                            .setStake_cpu_quantity(Double.parseDouble(stakeCpu), null)
-                            .setStake_net_quantity(Double.parseDouble(stakeNet), null)
-                            .setTransfer(1)
-                            .build();
-
-                    final PushTransaction pushTransaction = new PushTransaction(newaccountActionParams, buyramActionParams, delegatebwActionParams);
-                    pushTransaction.submit(creatorKeyPrivate, new PushTransaction.Callback()
+                    @Override
+                    public void onSuccess(ApiResponse<PushTransactionResponse> response)
                     {
-                        @Override
-                        public void onSuccess(ApiResponse<PushTransactionResponse> response)
-                        {
-                            setTextContent(tv_content, new Gson().toJson(response.getSuccess()));
-                            AccountHolder.get().add(new AccountModel(newAccount, newAccountKeyPrivate, newAccountKeyPublic));
-                        }
+                        setTextContent(tv_content, new Gson().toJson(response.getSuccess()));
+                        AccountHolder.get().add(new AccountModel(newAccount, newAccountKeyPrivate, newAccountKeyPublic));
+                    }
 
-                        @Override
-                        public void onErrorApi(PushTransaction.ApiError error, ErrorResponse errorResponse)
-                        {
-                            super.onErrorApi(error, errorResponse);
-                            setTextContent(tv_content, errorResponse.getErrorInformation());
-                        }
+                    @Override
+                    public void onErrorApi(PushTransaction.ApiError error, ErrorResponse errorResponse)
+                    {
+                        super.onErrorApi(error, errorResponse);
+                        setTextContent(tv_content, errorResponse.getErrorInformation());
+                    }
 
-                        @Override
-                        public void onError(PushTransaction.Error error, String msg)
-                        {
-                            super.onError(error, msg);
-                            setTextContent(tv_content, msg);
-                        }
-                    });
-                }catch (Exception e)
-                {
-                    throw new RuntimeException(e);
-                }
+                    @Override
+                    public void onError(PushTransaction.Error error, String msg)
+                    {
+                        super.onError(error, msg);
+                        setTextContent(tv_content, msg);
+                    }
+                });
             }
-        }).start();
+
+            @Override
+            protected void onError(Exception e)
+            {
+                super.onError(e);
+                setTextContent(tv_content, String.valueOf(e));
+            }
+
+            @Override
+            protected void onFinally()
+            {
+                super.onFinally();
+                dismissProgress();
+            }
+        };
 
         showProgress("");
+        mTask.submit();
     }
 
     private void cancelTask()

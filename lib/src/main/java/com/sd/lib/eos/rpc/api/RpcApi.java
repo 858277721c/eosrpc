@@ -85,21 +85,21 @@ public class RpcApi
      */
     public ApiResponse<GetCurrencyBalanceResponse> getCurrencyBalance(String account) throws RpcException
     {
-        return getCurrencyBalance("eosio.token", account, "eos");
+        return getCurrencyBalance(account, "eosio.token", "eos");
     }
 
     /**
      * 查看账号余额
      *
-     * @param code    合约
      * @param account 账号
+     * @param code    合约
      * @param symbol  币种
      * @return
      * @throws RpcException
      */
-    public ApiResponse<GetCurrencyBalanceResponse> getCurrencyBalance(String code, String account, String symbol) throws RpcException
+    public ApiResponse<GetCurrencyBalanceResponse> getCurrencyBalance(String account, String code, String symbol) throws RpcException
     {
-        final GetCurrencyBalanceRequest.Params params = new GetCurrencyBalanceRequest.Params(code, account, symbol);
+        final GetCurrencyBalanceRequest.Params params = new GetCurrencyBalanceRequest.Params(account, code, symbol);
         return new GetCurrencyBalanceRequest(mBaseUrl).execute(params);
     }
 

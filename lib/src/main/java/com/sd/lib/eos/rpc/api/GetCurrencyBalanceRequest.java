@@ -39,14 +39,14 @@ class GetCurrencyBalanceRequest extends BaseRequest<GetCurrencyBalanceRequest.Pa
 
     public static class Params extends BaseRequest.Params
     {
-        public final String code;
         public final String account;
+        public final String code;
         public final String symbol;
 
-        public Params(String code, String account, String symbol)
+        public Params(String account, String code, String symbol)
         {
-            this.code = code;
             this.account = account;
+            this.code = code;
             this.symbol = symbol;
         }
 

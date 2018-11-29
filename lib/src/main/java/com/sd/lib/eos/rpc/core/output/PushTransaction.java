@@ -61,9 +61,10 @@ public abstract class PushTransaction
      * 提交交易(同步执行)
      *
      * @param privateKey
+     * @return
      * @throws RpcException
      */
-    public final void submit(String privateKey) throws RpcException
+    public final boolean submit(String privateKey) throws RpcException
     {
         Utils.checkEmpty(privateKey, "private key is empty");
 
@@ -71,7 +72,7 @@ public abstract class PushTransaction
         Utils.checkEmpty(publicKey, "private key format error");
 
         if (!checkAuthorizationPermission(publicKey))
-            return;
+            return false;
 
         final List<ActionModel> listAction = new ArrayList<>();
         for (ActionParams item : mActionParams)
@@ -87,7 +88,7 @@ public abstract class PushTransaction
             if (!apiResponse.isSuccessful())
             {
                 onErrorApi(ApiType.AbiJsonToBin, apiResponse.getError());
-                return;
+                return false;
             }
 
             final AbiJsonToBinResponse response = apiResponse.getSuccess();
@@ -107,7 +108,7 @@ public abstract class PushTransaction
         if (!infoApiResponse.isSuccessful())
         {
             onErrorApi(ApiType.GetInfo, infoApiResponse.getError());
-            return;
+            return false;
         }
 
         final GetInfoResponse info = infoApiResponse.getSuccess();
@@ -117,7 +118,7 @@ public abstract class PushTransaction
         if (!blockApiResonse.isSuccessful())
         {
             onErrorApi(ApiType.GetBlock, blockApiResonse.getError());
-            return;
+            return false;
         }
 
         final GetBlockResponse block = blockApiResonse.getSuccess();
@@ -147,10 +148,11 @@ public abstract class PushTransaction
         if (!pushApiResponse.isSuccessful())
         {
             onErrorApi(ApiType.PushTransaction, pushApiResponse.getError());
-            return;
+            return false;
         }
 
         onSuccess(pushApiResponse);
+        return true;
     }
 
     private boolean checkAuthorizationPermission(String publicKey) throws RpcException

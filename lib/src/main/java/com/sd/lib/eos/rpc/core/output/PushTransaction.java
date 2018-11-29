@@ -10,7 +10,6 @@ import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
 import com.sd.lib.eos.rpc.api.model.GetInfoResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.core.FEOSManager;
-import com.sd.lib.eos.rpc.core.TransactionSigner;
 import com.sd.lib.eos.rpc.core.output.model.ActionModel;
 import com.sd.lib.eos.rpc.core.output.model.AuthorizationModel;
 import com.sd.lib.eos.rpc.core.output.model.TransactionModel;
@@ -31,9 +30,9 @@ import java.util.Map;
 /**
  * 提交交易
  */
-public class PushTransaction
+public abstract class PushTransaction
 {
-    private final RpcApi mRpcApi = new RpcApi();
+    private RpcApi mRpcApi;
     private final ActionParams[] mActionParams;
     private final boolean mCheckAuthorizationPermission;
 
@@ -51,22 +50,27 @@ public class PushTransaction
         mCheckAuthorizationPermission = checkAuthorizationPermission;
     }
 
+    public RpcApi getRpcApi()
+    {
+        if (mRpcApi == null)
+            mRpcApi = new RpcApi();
+        return mRpcApi;
+    }
+
     /**
      * 提交交易(同步执行)
      *
      * @param privateKey
-     * @param callback
      * @throws RpcException
      */
-    public final void submit(String privateKey, Callback callback) throws RpcException
+    public final void submit(String privateKey) throws RpcException
     {
         Utils.checkEmpty(privateKey, "private key is empty");
-        Utils.checkNotNull(callback, "callback is null");
 
         final String publicKey = FEOSManager.getInstance().getEccTool().privateToPublicKey(privateKey);
         Utils.checkEmpty(publicKey, "private key format error");
 
-        if (!checkAuthorizationPermission(publicKey, callback))
+        if (!checkAuthorizationPermission(publicKey))
             return;
 
         final List<ActionModel> listAction = new ArrayList<>();
@@ -79,10 +83,10 @@ public class PushTransaction
             final String action = item.getAction();
             final ActionParams.Args args = item.getArgs();
 
-            final ApiResponse<AbiJsonToBinResponse> apiResponse = mRpcApi.abiJsonToBin(code, action, args);
+            final ApiResponse<AbiJsonToBinResponse> apiResponse = getRpcApi().abiJsonToBin(code, action, args);
             if (!apiResponse.isSuccessful())
             {
-                callback.onErrorApi(ApiType.AbiJsonToBin, apiResponse.getError());
+                onErrorApi(ApiType.AbiJsonToBin, apiResponse.getError());
                 return;
             }
 
@@ -99,20 +103,20 @@ public class PushTransaction
             listAction.add(actionModel);
         }
 
-        final ApiResponse<GetInfoResponse> infoApiResponse = mRpcApi.getInfo();
+        final ApiResponse<GetInfoResponse> infoApiResponse = getRpcApi().getInfo();
         if (!infoApiResponse.isSuccessful())
         {
-            callback.onErrorApi(ApiType.GetInfo, infoApiResponse.getError());
+            onErrorApi(ApiType.GetInfo, infoApiResponse.getError());
             return;
         }
 
         final GetInfoResponse info = infoApiResponse.getSuccess();
         final String blockId = infoApiResponse.getSuccess().getHead_block_id();
 
-        final ApiResponse<GetBlockResponse> blockApiResonse = mRpcApi.getBlock(blockId);
+        final ApiResponse<GetBlockResponse> blockApiResonse = getRpcApi().getBlock(blockId);
         if (!blockApiResonse.isSuccessful())
         {
-            callback.onErrorApi(ApiType.GetBlock, blockApiResonse.getError());
+            onErrorApi(ApiType.GetBlock, blockApiResonse.getError());
             return;
         }
 
@@ -127,13 +131,13 @@ public class PushTransaction
         TransactionSignResult signResult = null;
         try
         {
-            signResult = getTransactionSigner().signTransaction(transaction, info.getChain_id(), privateKey);
+            signResult = FEOSManager.getInstance().getTransactionSigner().signTransaction(transaction, info.getChain_id(), privateKey);
         } catch (Exception e)
         {
             throw new RpcTransactionSignException("sign transaction error", e);
         }
 
-        final ApiResponse<PushTransactionResponse> pushApiResponse = mRpcApi.pushTransaction(
+        final ApiResponse<PushTransactionResponse> pushApiResponse = getRpcApi().pushTransaction(
                 signResult.getSignatures(),
                 signResult.getPacked_trx(),
                 null,
@@ -142,14 +146,14 @@ public class PushTransaction
 
         if (!pushApiResponse.isSuccessful())
         {
-            callback.onErrorApi(ApiType.PushTransaction, pushApiResponse.getError());
+            onErrorApi(ApiType.PushTransaction, pushApiResponse.getError());
             return;
         }
 
-        callback.onSuccess(pushApiResponse);
+        onSuccess(pushApiResponse);
     }
 
-    private boolean checkAuthorizationPermission(String publicKey, Callback callback) throws RpcException
+    private boolean checkAuthorizationPermission(String publicKey) throws RpcException
     {
         if (!mCheckAuthorizationPermission)
             return true;
@@ -170,19 +174,16 @@ public class PushTransaction
                 item.setAuthorizationPermission(savedPermission);
             } else
             {
-                final ApiResponse<GetAccountResponse> apiResponse = mRpcApi.getAccount(actor);
+                final ApiResponse<GetAccountResponse> apiResponse = getRpcApi().getAccount(actor);
                 if (!apiResponse.isSuccessful())
-                {
-                    callback.onErrorApi(ApiType.GetAccount, apiResponse.getError());
                     return false;
-                }
 
                 final GetAccountResponse response = apiResponse.getSuccess();
                 final Map<String, GetAccountResponse.Permission> permissions = response.getPermission(publicKey);
 
                 if (permissions == null || permissions.isEmpty())
                 {
-                    callback.onError(Error.NotAccountKey, "The key provided is not the key of the account");
+                    onError(Error.NotAccountKey, "The key provided is not the key of the account");
                     return false;
                 }
 
@@ -197,22 +198,14 @@ public class PushTransaction
         return true;
     }
 
-    protected TransactionSigner getTransactionSigner()
+    protected abstract void onSuccess(ApiResponse<PushTransactionResponse> response);
+
+    protected void onErrorApi(ApiType apiType, ErrorResponse errorResponse)
     {
-        return FEOSManager.getInstance().getTransactionSigner();
     }
 
-    public static abstract class Callback
+    protected void onError(Error error, String msg)
     {
-        public abstract void onSuccess(ApiResponse<PushTransactionResponse> response);
-
-        public void onErrorApi(ApiType apiType, ErrorResponse errorResponse)
-        {
-        }
-
-        public void onError(Error error, String msg)
-        {
-        }
     }
 
     public enum Error

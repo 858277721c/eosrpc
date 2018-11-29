@@ -121,29 +121,28 @@ public class TransferActivity extends BaseActivity implements View.OnClickListen
             @Override
             protected void onRun() throws Exception
             {
-                final PushTransaction pushTransaction = new PushTransaction(actionParams);
-                pushTransaction.submit(fromkeyPrivate, new PushTransaction.Callback()
+                new PushTransaction(actionParams)
                 {
                     @Override
-                    public void onSuccess(ApiResponse<PushTransactionResponse> response)
+                    protected void onSuccess(ApiResponse<PushTransactionResponse> response)
                     {
                         setTextContent(tv_content, new Gson().toJson(response.getSuccess()));
                     }
 
                     @Override
-                    public void onErrorApi(ApiType apiType, ErrorResponse errorResponse)
+                    protected void onErrorApi(ApiType apiType, ErrorResponse errorResponse)
                     {
                         super.onErrorApi(apiType, errorResponse);
                         setTextContent(tv_content, errorResponse.getFormattedMessage());
                     }
 
                     @Override
-                    public void onError(PushTransaction.Error error, String msg)
+                    protected void onError(Error error, String msg)
                     {
                         super.onError(error, msg);
                         setTextContent(tv_content, msg);
                     }
-                });
+                }.submit(fromkeyPrivate);
             }
 
             @Override

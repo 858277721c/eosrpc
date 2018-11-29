@@ -3,6 +3,7 @@ package com.sd.lib.eos.rpc.api;
 import com.sd.lib.eos.rpc.api.model.AbiBinToJsonResponse;
 import com.sd.lib.eos.rpc.api.model.AbiJsonToBinResponse;
 import com.sd.lib.eos.rpc.api.model.ApiResponse;
+import com.sd.lib.eos.rpc.api.model.ErrorResponse;
 import com.sd.lib.eos.rpc.api.model.GetAccountResponse;
 import com.sd.lib.eos.rpc.api.model.GetActionsResponse;
 import com.sd.lib.eos.rpc.api.model.GetBlockResponse;
@@ -47,7 +48,8 @@ public class RpcApi
      */
     public ApiResponse<GetInfoResponse> getInfo() throws RpcException
     {
-        return new GetInfoRequest(mBaseUrl).execute(null);
+        final RpcApiRequest request = new RpcApiRequest(ApiType.GetInfo, new GetInfoRequest(mBaseUrl), null);
+        return request.executeInternal(true);
     }
 
     /**
@@ -60,7 +62,8 @@ public class RpcApi
     public ApiResponse<GetBlockResponse> getBlock(String block_num_or_id) throws RpcException
     {
         final GetBlockRequest.Params params = new GetBlockRequest.Params(block_num_or_id);
-        return new GetBlockRequest(mBaseUrl).execute(params);
+        final RpcApiRequest request = new RpcApiRequest(ApiType.GetBlock, new GetBlockRequest(mBaseUrl), params);
+        return request.executeInternal(true);
     }
 
     /**
@@ -73,7 +76,8 @@ public class RpcApi
     public ApiResponse<GetAccountResponse> getAccount(String account_name) throws RpcException
     {
         final GetAccountRequest.Params params = new GetAccountRequest.Params(account_name);
-        return new GetAccountRequest(mBaseUrl).execute(params);
+        final RpcApiRequest request = new RpcApiRequest(ApiType.GetAccount, new GetAccountRequest(mBaseUrl), params);
+        return request.executeInternal(true);
     }
 
     /**
@@ -100,7 +104,8 @@ public class RpcApi
     public ApiResponse<GetCurrencyBalanceResponse> getCurrencyBalance(String account, String code, String symbol) throws RpcException
     {
         final GetCurrencyBalanceRequest.Params params = new GetCurrencyBalanceRequest.Params(account, code, symbol);
-        return new GetCurrencyBalanceRequest(mBaseUrl).execute(params);
+        final RpcApiRequest request = new RpcApiRequest(ApiType.GetCurrencyBalance, new GetCurrencyBalanceRequest(mBaseUrl), params);
+        return request.executeInternal(true);
     }
 
     /**
@@ -115,7 +120,8 @@ public class RpcApi
     public ApiResponse<GetActionsResponse> getActions(String account_name, int pos, int offset) throws RpcException
     {
         final GetActionsRequest.Params params = new GetActionsRequest.Params(account_name, pos, offset);
-        return new GetActionsRequest(mBaseUrl).execute(params);
+        final RpcApiRequest request = new RpcApiRequest(ApiType.GetActions, new GetActionsRequest(mBaseUrl), params);
+        return request.executeInternal(true);
     }
 
     /**
@@ -128,7 +134,8 @@ public class RpcApi
     public ApiResponse<GetTransactionResponse> getTransaction(String id) throws RpcException
     {
         final GetTransactionRequest.Params params = new GetTransactionRequest.Params(id);
-        return new GetTransactionRequest(mBaseUrl).execute(params);
+        final RpcApiRequest request = new RpcApiRequest(ApiType.GetTransaction, new GetTransactionRequest(mBaseUrl), params);
+        return request.executeInternal(true);
     }
 
     /**
@@ -141,7 +148,8 @@ public class RpcApi
     public ApiResponse<GetKeyAccountsResponse> getKeyAccounts(String public_key) throws RpcException
     {
         final GetKeyAccountsRequest.Params params = new GetKeyAccountsRequest.Params(public_key);
-        return new GetKeyAccountsRequest(mBaseUrl).execute(params);
+        final RpcApiRequest request = new RpcApiRequest(ApiType.GetKeyAccounts, new GetKeyAccountsRequest(mBaseUrl), params);
+        return request.executeInternal(true);
     }
 
     /**
@@ -154,7 +162,8 @@ public class RpcApi
     public ApiResponse<GetCodeResponse> getCode(String account_name) throws RpcException
     {
         final GetCodeRequest.Params params = new GetCodeRequest.Params(account_name);
-        return new GetCodeRequest(mBaseUrl).execute(params);
+        final RpcApiRequest request = new RpcApiRequest(ApiType.GetCode, new GetCodeRequest(mBaseUrl), params);
+        return request.executeInternal(true);
     }
 
     /**
@@ -195,7 +204,8 @@ public class RpcApi
     public ApiResponse<GetTableRowsResponse> getTableRows(String scope, String code, String table, int limit) throws RpcException
     {
         final GetTableRowsRequest.Params params = new GetTableRowsRequest.Params(scope, code, table, limit);
-        return new GetTableRowsRequest(mBaseUrl).execute(params);
+        final RpcApiRequest request = new RpcApiRequest(ApiType.GetTableRows, new GetTableRowsRequest(mBaseUrl), params);
+        return request.executeInternal(true);
     }
 
     /**
@@ -210,7 +220,8 @@ public class RpcApi
     public ApiResponse<AbiJsonToBinResponse> abiJsonToBin(String code, String action, Object args) throws RpcException
     {
         final AbiJsonToBinRequest.Params params = new AbiJsonToBinRequest.Params(code, action, args);
-        return new AbiJsonToBinRequest(mBaseUrl).execute(params);
+        final RpcApiRequest request = new RpcApiRequest(ApiType.AbiJsonToBin, new AbiJsonToBinRequest(mBaseUrl), params);
+        return request.executeInternal(true);
     }
 
     /**
@@ -225,7 +236,8 @@ public class RpcApi
     public ApiResponse<AbiBinToJsonResponse> abiBinToJson(String code, String action, String binargs) throws RpcException
     {
         final AbiBinToJsonRequest.Params params = new AbiBinToJsonRequest.Params(code, action, binargs);
-        return new AbiBinToJsonRequest(mBaseUrl).execute(params);
+        final RpcApiRequest request = new RpcApiRequest(ApiType.AbiBinToJson, new AbiBinToJsonRequest(mBaseUrl), params);
+        return request.executeInternal(true);
     }
 
     /**
@@ -241,6 +253,56 @@ public class RpcApi
     public ApiResponse<PushTransactionResponse> pushTransaction(List<String> signatures, String packed_trx, String packed_context_free_data, String compression) throws RpcException
     {
         final PushTransactionRequest.Params params = new PushTransactionRequest.Params(signatures, packed_trx, packed_context_free_data, compression);
-        return new PushTransactionRequest(mBaseUrl).execute(params);
+        final RpcApiRequest request = new RpcApiRequest(ApiType.PushTransaction, new PushTransactionRequest(mBaseUrl), params);
+        return request.executeInternal(true);
+    }
+
+    protected ApiResponse onErrorResponse(ApiType apiType, ErrorResponse errorResponse, RpcApiRequest request)
+    {
+        return null;
+    }
+
+    protected final class RpcApiRequest<P extends BaseRequest.Params, T>
+    {
+        private final ApiType mApiType;
+        private final BaseRequest<P, T> mRequest;
+        private final P mParams;
+
+        private int mExecuteCount;
+
+        public RpcApiRequest(ApiType apiType, BaseRequest<P, T> request, P params)
+        {
+            mApiType = apiType;
+            mRequest = request;
+            mParams = params;
+        }
+
+        public int getExecuteCount()
+        {
+            return mExecuteCount;
+        }
+
+        public ApiResponse<T> execute() throws RpcException
+        {
+            return executeInternal(false);
+        }
+
+        private ApiResponse<T> executeInternal(boolean notifyError) throws RpcException
+        {
+            final ApiResponse<T> apiResponse = mRequest.execute(mParams);
+            mExecuteCount++;
+
+            if (notifyError)
+            {
+                if (!apiResponse.isSuccessful())
+                {
+                    final ApiResponse errorApiResponse = onErrorResponse(mApiType, apiResponse.getError(), this);
+                    if (errorApiResponse != null)
+                        return errorApiResponse;
+                }
+            }
+
+            return apiResponse;
+        }
     }
 }

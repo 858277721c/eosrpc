@@ -15,7 +15,7 @@ import com.sd.lib.eos.rpc.utils.Utils;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-abstract class BaseRequest<P extends BaseRequest.Params, T>
+public abstract class BaseRequest<P extends BaseRequest.Params, T>
 {
     protected final String mBaseUrl;
 

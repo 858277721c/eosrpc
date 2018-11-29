@@ -257,7 +257,11 @@ public class RpcApi
         return request.executeInternal(true);
     }
 
-    protected ApiResponse onErrorResponse(ApiType apiType, ErrorResponse errorResponse, RpcApiRequest request)
+    protected void onErrorResponse(ApiType apiType, ErrorResponse errorResponse)
+    {
+    }
+
+    protected ApiResponse onRpcException(ApiType apiType, RpcException e, RpcApiRequest request)
     {
         return null;
     }
@@ -287,22 +291,32 @@ public class RpcApi
             return executeInternal(false);
         }
 
-        private ApiResponse<T> executeInternal(boolean notifyError) throws RpcException
+        private ApiResponse<T> executeInternal(boolean notifyException) throws RpcException
         {
-            final ApiResponse<T> apiResponse = mRequest.execute(mParams);
-            mExecuteCount++;
-
-            if (notifyError)
+            try
             {
+                mExecuteCount++;
+                final ApiResponse<T> apiResponse = mRequest.execute(mParams);
+
                 if (!apiResponse.isSuccessful())
+                    onErrorResponse(mApiType, apiResponse.getError());
+
+                return apiResponse;
+
+            } catch (RpcException e)
+            {
+                if (notifyException)
                 {
-                    final ApiResponse errorApiResponse = onErrorResponse(mApiType, apiResponse.getError(), this);
-                    if (errorApiResponse != null)
-                        return errorApiResponse;
+                    final ApiResponse response = onRpcException(mApiType, e, this);
+                    if (response != null)
+                        return response;
+                    else
+                        throw e;
+                } else
+                {
+                    throw e;
                 }
             }
-
-            return apiResponse;
         }
     }
 }

@@ -261,7 +261,7 @@ public class RpcApi
     {
     }
 
-    protected ApiResponse onRpcException(ApiType apiType, RpcException e, RpcApiRequest request)
+    protected ApiResponse onRpcException(ApiType apiType, RpcException exception, RpcApiRequest request) throws RpcException
     {
         return null;
     }

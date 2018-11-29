@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.sd.eos.rpc.R;
 import com.sd.eos.rpc.dialog.LocalAccountDialog;
 import com.sd.eos.rpc.model.AccountModel;
+import com.sd.lib.eos.rpc.api.ApiType;
 import com.sd.lib.eos.rpc.api.model.ApiResponse;
 import com.sd.lib.eos.rpc.api.model.ErrorResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
@@ -130,10 +131,10 @@ public class TransferActivity extends BaseActivity implements View.OnClickListen
                     }
 
                     @Override
-                    public void onErrorApi(PushTransaction.ApiError error, ErrorResponse errorResponse)
+                    public void onErrorApi(ApiType apiType, ErrorResponse errorResponse)
                     {
-                        super.onErrorApi(error, errorResponse);
-                        setTextContent(tv_content, errorResponse.getErrorInformation());
+                        super.onErrorApi(apiType, errorResponse);
+                        setTextContent(tv_content, errorResponse.getFormattedMessage());
                     }
 
                     @Override

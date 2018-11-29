@@ -200,13 +200,9 @@ public abstract class PushTransaction
 
     protected abstract void onSuccess(ApiResponse<PushTransactionResponse> response);
 
-    protected void onErrorApi(ApiType apiType, ErrorResponse errorResponse)
-    {
-    }
+    protected abstract void onErrorApi(ApiType apiType, ErrorResponse errorResponse);
 
-    protected void onError(Error error, String msg)
-    {
-    }
+    protected abstract void onError(Error error, String msg);
 
     public enum Error
     {

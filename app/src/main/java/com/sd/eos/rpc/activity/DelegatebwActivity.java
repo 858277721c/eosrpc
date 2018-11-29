@@ -137,14 +137,12 @@ public class DelegatebwActivity extends BaseActivity implements View.OnClickList
                     @Override
                     protected void onErrorApi(ApiType apiType, ErrorResponse errorResponse)
                     {
-                        super.onErrorApi(apiType, errorResponse);
                         setTextContent(tv_content, errorResponse.getFormattedMessage());
                     }
 
                     @Override
                     protected void onError(Error error, String msg)
                     {
-                        super.onError(error, msg);
                         setTextContent(tv_content, msg);
                     }
                 }.submit(fromkeyPrivate);

@@ -1,5 +1,23 @@
 <resources>
-    <string name="app_name">lib</string>
 
     <string name="lib_eosrpc_digits_account">abcdefghijklmnopqrstuvwxyz12345</string>
+
+    <string name="api_error_code_3010010">交易参数打包错误</string>
+    <string name="api_error_code_3010011">金额格式错误</string>
+
+    <string name="api_error_code_3040005">交易过期</string>
+    <string name="api_error_code_3040006">交易过期时间太长</string>
+    <string name="api_error_code_3040007">引用块无效或不匹配</string>
+
+    <string name="api_error_code_3050000">Action校验失败</string>
+    <string name="api_error_code_3050001">账户名已存在</string>
+    <string name="api_error_code_3050002">无效的Action参数</string>
+    <string name="api_error_code_3050003">可用余额不足</string>
+
+    <string name="api_error_code_3080001">内存不足</string>
+    <string name="api_error_code_3080002">net资源不足</string>
+    <string name="api_error_code_3080004">cpu资源不足</string>
+
+    <string name="api_error_code_3090003">签名校验失败</string>
+
 </resources>

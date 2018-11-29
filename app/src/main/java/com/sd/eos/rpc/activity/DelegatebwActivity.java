@@ -16,6 +16,7 @@ import com.sd.lib.eos.rpc.api.model.ErrorResponse;
 import com.sd.lib.eos.rpc.api.model.PushTransactionResponse;
 import com.sd.lib.eos.rpc.core.output.PushTransaction;
 import com.sd.lib.eos.rpc.params.DelegatebwActionParams;
+import com.sd.lib.eos.rpc.utils.RpcUtils;
 import com.sd.lib.task.FTask;
 
 /**
@@ -137,7 +138,7 @@ public class DelegatebwActivity extends BaseActivity implements View.OnClickList
                     @Override
                     protected void onErrorApi(ApiType apiType, ErrorResponse errorResponse)
                     {
-                        setTextContent(tv_content, errorResponse.getFormattedMessage());
+                        setTextContent(tv_content, RpcUtils.getErrorCodeMessage(errorResponse, DelegatebwActivity.this));
                     }
 
                     @Override

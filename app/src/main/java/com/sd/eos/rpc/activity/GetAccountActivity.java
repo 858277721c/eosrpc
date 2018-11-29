@@ -12,6 +12,7 @@ import com.sd.eos.rpc.model.AccountModel;
 import com.sd.lib.eos.rpc.api.RpcApi;
 import com.sd.lib.eos.rpc.api.model.ApiResponse;
 import com.sd.lib.eos.rpc.api.model.GetAccountResponse;
+import com.sd.lib.eos.rpc.utils.RpcUtils;
 import com.sd.lib.task.FTask;
 
 /**
@@ -68,7 +69,9 @@ public class GetAccountActivity extends BaseActivity implements View.OnClickList
                 if (response.isSuccessful())
                     setTextContent(tv_content, new Gson().toJson(response.getSuccess()));
                 else
-                    setTextContent(tv_content, new Gson().toJson(response.getError()));
+                {
+                    setTextContent(tv_content, RpcUtils.getErrorCodeMessage(response.getError(), GetAccountActivity.this));
+                }
             }
 
             @Override

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="api_error_code_3010010">Invalid packed transaction</string>
+    <string name="api_error_code_3010011">Invalid asset</string>
+
+    <string name="api_error_code_3040005">Expired Transaction</string>
+    <string name="api_error_code_3040006">Transaction Expiration Too Far</string>
+    <string name="api_error_code_3040007">Invalid Reference Block</string>
+
+    <string name="api_error_code_3050000">Action validate exception</string>
+    <string name="api_error_code_3050001">Account name already exists</string>
+    <string name="api_error_code_3050002">Invalid Action Arguments</string>
+    <string name="api_error_code_3050003">Insufficient available balance</string>
+
+    <string name="api_error_code_3080001">Account using more than allotted RAM usage</string>
+    <string name="api_error_code_3080002">Transaction exceeded the current network usage limit imposed on the transaction</string>
+    <string name="api_error_code_3080004">Transaction exceeded the current CPU usage limit imposed on the transaction</string>
+
+    <string name="api_error_code_3090003">Provided keys, permissions, and delays do not satisfy declared authorizations</string>
+
+</resources>

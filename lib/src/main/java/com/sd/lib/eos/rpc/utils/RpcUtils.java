@@ -1,5 +1,9 @@
 package com.sd.lib.eos.rpc.utils;
 
+import android.content.Context;
+
+import com.sd.lib.eos.rpc.api.model.ErrorResponse;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DateFormat;
@@ -205,6 +209,29 @@ public class RpcUtils
         } catch (ParseException e)
         {
             e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String getErrorCodeMessage(ErrorResponse errorResponse, Context context)
+    {
+        final int code = errorResponse.getErrorCode();
+        String message = getErrorCodeMessage(code, context);
+        if (message == null || message.isEmpty())
+            message = errorResponse.getFormattedMessage();
+        return message;
+    }
+
+    public static String getErrorCodeMessage(int code, Context context)
+    {
+        final String name = "api_error_code_" + code;
+
+        try
+        {
+            final int resId = context.getResources().getIdentifier(name, "string", context.getPackageName());
+            return context.getResources().getString(resId);
+        } catch (Exception e)
+        {
             return null;
         }
     }

@@ -6,18 +6,25 @@ import com.sd.lib.eos.rpc.api.model.GetActionsResponse;
 
 import java.util.List;
 
-public abstract class ReverseEosActionsLoader
+public abstract class ReverseEosActionsLoader extends EosActionsLoader
 {
     private static final int MAX_POSITION = Integer.MIN_VALUE;
 
     private int mMaxSize = -1;
     private int mNextPosition = MAX_POSITION;
 
-    protected String getLogTag()
+    public ReverseEosActionsLoader(String accountName)
     {
-        return "ReverseEosActionsLoader";
+        super(accountName);
     }
 
+    @Override
+    protected String getLogTag()
+    {
+        return ReverseEosActionsLoader.class.getSimpleName();
+    }
+
+    @Override
     public void reset()
     {
         setMaxSize(-1);
@@ -25,6 +32,7 @@ public abstract class ReverseEosActionsLoader
         Log.e(getLogTag(), "reset");
     }
 
+    @Override
     public final boolean hasNextPage()
     {
         if (mMaxSize <= 0)
@@ -33,6 +41,7 @@ public abstract class ReverseEosActionsLoader
         return mNextPosition >= 0;
     }
 
+    @Override
     public final List<GetActionsResponse.Action> loadPage(int pageSize) throws Exception
     {
         if (pageSize <= 0)

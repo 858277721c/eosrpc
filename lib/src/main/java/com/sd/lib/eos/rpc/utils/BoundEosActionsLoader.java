@@ -6,9 +6,8 @@ import com.sd.lib.eos.rpc.api.model.GetActionsResponse;
 
 import java.util.List;
 
-public abstract class BoundEosActionsLoader
+public abstract class BoundEosActionsLoader extends EosActionsLoader
 {
-    private final String mAccountName;
     private final int mOriginalStart;
     private final int mOriginalEnd;
     private final boolean mIsReverse;
@@ -20,10 +19,10 @@ public abstract class BoundEosActionsLoader
 
     public BoundEosActionsLoader(String accountName, int start, int end)
     {
+        super(accountName);
         if (start < 0 && end < 0)
             throw new IllegalArgumentException("");
 
-        mAccountName = accountName;
         mOriginalStart = start;
         mOriginalEnd = end;
 
@@ -39,14 +38,10 @@ public abstract class BoundEosActionsLoader
         }
     }
 
+    @Override
     protected String getLogTag()
     {
-        return "BoundEosActionsLoader";
-    }
-
-    public final String getAccountName()
-    {
-        return mAccountName;
+        return BoundEosActionsLoader.class.getSimpleName();
     }
 
     public final int getMaxSize()
@@ -59,6 +54,17 @@ public abstract class BoundEosActionsLoader
         return mIsReverse;
     }
 
+    @Override
+    public void reset()
+    {
+        setMaxSize(-1);
+        setStart(-1);
+        setEnd(-1);
+        setNextPosition(-1);
+        Log.e(getLogTag(), "reset");
+    }
+
+    @Override
     public final boolean hasNextPage()
     {
         checkInit();
@@ -76,15 +82,6 @@ public abstract class BoundEosActionsLoader
         {
             return mNextPosition <= mEnd;
         }
-    }
-
-    public void reset()
-    {
-        setMaxSize(-1);
-        setStart(-1);
-        setEnd(-1);
-        setNextPosition(-1);
-        Log.e(getLogTag(), "reset");
     }
 
     public final int init() throws Exception
@@ -120,6 +117,7 @@ public abstract class BoundEosActionsLoader
         return mMaxSize;
     }
 
+    @Override
     public final List<GetActionsResponse.Action> loadPage(int pageSize) throws Exception
     {
         if (pageSize <= 0)
@@ -218,13 +216,12 @@ public abstract class BoundEosActionsLoader
         }
     }
 
-    public final void setNextPosition(int nextPosition)
+    private void setNextPosition(int nextPosition)
     {
         if (mNextPosition != nextPosition)
         {
             mNextPosition = nextPosition;
             Log.i(getLogTag(), "setNextPosition:" + nextPosition);
-            onNextPositionChanged(nextPosition);
         }
     }
 
@@ -258,9 +255,5 @@ public abstract class BoundEosActionsLoader
     {
         if (mMaxSize < 0)
             throw new RuntimeException("loader is not initialized");
-    }
-
-    protected void onNextPositionChanged(int nextPosition)
-    {
     }
 }

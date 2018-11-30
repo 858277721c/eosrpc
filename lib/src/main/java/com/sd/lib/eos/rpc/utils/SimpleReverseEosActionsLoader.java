@@ -15,13 +15,12 @@ public abstract class SimpleReverseEosActionsLoader extends ReverseEosActionsLoa
 {
     private static final int SIZE_RETRY_COUNT = 5;
 
-    private final String mAccountName;
     private final RpcApi mRpcApi;
     private int mSizeRetryCount;
 
     public SimpleReverseEosActionsLoader(String accountName, RpcApi rpcApi)
     {
-        mAccountName = accountName;
+        super(accountName);
         if (rpcApi == null)
             rpcApi = new RpcApi();
         mRpcApi = rpcApi;
@@ -72,7 +71,7 @@ public abstract class SimpleReverseEosActionsLoader extends ReverseEosActionsLoa
     private List<GetActionsResponse.Action> getActions(int position, int offset) throws RpcException
     {
         Log.i(getLogTag(), "getActions position:" + position + " offset:" + offset);
-        final ApiResponse<GetActionsResponse> apiResponse = mRpcApi.getActions(mAccountName, position, offset);
+        final ApiResponse<GetActionsResponse> apiResponse = mRpcApi.getActions(getAccountName(), position, offset);
         if (!apiResponse.isSuccessful())
         {
             Log.e(getLogTag(), "onError:" + apiResponse.getError().getCode() + " " + apiResponse.getError().getMessage());

@@ -10,6 +10,7 @@ public abstract class EosActionsLoader
 
     public EosActionsLoader(String accountName)
     {
+        Utils.checkEmpty(accountName, "accountName is empty");
         mAccountName = accountName;
     }
 

@@ -8,14 +8,19 @@ public class RpcException extends Exception
     }
 
     @Override
-    public String toString()
+    public String getLocalizedMessage()
     {
-        String result = super.toString();
-
         final Throwable throwable = getCause();
         if (throwable != null)
-            result = result + " " + throwable.toString();
+            return throwable.getMessage();
 
-        return result;
+        return super.getLocalizedMessage();
+    }
+
+    @Override
+    public String toString()
+    {
+        final Throwable throwable = getCause();
+        return throwable == null ? super.toString() : super.toString() + " " + throwable.toString();
     }
 }

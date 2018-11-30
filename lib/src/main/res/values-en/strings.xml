@@ -17,6 +17,7 @@
     <string name="api_error_code_3080001">Account using more than allotted RAM usage</string>
     <string name="api_error_code_3080002">Transaction exceeded the current network usage limit imposed on the transaction</string>
     <string name="api_error_code_3080004">Transaction exceeded the current CPU usage limit imposed on the transaction</string>
+    <string name="api_error_code_3081001">Transaction reached the deadline set due to leeway on account CPU limits</string>
 
     <string name="api_error_code_3090003">Provided keys, permissions, and delays do not satisfy declared authorizations</string>
 

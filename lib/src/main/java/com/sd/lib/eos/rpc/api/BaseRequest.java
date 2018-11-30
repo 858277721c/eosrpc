@@ -135,5 +135,17 @@ public abstract class BaseRequest<P extends BaseRequest.Params, T>
         {
             return FEOSManager.getInstance().getJsonConverter().objectToJson(this);
         }
+
+        @Override
+        public String toString()
+        {
+            try
+            {
+                return toJson();
+            } catch (Exception e)
+            {
+                return super.toString();
+            }
+        }
     }
 }

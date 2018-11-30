@@ -27,7 +27,7 @@ public class RetryRpcApi extends RpcApi
     @Override
     protected ApiResponse onRpcException(ApiType apiType, RpcException exception, RpcApiRequest request) throws RpcException
     {
-        Log.e(RetryRpcApi.class.getSimpleName(), "onRpcException:" + apiType + " " + exception);
+        Log.e(RetryRpcApi.class.getSimpleName(), this + " onRpcException:" + request.toString() + " " + exception);
 
         mCurrentCount = 0;
         while (mCurrentCount < mRetryCount)
@@ -36,19 +36,19 @@ public class RetryRpcApi extends RpcApi
             {
                 mCurrentCount++;
 
-                Log.i(RetryRpcApi.class.getSimpleName(), "retry:" + mCurrentCount);
+                Log.i(RetryRpcApi.class.getSimpleName(), this + " retry:" + mCurrentCount);
                 final ApiResponse apiResponse = request.execute();
-                Log.i(RetryRpcApi.class.getSimpleName(), "retry success");
+                Log.i(RetryRpcApi.class.getSimpleName(), this + " retry success");
 
                 return apiResponse;
             } catch (RpcException e)
             {
-                Log.i(RetryRpcApi.class.getSimpleName(), "retry failed:" + e);
+                Log.i(RetryRpcApi.class.getSimpleName(), this + " retry failed:" + e);
                 continue;
             }
         }
 
-        Log.i(RetryRpcApi.class.getSimpleName(), "retry failed after count:" + mCurrentCount);
+        Log.i(RetryRpcApi.class.getSimpleName(), this + " retry failed after count:" + mCurrentCount);
         return super.onRpcException(apiType, exception, request);
     }
 }

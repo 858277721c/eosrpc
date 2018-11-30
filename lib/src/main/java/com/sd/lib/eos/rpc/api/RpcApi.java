@@ -272,18 +272,11 @@ public class RpcApi
         private final BaseRequest<P, T> mRequest;
         private final P mParams;
 
-        private int mExecuteCount;
-
         public RpcApiRequest(ApiType apiType, BaseRequest<P, T> request, P params)
         {
             mApiType = apiType;
             mRequest = request;
             mParams = params;
-        }
-
-        public int getExecuteCount()
-        {
-            return mExecuteCount;
         }
 
         public ApiResponse<T> execute() throws RpcException
@@ -295,7 +288,6 @@ public class RpcApi
         {
             try
             {
-                mExecuteCount++;
                 final ApiResponse<T> apiResponse = mRequest.execute(mParams);
 
                 if (!apiResponse.isSuccessful())
@@ -317,6 +309,12 @@ public class RpcApi
                     throw e;
                 }
             }
+        }
+
+        @Override
+        public String toString()
+        {
+            return mApiType + " " + mParams.toString();
         }
     }
 }

@@ -2,6 +2,7 @@
 
     <string name="lib_eosrpc_digits_account">abcdefghijklmnopqrstuvwxyz12345</string>
 
+    <string name="api_error_code_3010001">账号名格式不正确</string>
     <string name="api_error_code_3010010">交易参数打包错误</string>
     <string name="api_error_code_3010011">金额格式错误</string>
 

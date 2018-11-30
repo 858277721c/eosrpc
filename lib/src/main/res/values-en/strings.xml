@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="api_error_code_3010001">Invalid name</string>
     <string name="api_error_code_3010010">Invalid packed transaction</string>
     <string name="api_error_code_3010011">Invalid asset</string>
 

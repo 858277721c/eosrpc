@@ -31,7 +31,7 @@ class GetAccountRequest extends BaseRequest<GetAccountRequest.Params, GetAccount
         @Override
         public void check()
         {
-            RpcUtils.checkAccountName(account_name, this + " account_name is empty");
+            RpcUtils.checkAccountName(account_name, this + " account_name format error");
         }
     }
 }

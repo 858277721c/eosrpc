@@ -47,8 +47,8 @@ public class DelegatebwActionParams extends BaseParams<DelegatebwActionParams.Ar
         private Args(Builder builder)
         {
             super(builder);
-            this.from = RpcUtils.checkAccountName(builder.from, "delegatebw from was not specified");
-            this.receiver = RpcUtils.checkAccountName(builder.receiver, "delegatebw receiver was not specified");
+            this.from = RpcUtils.checkAccountName(builder.from, "delegatebw from format error");
+            this.receiver = RpcUtils.checkAccountName(builder.receiver, "delegatebw receiver format error");
             this.stake_net_quantity = RpcUtils.checkMoney(builder.stake_net_quantity, "delegatebw stake net quantity was not specified");
             this.stake_cpu_quantity = RpcUtils.checkMoney(builder.stake_cpu_quantity, "delegatebw stake cpu quantity was not specified");
 

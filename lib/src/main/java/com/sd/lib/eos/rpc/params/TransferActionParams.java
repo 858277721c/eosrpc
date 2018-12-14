@@ -45,8 +45,8 @@ public class TransferActionParams extends BaseParams<TransferActionParams.Args, 
         private Args(Builder builder)
         {
             super(builder);
-            this.from = RpcUtils.checkAccountName(builder.from, "transfer from was not specified");
-            this.to = RpcUtils.checkAccountName(builder.to, "transfer to was not specified");
+            this.from = RpcUtils.checkAccountName(builder.from, "transfer from format error");
+            this.to = RpcUtils.checkAccountName(builder.to, "transfer to format error");
             this.quantity = RpcUtils.checkMoney(builder.quantity, "transfer quantity was not specified");
             this.memo = builder.memo;
         }

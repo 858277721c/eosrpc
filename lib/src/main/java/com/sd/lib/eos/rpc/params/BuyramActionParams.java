@@ -44,8 +44,8 @@ public class BuyramActionParams extends BaseParams<BuyramActionParams.Args, Buyr
         private Args(Builder builder)
         {
             super(builder);
-            this.payer = RpcUtils.checkAccountName(builder.payer, "buyram payer was not specified");
-            this.receiver = RpcUtils.checkAccountName(builder.receiver, "buyram receiver was not specified");
+            this.payer = RpcUtils.checkAccountName(builder.payer, "buyram payer format error");
+            this.receiver = RpcUtils.checkAccountName(builder.receiver, "buyram receiver format error");
             this.quant = RpcUtils.checkMoney(builder.quantity, "buyram quantity was not specified");
         }
 

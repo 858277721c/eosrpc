@@ -45,8 +45,8 @@ public class UnDelegatebwActionParams extends BaseParams<UnDelegatebwActionParam
         private Args(Builder builder)
         {
             super(builder);
-            this.from = RpcUtils.checkAccountName(builder.from, "undelegatebw from was not specified");
-            this.receiver = RpcUtils.checkAccountName(builder.receiver, "undelegatebw receiver was not specified");
+            this.from = RpcUtils.checkAccountName(builder.from, "undelegatebw from format error");
+            this.receiver = RpcUtils.checkAccountName(builder.receiver, "undelegatebw receiver format error");
             this.unstake_net_quantity = RpcUtils.checkMoney(builder.unstake_net_quantity, "undelegatebw unstake net quantity was not specified");
             this.unstake_cpu_quantity = RpcUtils.checkMoney(builder.unstake_cpu_quantity, "undelegatebw unstake cpu quantity was not specified");
         }

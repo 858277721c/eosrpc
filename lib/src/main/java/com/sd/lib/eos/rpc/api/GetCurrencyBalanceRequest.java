@@ -53,7 +53,7 @@ class GetCurrencyBalanceRequest extends BaseRequest<GetCurrencyBalanceRequest.Pa
         @Override
         public void check()
         {
-            RpcUtils.checkAccountName(account, this + " account is empty");
+            RpcUtils.checkAccountName(account, this + " account format error");
             Utils.checkEmpty(code, this + " code is empty");
             Utils.checkEmpty(symbol, this + " symbol is empty");
         }

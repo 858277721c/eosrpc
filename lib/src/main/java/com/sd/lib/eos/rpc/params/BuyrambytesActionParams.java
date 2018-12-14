@@ -43,8 +43,8 @@ public class BuyrambytesActionParams extends BaseParams<BuyrambytesActionParams.
         private Args(Builder builder)
         {
             super(builder);
-            this.payer = RpcUtils.checkAccountName(builder.payer, "buyrambytes payer was not specified");
-            this.receiver = RpcUtils.checkAccountName(builder.receiver, "buyrambytes receiver was not specified");
+            this.payer = RpcUtils.checkAccountName(builder.payer, "buyrambytes payer format error");
+            this.receiver = RpcUtils.checkAccountName(builder.receiver, "buyrambytes receiver format error");
 
             final long b = builder.bytes;
             if (b <= 0)

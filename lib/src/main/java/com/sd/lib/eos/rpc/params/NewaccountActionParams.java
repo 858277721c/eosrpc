@@ -49,8 +49,8 @@ public class NewaccountActionParams extends BaseParams<NewaccountActionParams.Ar
         private Args(Builder builder)
         {
             super(builder);
-            this.creator = RpcUtils.checkAccountName(builder.creator, "newaccount creator was not specified");
-            this.name = RpcUtils.checkAccountName(builder.newAccount, "newaccount name was not specified");
+            this.creator = RpcUtils.checkAccountName(builder.creator, "newaccount creator format error");
+            this.name = RpcUtils.checkAccountName(builder.newAccount, "newaccount name format error");
 
             final String ownerPublicKey = Utils.checkEmpty(builder.ownerPublicKey, "newaccount owner public key was not specified");
             this.owner = PermissionModel.create(ownerPublicKey);

@@ -42,7 +42,7 @@ public class SellramParams extends BaseParams<SellramParams.Args, SellramParams.
         private Args(Builder builder)
         {
             super(builder);
-            this.account = RpcUtils.checkAccountName(account, "sellram account format error");
+            this.account = RpcUtils.checkAccountName(builder.account, "sellram account format error");
 
             final long b = builder.bytes;
             if (b <= 0)

@@ -178,7 +178,10 @@ public abstract class PushTransaction
             {
                 final ApiResponse<GetAccountResponse> apiResponse = getRpcApi().getAccount(actor);
                 if (!apiResponse.isSuccessful())
+                {
+                    onErrorApi(ApiType.GetAccount, apiResponse.getError());
                     return false;
+                }
 
                 final GetAccountResponse response = apiResponse.getSuccess();
                 final Map<String, GetAccountResponse.Permission> permissions = response.getPermission(publicKey);

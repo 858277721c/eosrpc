@@ -164,11 +164,11 @@ public abstract class PushTransaction
         for (ActionParams item : mActionParams)
         {
             final AuthorizationModel authorizationModel = item.getAuthorization();
-            if (!Utils.isEmpty(authorizationModel.getPermission()))
-                continue;
-
             final String actor = authorizationModel.getActor();
             Utils.checkEmpty(actor, "authorization actor was not specified");
+
+            if (!Utils.isEmpty(authorizationModel.getPermission()))
+                continue;
 
             final String savedPermission = mapPermissionCache.get(actor);
             if (!Utils.isEmpty(savedPermission))
@@ -192,8 +192,7 @@ public abstract class PushTransaction
                     return false;
                 }
 
-                final List<GetAccountResponse.Permission> listPermission = new ArrayList<>(permissions.values());
-                final String permissionName = listPermission.get(0).getPerm_name();
+                final String permissionName = permissions.values().iterator().next().getPerm_name();
 
                 mapPermissionCache.put(actor, permissionName);
                 item.setAuthorizationPermission(permissionName);

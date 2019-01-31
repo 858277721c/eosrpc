@@ -29,14 +29,14 @@ public abstract class BaseParams<A extends BaseParams.Args, B extends BaseParams
         return new AuthorizationModel(authorizationActor, authorizationPermission);
     }
 
-    protected static class Args<B> extends ActionParams.Args
+    public static class Args<B> extends ActionParams.Args
     {
         protected Args(B builder)
         {
         }
     }
 
-    protected static class Builder<T extends Builder>
+    public static class Builder<T extends Builder>
     {
 
     }
